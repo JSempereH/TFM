@@ -1,0 +1,7 @@
+# Ignore all files .aux, .gz, .fls
+
+*.aux
+*.gz
+*.fls
+thesis/main.log
+thesis/main.fdb_latexmk
