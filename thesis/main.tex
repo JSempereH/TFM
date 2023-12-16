@@ -1,11 +1,14 @@
 \documentclass{report}
 \usepackage[utf8]{inputenc}
+\usepackage[backend=bibtex]{biblatex}
 \usepackage{lipsum}  % Paquete para generar texto de relleno
+
+\addbibresource{TFM.bib}
 
 \begin{document}
 
 \include{Chapter1}
 \include{Chapter2}
 
-
+\printbibliography
 \end{document}
