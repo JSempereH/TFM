@@ -1,7 +1,20 @@
-# Ignore all files .aux, .gz, .fls
+
 
 *.aux
 *.gz
 *.fls
 thesis/main.log
 thesis/main.fdb_latexmk
+*.xml
+*.bbl
+*.blg
+thesis/main-blx.bib
+thesis/build/
+settings.json
+
+src/dataset/
+src/FedAvg/
+src/fedprox/
+src/multirun/
+src/outputs/
+TFM_venv/
