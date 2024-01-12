@@ -13,7 +13,23 @@
   file = {/home/javier/Zotero/storage/9D2E5TRQ/Li et al. - 2020 - Federated Optimization in Heterogeneous Networks.pdf;/home/javier/Zotero/storage/DGCZVR7F/1812.html}
 }
 
-@misc{mcmahan2023,
+@misc{li2021,
+  title = {Federated {{Learning}} on {{Non-IID Data Silos}}: {{An Experimental Study}}},
+  shorttitle = {Federated {{Learning}} on {{Non-IID Data Silos}}},
+  author = {Li, Qinbin and Diao, Yiqun and Chen, Quan and He, Bingsheng},
+  year = {2021},
+  month = oct,
+  number = {arXiv:2102.02079},
+  eprint = {2102.02079},
+  primaryclass = {cs},
+  publisher = {{arXiv}},
+  urldate = {2024-01-12},
+  abstract = {Due to the increasing privacy concerns and data regulations, training data have been increasingly fragmented, forming distributed databases of multiple "data silos" (e.g., within different organizations and countries). To develop effective machine learning services, there is a must to exploit data from such distributed databases without exchanging the raw data. Recently, federated learning (FL) has been a solution with growing interests, which enables multiple parties to collaboratively train a machine learning model without exchanging their local data. A key and common challenge on distributed databases is the heterogeneity of the data distribution among the parties. The data of different parties are usually non-independently and identically distributed (i.e., non-IID). There have been many FL algorithms to address the learning effectiveness under non-IID data settings. However, there lacks an experimental study on systematically understanding their advantages and disadvantages, as previous studies have very rigid data partitioning strategies among parties, which are hardly representative and thorough. In this paper, to help researchers better understand and study the non-IID data setting in federated learning, we propose comprehensive data partitioning strategies to cover the typical non-IID data cases. Moreover, we conduct extensive experiments to evaluate state-of-the-art FL algorithms. We find that non-IID does bring significant challenges in learning accuracy of FL algorithms, and none of the existing state-of-the-art FL algorithms outperforms others in all cases. Our experiments provide insights for future studies of addressing the challenges in "data silos".},
+  archiveprefix = {arxiv},
+  file = {/home/javier/Zotero/storage/IQ9PYUR9/Li et al. - 2021 - Federated Learning on Non-IID Data Silos An Exper.pdf;/home/javier/Zotero/storage/UKIJ3SD9/2102.html}
+}
+
+@misc{mcmahan2023a,
   title = {Communication-{{Efficient Learning}} of {{Deep Networks}} from {{Decentralized Data}}},
   author = {McMahan, H. Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and y Arcas, Blaise Ag{\"u}era},
   year = {2023},
@@ -22,8 +38,21 @@
   eprint = {1602.05629},
   primaryclass = {cs},
   publisher = {{arXiv}},
-  urldate = {2023-12-16},
+  urldate = {2024-01-12},
   abstract = {Modern mobile devices have access to a wealth of data suitable for learning models, which in turn can greatly improve the user experience on the device. For example, language models can improve speech recognition and text entry, and image models can automatically select good photos. However, this rich data is often privacy sensitive, large in quantity, or both, which may preclude logging to the data center and training there using conventional approaches. We advocate an alternative that leaves the training data distributed on the mobile devices, and learns a shared model by aggregating locally-computed updates. We term this decentralized approach Federated Learning. We present a practical method for the federated learning of deep networks based on iterative model averaging, and conduct an extensive empirical evaluation, considering five different model architectures and four datasets. These experiments demonstrate the approach is robust to the unbalanced and non-IID data distributions that are a defining characteristic of this setting. Communication costs are the principal constraint, and we show a reduction in required communication rounds by 10-100x as compared to synchronized stochastic gradient descent.},
   archiveprefix = {arxiv},
-  file = {/home/javier/Zotero/storage/22REHHEG/McMahan et al. - 2023 - Communication-Efficient Learning of Deep Networks .pdf;/home/javier/Zotero/storage/XBKS2NES/1602.html}
+  file = {/home/javier/Zotero/storage/EBNMC2MY/McMahan et al. - 2023 - Communication-Efficient Learning of Deep Networks .pdf;/home/javier/Zotero/storage/3WPBK7V8/1602.html}
+}
+
+@article{zhao2018,
+  title = {Federated {{Learning}} with {{Non-IID Data}}},
+  author = {Zhao, Yue and Li, Meng and Lai, Liangzhen and Suda, Naveen and Civin, Damon and Chandra, Vikas},
+  year = {2018},
+  eprint = {1806.00582},
+  primaryclass = {cs, stat},
+  doi = {10.48550/arXiv.1806.00582},
+  urldate = {2024-01-12},
+  abstract = {Federated learning enables resource-constrained edge compute devices, such as mobile phones and IoT devices, to learn a shared model for prediction, while keeping the training data local. This decentralized approach to train models provides privacy, security, regulatory and economic benefits. In this work, we focus on the statistical challenge of federated learning when local data is non-IID. We first show that the accuracy of federated learning reduces significantly, by up to 55\% for neural networks trained for highly skewed non-IID data, where each client device trains only on a single class of data. We further show that this accuracy reduction can be explained by the weight divergence, which can be quantified by the earth mover's distance (EMD) between the distribution over classes on each device and the population distribution. As a solution, we propose a strategy to improve training on non-IID data by creating a small subset of data which is globally shared between all the edge devices. Experiments show that accuracy can be increased by 30\% for the CIFAR-10 dataset with only 5\% globally shared data.},
+  archiveprefix = {arxiv},
+  file = {/home/javier/Zotero/storage/7T3IPGCR/Zhao et al. - 2018 - Federated Learning with Non-IID Data.pdf;/home/javier/Zotero/storage/EMHTM8BJ/1806.html}
 }
