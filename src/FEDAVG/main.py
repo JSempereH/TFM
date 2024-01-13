@@ -74,7 +74,7 @@ for round in range(N_ROUNDS):
         break
     #print(f"Before FedAvg: {first_weight_tensor}")
 
-    FedAvg.aggregation(global_model=global_model,
+    strategy.aggregation(global_model=global_model,
                        list_local_models=[client.net for client in list_clients],
                        list_len_datasets=[client.local_train_dataloader.dataset.__len__() for client in list_clients]
     )
@@ -83,5 +83,7 @@ for round in range(N_ROUNDS):
         first_weight_tensor = param
         break
     #print(f"After FedAvg {first_weight_tensor}")
+
+    # TODO: HACER UN client.set_parameters con los parametros del modelo agregado
         
     
