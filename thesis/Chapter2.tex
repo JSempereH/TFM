@@ -2,10 +2,10 @@
 \label{ch:Federated_Learning}
 
 \section{Introduction}
-In the rapidly evolving landscape of artificial intelligence and machine learning, Federated Learning (FL) 
+In the rapidly evolving landscape of artificial intelligence and machine learning, Federated Learning (FL)
 has emerged as a paradigm that addresses key challenges related to privacy, data security,
- and decentralized computing. Federated Learning represents a novel approach to model training, allowing 
- machine learning models to be trained collaboratively across multiple decentralized devices or servers 
+ and decentralized computing. Federated Learning represents a novel approach to model training, allowing
+ machine learning models to be trained collaboratively across multiple decentralized devices or servers
  without exchanging raw data \cite{mcmahan2023a}.
 
  Unlike traditional centralized approaches, where data is collected and processed in a central server, FL enables training on local devices following a scheme of decentralized model training.
@@ -18,12 +18,12 @@ Horizontal Federated Learning (HFL) and Vertical Federated learning (VFL) are tw
 
 \begin{itemize}
     \item \textbf{HFL:} Each party has a portion of the overall dataset, each party holds a different subset of examples but for the same features.
-    \item \textbf{VFL:} The data data is vertically partitioned, each party has different features for the same set of examples (rows).
+    \item \textbf{VFL:} The data  is vertically partitioned, each party has different features for the same set of examples (rows).
 \end{itemize}
 
 HFL and VFL are not mutually exclusive, in some cases a combination of both schemes may be applied. This work will focus on HFL. Also, we will only study Cross-Silo Federated Learning (Cross-Silo FL),
-which is a variation of FL that addresses the scenario where data is distributed acrros different organizations, usually few parties, each mainaining control over its own data.
-This setting is particularly relevant in industries where different organizations need to collaborate on machine learning task, such as healthcare (hospitals collaborating on medical research), finance (banks collaborating on fraud detection), epidemiological studies (international public health agencies studying disease spread), 
+which is a variation of FL that addresses the scenario where data is distributed across different organizations, usually few parties, each maintaining control over its own data.
+This setting is particularly relevant in industries where different organizations need to collaborate on machine learning task, such as healthcare (hospitals collaborating on medical research), finance (banks collaborating on fraud detection), epidemiological studies (international public health agencies studying disease spread),
 smart cities (urban planning authorities collaborating on public services optimization), etc. Ensuring interoperability between different silos is a huge challenge, since there needs to be a fixed standard in data format, structures and processing capabilities accross different organizations.
 
 We will begin by studying the FedAvg algorithm \cite{mcmahan2023a}, which is de facto approach for Federated Learning (FL). We will establish notation, examine some of its properties, and explore issues that arise when data is not independently identically distributed (statistical heterogeneity). Following that, various approaches that have been proposed to address this problem will be developed, and the performance of each will be analyzed across different training architectures.
