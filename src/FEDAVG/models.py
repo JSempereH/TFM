@@ -8,6 +8,7 @@ DEVICE = torch.device("cpu")
 CRITERION = torch.nn.CrossEntropyLoss()
 OPTIMIZER = "ADAM"
 
+
 class Net(nn.Module):
     def __init__(self) -> None:
         super(Net, self).__init__()
@@ -27,18 +28,18 @@ class Net(nn.Module):
         x = self.fc3(x)
         return x
 
+
 def select_optimizer(net: nn.Module):
     if OPTIMIZER == "ADAM":
         return torch.optim.Adam(filter(lambda p: p.requires_grad, net.parameters()))
+
 
 def train(net, trainloader, epochs: int, server_name: str):
     """Train the network on the training set."""
     criterion = CRITERION
     optimizer = select_optimizer(net=net)
 
-    pbar = tqdm(range(epochs), 
-                desc = f"Training {server_name}:",
-                colour="green")
+    pbar = tqdm(range(epochs), desc=f"Training {server_name}:", colour="green")
     net.train()
     for epoch in pbar:
         correct, total, epoch_loss = 0, 0, 0.0
@@ -55,18 +56,20 @@ def train(net, trainloader, epochs: int, server_name: str):
             correct += (torch.max(outputs.data, 1)[1] == labels).sum().item()
         epoch_loss /= len(trainloader.dataset)
         epoch_acc = correct / total
-        pbar.set_description(f"Epoch {epoch+1}: train loss {epoch_loss}, accuracy {epoch_acc}")
+        pbar.set_description(
+            f"Epoch {epoch+1}: train loss {epoch_loss}, accuracy {epoch_acc}"
+        )
 
 
-def train_fedprox(net, trainloader, epochs: int, server_name: str, mu: float, global_model: nn.Module):
+def train_fedprox(
+    net, trainloader, epochs: int, server_name: str, mu: float, global_model: nn.Module
+):
     """Train the network on the training set."""
     criterion = CRITERION
     optimizer = select_optimizer(net=net)
 
-    pbar = tqdm(range(epochs), 
-                desc = f"Training {server_name}:",
-                colour="green")
-    
+    pbar = tqdm(range(epochs), desc=f"Training {server_name}:", colour="green")
+
     global_weight_collector = list(global_model.to(DEVICE).parameters())
     net.train()
     for epoch in pbar:
@@ -78,7 +81,9 @@ def train_fedprox(net, trainloader, epochs: int, server_name: str, mu: float, gl
             loss = criterion(net(images), labels)
             fed_prox_reg = 0.0
             for param_index, param in enumerate(net.parameters()):
-                fed_prox_reg += ((mu / 2) * torch.norm((param - global_weight_collector[param_index]))**2)
+                fed_prox_reg += (mu / 2) * torch.norm(
+                    (param - global_weight_collector[param_index])
+                ) ** 2
             loss += fed_prox_reg
             loss.backward()
             optimizer.step()
@@ -88,7 +93,9 @@ def train_fedprox(net, trainloader, epochs: int, server_name: str, mu: float, gl
             correct += (torch.max(outputs.data, 1)[1] == labels).sum().item()
         epoch_loss /= len(trainloader.dataset)
         epoch_acc = correct / total
-        pbar.set_description(f"Epoch {epoch+1}: train loss {epoch_loss}, accuracy {epoch_acc}")
+        pbar.set_description(
+            f"Epoch {epoch+1}: train loss {epoch_loss}, accuracy {epoch_acc}"
+        )
 
 
 def test(net, testloader):
@@ -114,12 +121,18 @@ def are_models_equal(model_list: List[nn.Module]):
     state_dicts_list = [model.state_dict() for model in model_list]
 
     # Check if the keys of state_dicts are the same for all models
-    if any(set(state_dict.keys()) != set(state_dicts_list[0].keys()) for state_dict in state_dicts_list[1:]):
+    if any(
+        set(state_dict.keys()) != set(state_dicts_list[0].keys())
+        for state_dict in state_dicts_list[1:]
+    ):
         return False
 
     # Check if the values (weights) of the corresponding keys are the same for all models
     for key in state_dicts_list[0].keys():
-        if any(not torch.equal(state_dict[key], state_dicts_list[0][key]) for state_dict in state_dicts_list[1:]):
+        if any(
+            not torch.equal(state_dict[key], state_dicts_list[0][key])
+            for state_dict in state_dicts_list[1:]
+        ):
             return False
 
     # If all checks pass, the models are equal
