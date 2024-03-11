@@ -17,4 +17,11 @@ src/FedAvg/
 src/fedprox/
 src/multirun/
 src/outputs/
+.vscode/
+src/FEDAVG/__pycache__/
 TFM_venv/
+
+Manifest.toml
+Project.toml
+
+dataset/

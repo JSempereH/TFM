@@ -20,6 +20,8 @@ def download_datasets(dataset_name: str):
         trainset = CIFAR10("./dataset", train=True, download=True, transform=transform)
         testset = CIFAR10("./dataset", train=False, download=True, transform=transform)
 
+    #   TODO: Add more datasets: MNIST, EMNIST, etc
+
     return trainset, testset
 
 
