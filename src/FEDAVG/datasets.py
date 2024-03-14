@@ -1,5 +1,5 @@
 import torchvision.transforms as transforms
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader, random_split, Subset
 from torchvision.datasets import CIFAR10
 import torch
 import matplotlib
@@ -51,6 +51,100 @@ def load_IID_datasets(num_clients: int, dataset_name: str = "CIFAR10"):
         valloaders.append(DataLoader(ds_val, batch_size=32))
     testloader = DataLoader(testset, batch_size=32)
     return trainloaders, valloaders, testloader
+
+
+def load_non_iid_dataloaders_Dirichlet(num_clients, dataset_name="CIFAR10", beta=0.5):
+    """
+    Dirichlet Distribution-based label imbalance. Different P(y_i) among clients.
+    """
+    trainset, testset = download_datasets(dataset_name)
+    num_classes = len(trainset.classes)
+    proportions = np.random.dirichlet([beta] * num_classes, size=num_clients)
+    trainloaders = []
+    valloaders = []
+
+    for client_proportions in proportions:
+        client_indices = []
+        for class_idx, class_proportion in enumerate(client_proportions):
+            class_samples = np.where(np.array(trainset.targets) == class_idx)[0]
+            num_samples = int(len(class_samples) * class_proportion)
+            sampled_indices = np.random.choice(
+                class_samples, num_samples, replace=False
+            )
+            client_indices.extend(sampled_indices.tolist())
+
+        train_data = torch.utils.data.Subset(trainset, client_indices)
+        val_size = int(len(train_data) * 0.1)  # 10% for validation
+        train_data, val_data = torch.utils.data.random_split(
+            train_data, [len(train_data) - val_size, val_size]
+        )
+
+        trainloader = DataLoader(train_data, batch_size=32, shuffle=True)
+        valloader = DataLoader(val_data, batch_size=32)
+
+        trainloaders.append(trainloader)
+        valloaders.append(valloader)
+
+    testloader = DataLoader(testset, batch_size=32)
+    return trainloaders, valloaders, testloader
+
+
+def load_non_iid_dataloaders_quantity_based(
+    labels_per_party: list, dataset_name: str = "CIFAR10"
+):
+    """
+    Quantity-based label imbalance partition. Different P(y_i) among clients.
+    len(labels_per_party) already gives the number of clients
+
+    """
+    trainset, testset = download_datasets(dataset_name)
+    num_classes = len(trainset.classes)
+    total_labels = sum(labels_per_party)
+
+    assert (
+        num_classes == total_labels
+    ), "The sum of labels per party must be equal to the total number of classes"
+
+    party_data_indices = []
+    start_idx = 0
+
+    for num_labels in labels_per_party:
+        end_idx = start_idx + num_labels
+        label_indices = []
+
+        for label_id in range(start_idx, end_idx):
+            label_indices.extend(
+                [idx for idx, (_, label) in enumerate(trainset) if label == label_id]
+            )
+
+        party_data_indices.append(label_indices)
+        start_idx = end_idx
+
+    trainloaders = []
+    valloaders = []
+    val_split = 0.1  # 10% for validation set
+    for data_indices in party_data_indices:
+        train_data = Subset(trainset, data_indices)
+        num_train = len(train_data)
+        indices = list(range(num_train))
+        split = int(np.floor(val_split * num_train))
+
+        np.random.shuffle(indices)
+        train_idx, val_idx = indices[split:], indices[:split]
+
+        trainloader = DataLoader(
+            Subset(train_data, train_idx), batch_size=32, shuffle=True
+        )
+        valloader = DataLoader(Subset(train_data, val_idx), batch_size=32)
+
+        trainloaders.append(trainloader)
+        valloaders.append(valloader)
+
+    testloader = testloader = DataLoader(testset, batch_size=32)
+    return trainloaders, valloaders, testloader
+
+
+#################################3
 
 
 def plot_label_bars_multi(
