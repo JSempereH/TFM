@@ -336,7 +336,7 @@ def plot_label_bars_multi(
     train_loaders: List[DataLoader],
     val_loaders: List[DataLoader],
     dataset_name: str,
-    extra_name: str,
+    extra_name: str = "",
 ):
     """
     Plots bar subplots of labels in lists of CIFAR10 DataLoaders.
@@ -382,9 +382,10 @@ def plot_label_bars_multi(
             label=f"Client {i + 1}",
         )
 
+    classes_names = download_datasets(dataset_name)[0].classes
     for ax, title in zip(axes, ["Train", "Validation"]):
         ax.set_xticks(np.arange(10) + (bar_width * (num_loaders - 1)) / 2)
-        ax.set_xticklabels(range(10))
+        ax.set_xticklabels(classes_names, rotation=45, ha="right")
         ax.set_title(f"Bar plot of {dataset_name} Labels - {title}")
         ax.set_xlabel("Labels")
         ax.set_ylabel("Frequency")
