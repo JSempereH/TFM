@@ -1,12 +1,10 @@
 import torchvision.transforms as transforms
-from torch.utils.data import DataLoader, random_split, Subset
+from torch.utils.data import Dataset, DataLoader, random_split, Subset
 from torchvision.datasets import CIFAR10
 import torch
-import matplotlib
 import matplotlib.pyplot as plt
-from typing import List
+from typing import List, Tuple
 import numpy as np
-import os
 
 
 def download_datasets(dataset_name: str):
@@ -25,30 +23,97 @@ def download_datasets(dataset_name: str):
     return trainset, testset
 
 
-def load_IID_datasets(num_clients: int, dataset_name: str = "CIFAR10"):
-    # Download and transform CIFAR-10 (train and test)
+def split_dataset_randomly(
+    dataset: Dataset, num_clients: int, seed: int = 42
+) -> List[Dataset]:
+    """
+    Split the dataset randomly into `num_clients` partitions.
 
-    trainset, testset = download_datasets(dataset_name)
+    Args:
+        dataset (Dataset): The dataset to be split.
+        num_clients (int): The number of partitions (clients).
+        seed (int): Random seed for reproducibility. Default is 42.
 
-    # Split training set into `num_clients` partitions to simulate different local datasets
-    partition_size = len(trainset) // num_clients
-    remainder = len(trainset) % num_clients  # We dont want to loose any data
+    Returns:
+        list: A list containing `num_clients` partitions of the dataset.
+    """
+    # Calculate partition sizes
+    partition_size = len(dataset) // num_clients
+    remainder = len(dataset) % num_clients
     lengths = [partition_size] * num_clients
     for i in range(remainder):
         lengths[i] += 1
 
-    datasets = random_split(trainset, lengths, torch.Generator().manual_seed(42))
+    # Split dataset into partitions
+    partitions = random_split(
+        dataset, lengths, generator=torch.Generator().manual_seed(seed)
+    )
 
-    # Split each partition into train/val and create DataLoader
+    return partitions
+
+
+def create_train_val_loaders(
+    partitions: List[Dataset],
+    batch_size: int = 32,
+    val_split: float = 0.1,
+    shuffle: bool = True,
+    seed: int = 42,
+) -> Tuple[List[DataLoader], List[DataLoader]]:
+    """
+    Create DataLoader instances for training and validation sets for each partition.
+
+    Args:
+        partitions (list[Dataset]): A list containing partitions of the dataset.
+        batch_size (int): Batch size for DataLoader. Default is 32.
+        val_split (float): Fraction of data to include in the validation set. Default is 0.1.
+        shuffle (bool): Whether to shuffle the data. Default is True.
+        seed (int): Random seed for reproducibility. Default is 42.
+
+    Returns:
+        tuple: A tuple containing lists of DataLoader instances for training and validation sets.
+    """
+    if not 0 < val_split < 1:
+        raise ValueError("val_split must be between 0 and 1.")
+
     trainloaders = []
     valloaders = []
-    for ds in datasets:
-        len_val = len(ds) // 10  # 10 % validation set
+
+    for ds in partitions:
+        len_val = int(len(ds) * val_split)
         len_train = len(ds) - len_val
         lengths = [len_train, len_val]
-        ds_train, ds_val = random_split(ds, lengths, torch.Generator().manual_seed(42))
-        trainloaders.append(DataLoader(ds_train, batch_size=32, shuffle=True))
-        valloaders.append(DataLoader(ds_val, batch_size=32))
+
+        ds_train, ds_val = random_split(
+            ds, lengths, generator=torch.Generator().manual_seed(seed)
+        )
+
+        trainloader = DataLoader(ds_train, batch_size=batch_size, shuffle=shuffle)
+        valloader = DataLoader(ds_val, batch_size=batch_size)
+
+        trainloaders.append(trainloader)
+        valloaders.append(valloader)
+
+    return trainloaders, valloaders
+
+
+def load_IID_datasets(
+    num_clients: int, dataset_name: str = "CIFAR10"
+) -> Tuple[List[DataLoader], List[DataLoader], DataLoader]:
+    """
+    Load IID (independently and identically distributed) datasets for Federated Learning.
+
+    Args:
+        num_clients (int): Number of clients.
+        dataset_name (str): Name of the dataset. Default is "CIFAR10".
+
+    Returns:
+        tuple: A tuple containing lists of DataLoader instances for training and validation sets, and a DataLoader instance for the test set.
+    """
+    trainset, testset = download_datasets(dataset_name)
+    partitions = split_dataset_randomly(trainset, num_clients)
+
+    # Split each partition into train/val and create DataLoader
+    trainloaders, valloaders = create_train_val_loaders(partitions)
     testloader = DataLoader(testset, batch_size=32)
     return trainloaders, valloaders, testloader
 
@@ -141,6 +206,78 @@ def load_non_iid_dataloaders_quantity_based(
         valloaders.append(valloader)
 
     testloader = testloader = DataLoader(testset, batch_size=32)
+    return trainloaders, valloaders, testloader
+
+
+def load_non_iid_dataloaders_Noise(
+    num_clients: int, noise_level: float, dataset_name="CIFAR10"
+):
+    def add_gaussian_noise(dataset, noise_level, party_idx, num_clients):
+        noisy_dataset = []
+        for data in dataset:
+            image, label = data
+            noise_scale = (
+                noise_level * (party_idx + 1) / num_clients
+            )  # Increase noise level with party index
+            noisy_image = image + torch.randn_like(image) * noise_scale
+            noisy_dataset.append((noisy_image, label))
+        return noisy_dataset
+
+    trainset, testset = download_datasets(dataset_name)
+    partitions = split_dataset_randomly(trainset, num_clients)
+    noisy_partitions = [
+        add_gaussian_noise(partition, noise_level, idx, num_clients)
+        for idx, partition in enumerate(partitions)
+    ]
+    trainloaders, valloaders = create_train_val_loaders(noisy_partitions)
+    testloader = DataLoader(testset, batch_size=32)
+    return trainloaders, valloaders, testloader
+
+
+def load_non_iid_dataloaders_QuantitySkew(
+    num_clients: int,
+    dataset_name: str = "CIFAR10",
+    beta: float = 0.5,
+    batch_size: int = 32,
+    val_split: float = 0.1,
+    shuffle: bool = True,
+    seed: int = 42,
+):
+    """
+    Quantity Skew partitioning strategy. Varying dataset sizes across parties using Dirichlet distribution.
+
+    Args:
+        num_clients (int): Number of parties (clients).
+        dataset_name (str): Name of the dataset. Default is "CIFAR10".
+        beta (float): Concentration parameter for Dirichlet distribution. Default is 0.5.
+        batch_size (int): Batch size for DataLoader. Default is 32.
+        val_split (float): Fraction of data to include in the validation set. Default is 0.1.
+        shuffle (bool): Whether to shuffle the data. Default is True.
+        seed (int): Random seed for reproducibility. Default is 42.
+
+    Returns:
+        tuple: A tuple containing lists of DataLoader instances for training and validation sets, and a DataLoader instance for the test set.
+    """
+    trainset, testset = download_datasets(dataset_name)
+    proportions = np.random.dirichlet([beta] * num_clients)
+    # Scale proportions to total number of samples
+    quantities = (proportions * len(trainset)).astype(int)
+    quantities[-1] += len(trainset) - sum(quantities)
+    # Partition the dataset based on the quantities
+    partitions = random_split(trainset, lengths=quantities)
+
+    # Create train and validation loaders
+    trainloaders, valloaders = create_train_val_loaders(
+        partitions,
+        batch_size=batch_size,
+        val_split=val_split,
+        shuffle=shuffle,
+        seed=seed,
+    )
+
+    # Create test loader
+    testloader = DataLoader(testset, batch_size=batch_size)
+
     return trainloaders, valloaders, testloader
 
 
