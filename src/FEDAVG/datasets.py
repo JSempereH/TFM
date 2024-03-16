@@ -1,13 +1,22 @@
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset, DataLoader, random_split, Subset
-from torchvision.datasets import CIFAR10
+from torchvision.datasets import CIFAR10, MNIST, FashionMNIST
 import torch
 import matplotlib.pyplot as plt
 from typing import List, Tuple
 import numpy as np
 
 
-def download_datasets(dataset_name: str):
+def download_datasets(dataset_name: str) -> Tuple[Dataset, Dataset]:
+    """
+    Downloads and returns the specified dataset.
+
+    Args:
+        dataset_name (str): Name of the dataset.
+
+    Returns:
+        tuple: A tuple containing the training and test datasets.
+    """
     if dataset_name == "CIFAR10":
         transform = transforms.Compose(
             [
@@ -18,7 +27,28 @@ def download_datasets(dataset_name: str):
         trainset = CIFAR10("./dataset", train=True, download=True, transform=transform)
         testset = CIFAR10("./dataset", train=False, download=True, transform=transform)
 
-    #   TODO: Add more datasets: MNIST, EMNIST, etc
+    elif dataset_name == "MNIST":
+        transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+        )
+        trainset = MNIST("./dataset", train=True, download=True, transform=transform)
+        testset = MNIST("./dataset", train=False, download=True, transform=transform)
+
+    elif dataset_name == "FashionMNIST":
+        transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+        )
+        trainset = FashionMNIST(
+            root="./dataset", train=True, download=True, transform=transform
+        )
+        testset = FashionMNIST(
+            root="./dataset", train=False, download=True, transform=transform
+        )
+
+    else:
+        raise ValueError(
+            "Invalid dataset name. Supported datasets: CIFAR10, MNIST, FashionMNIST"
+        )
 
     return trainset, testset
 
@@ -100,7 +130,7 @@ def load_IID_datasets(
     num_clients: int, dataset_name: str = "CIFAR10"
 ) -> Tuple[List[DataLoader], List[DataLoader], DataLoader]:
     """
-    Load IID (independently and identically distributed) datasets for Federated Learning.
+    Load IID (independently and identically distributed) datasets.
 
     Args:
         num_clients (int): Number of clients.
@@ -118,9 +148,19 @@ def load_IID_datasets(
     return trainloaders, valloaders, testloader
 
 
-def load_non_iid_dataloaders_Dirichlet(num_clients, dataset_name="CIFAR10", beta=0.5):
+def load_non_iid_dataloaders_Dirichlet(
+    num_clients, dataset_name="CIFAR10", beta=0.5
+) -> Tuple[List[DataLoader], List[DataLoader], DataLoader]:
     """
     Dirichlet Distribution-based label imbalance. Different P(y_i) among clients.
+
+    Args:
+        num_clients (int): Number of clients.
+        dataset_name (str): Name of the dataset. Default is "CIFAR10".
+        beta (float): Concentration parameter for the Dirichlet distribution. Default is 0.5.
+
+    Returns:
+        tuple: A tuple containing lists of DataLoader instances for training and validation sets, and a DataLoader instance for the test set.
     """
     trainset, testset = download_datasets(dataset_name)
     num_classes = len(trainset.classes)
@@ -156,11 +196,19 @@ def load_non_iid_dataloaders_Dirichlet(num_clients, dataset_name="CIFAR10", beta
 
 def load_non_iid_dataloaders_quantity_based(
     labels_per_party: list, dataset_name: str = "CIFAR10"
-):
+) -> Tuple[List[DataLoader], List[DataLoader], DataLoader]:
     """
     Quantity-based label imbalance partition. Different P(y_i) among clients.
-    len(labels_per_party) already gives the number of clients
+    len(labels_per_party) already gives the number of clients.
+    For example: [3,3,4] for CIFAR10 would give all the first 3 labels to client 1,
+    the next 3 labels to client 2 and the last 4 labels to client 3.
 
+    Args:
+        labels_per_party (list): A list specifying the number of labels each party/client possesses.
+        dataset_name (str): Name of the dataset. Default is "CIFAR10".
+
+    Returns:
+        tuple: A tuple containing lists of DataLoader instances for training and validation sets, and a DataLoader instance for the test set.
     """
     trainset, testset = download_datasets(dataset_name)
     num_classes = len(trainset.classes)
@@ -287,14 +335,17 @@ def load_non_iid_dataloaders_QuantitySkew(
 def plot_label_bars_multi(
     train_loaders: List[DataLoader],
     val_loaders: List[DataLoader],
-    dataset_name: str = "CIFAR10",
+    dataset_name: str,
+    extra_name: str,
 ):
     """
-    Plotea subgráficos de barras de las etiquetas en listas de DataLoaders de CIFAR10.
+    Plots bar subplots of labels in lists of CIFAR10 DataLoaders.
 
-    Parameters:
-    - train_loaders: Lista de DataLoaders de entrenamiento de CIFAR10.
-    - val_loaders: Lista de DataLoaders de validación de CIFAR10.
+    Args:
+        train_loaders (List[DataLoader]): List of CIFAR10 training DataLoaders.
+        val_loaders (List[DataLoader]): List of CIFAR10 validation DataLoaders.
+        dataset_name (str): Name of the dataset.
+        extra_name (str): Additional name to append to the plot file name.
     """
     plt.style.use("ggplot")
     num_loaders = len(train_loaders)
@@ -345,6 +396,7 @@ def plot_label_bars_multi(
         + str(num_loaders)
         + "-clients-"
         + dataset_name
+        + extra_name
         + ".png"
     )
     plt.savefig(plot_title)
