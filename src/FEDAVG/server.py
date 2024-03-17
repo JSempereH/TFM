@@ -50,3 +50,13 @@ class Client:
         self.set_parameters(parameters)
         loss, accuracy = test(self.net, self.valloader)
         return float(loss), len(self.valloader), {"accuracy": float(accuracy)}
+
+
+class Central_Server:
+    def __init__(self, global_net, test_dl):
+        self.global_net = global_net
+        self.test_dl = test_dl
+
+    def get_parameters(self):
+        """Return the parameters of the gloabl net."""
+        return [val.cpu().numpy() for _, val in self.global_net.state_dict().items()]
