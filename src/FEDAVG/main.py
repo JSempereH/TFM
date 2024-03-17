@@ -114,3 +114,9 @@ for round in range(N_ROUNDS):
     print(
         f"\nAre models equal?: {are_models_equal([client.net for client in list_clients]) and are_models_equal([list_clients[0].net, central_server.global_net])}"
     )
+
+    # Use global net for test_dl
+    central_server.test()
+    # Each client test its own val_dl with their own local net, which is now the global net
+    for client in list_clients:
+        client.evaluate()

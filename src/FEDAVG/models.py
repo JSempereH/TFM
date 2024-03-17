@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
-from typing import List
+from typing import List, Tuple
 
 DEVICE = torch.device("cpu")
 CRITERION = torch.nn.CrossEntropyLoss()
@@ -98,8 +98,8 @@ def train_fedprox(
         )
 
 
-def test(net, testloader):
-    """Evaluate the network on the entire test set."""
+def test(net, testloader) -> Tuple[float, float]:
+    """Evaluate the network on the test set."""
     criterion = torch.nn.CrossEntropyLoss()
     correct, total, loss = 0, 0, 0.0
     net.eval()
