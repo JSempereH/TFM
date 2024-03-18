@@ -1,9 +1,14 @@
 from typing import List
 import torch.nn as nn
+from abc import ABC
 import torch
 
 
-class FedAvg:
+class Strategy(ABC):
+    pass
+
+
+class FedAvg(Strategy):
     def __init__(self) -> None:
         pass
 
@@ -32,9 +37,10 @@ class FedAvg:
         global_model.load_state_dict(aggregated_params)
 
 
-class FedProx:  # Mejor que herede de una clase base donde se defina la agregación
-    def __init__(self, global_model, mu) -> None:
-        self.global_model = global_model
+class FedProx(
+    Strategy
+):  # TODO: Mejor que herede de una clase base donde se defina la agregación
+    def __init__(self, mu) -> None:
         self.mu = mu
 
     def aggregation(

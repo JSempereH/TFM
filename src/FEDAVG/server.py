@@ -25,7 +25,7 @@ class Client:
         state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
         self.net.load_state_dict(state_dict, strict=True)
 
-    def fit(self, parameters, strategy):
+    def fit(self, parameters, strategy, global_net):
         print(f"{self.client_name} fit")
         self.set_parameters(parameters)
         if isinstance(strategy, FedAvg):
@@ -42,7 +42,7 @@ class Client:
                 self.n_epochs,
                 server_name=self.client_name,
                 mu=strategy.mu,
-                global_model=strategy.global_model,
+                global_model=global_net,
             )
         # return self.get_parameters(self.net), len(self.local_train_dataloader)
 
