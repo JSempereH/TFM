@@ -17,18 +17,99 @@ has emerged as a paradigm that addresses key challenges related to privacy, data
 Horizontal Federated Learning (HFL) and Vertical Federated learning (VFL) are two variations of the federated learning paradigm that differ in how they distribute and collaborate on data.
 
 \begin{itemize}
-    \item \textbf{HFL:} Each party has a portion of the overall dataset, each party holds a different subset of examples but for the same features.
-    \item \textbf{VFL:} The data  is vertically partitioned, each party has different features for the same set of examples (rows).
+    \item \textbf{HFL:} Each party has a portion of the overall dataset, each party holds a different subset of samples but for the same features.
+    \item \textbf{VFL:} The data  is vertically partitioned, each party has different features for the same set of samples.
 \end{itemize}
 
-HFL and VFL are not mutually exclusive, in some cases a combination of both schemes may be applied. This work will focus on HFL. Also, we will only study Cross-Silo Federated Learning (Cross-Silo FL),
+[\textbf{PONER TABLAS QUE ILUSTREN HFL Y VFL}]
+
+HFL and VFL are not mutually exclusive, in some cases a combination of both schemes may be applied. This work will focus on HFL. Also, we will only study \textit{Cross-Silo Federated Learning (Cross-Silo FL)},
 which is a variation of FL that addresses the scenario where data is distributed across different organizations, usually few parties, each maintaining control over its own data.
 This setting is particularly relevant in industries where different organizations need to collaborate on machine learning task, such as healthcare (hospitals collaborating on medical research), finance (banks collaborating on fraud detection), epidemiological studies (international public health agencies studying disease spread),
-smart cities (urban planning authorities collaborating on public services optimization), etc. Ensuring interoperability between different silos is a huge challenge, since there needs to be a fixed standard in data format, structures and processing capabilities accross different organizations.
+smart cities (urban planning authorities collaborating on public services optimization), etc. Ensuring interoperability between different silos is a huge challenge, since there needs to be a fixed standard in data format, structures and processing capabilities accross different organizations.\\
+Another flavour of FL is \textit{Cross device FL}, which was the original topology proposed \cite*{mcmahan2023a}. In this type of setting, the scale of the parties is potentially much bigger (order of millions) since it's aimed to mobile devices, IoT, apps... where the data format and architecture is usually already defined by an organization. For example, this is the kind of FL that Google uses for training Gboard's models \cite*{zhang2023}. With \textit{Cross device FL}, it's needed to take into account some technical difficulties like client selection strategy \cite*{smestad2023}, connection overheard, connection dropouts, device heterogeneity, etc.
+Some of these challenges are shared with \textit{Cross-Silo FL}. The main differences are the scale of parties, the computing resources (mobile devices vs data centers or computers) and the partition of data: \textit{cross device} tends to be HFL while \textit{cross-silo} could be HFL or VFL. Since we are focusing in \textit{cross-silo FL}, it won't be studied the implications of client selection (since we are assuming the parties are few and well-defined), the connection overheard or dropouts. The focus of this work will be mainly the statistical heterogeneity challenge, since this work serves as the final project for obtaining a MSc in Statistics.
 
 We will begin by studying the FedAvg algorithm \cite{mcmahan2023a}, which is de facto approach for Federated Learning (FL). We will establish notation, examine some of its properties, and explore issues that arise when data is not independently identically distributed (statistical heterogeneity). Following that, various approaches that have been proposed to address this problem will be developed, and the performance of each will be analyzed across different training architectures.
 
 \section{FedAvg}
 
 Let $D = \{(\mathbf{x}, y)\}$ be the global dataset\footnote{Here, the global dataset is the union of the different local datasets, $D = \cup_{i=1}^N D^i$ . In practical cases, there is no such dataset in order to ensure data privacy. However, we will consider it to conduct a performance study of the various algorithms.} and $D^i \subset D$ the $i$-th party's local dataset, $i=1,...,N$.
-Let $\omega_g^t$ and $\omega_i^t$ be the global model and the local model of the $i$-th party in round $t\in \{1,...,T\}$, respectively.
+Let $\omega_g^t$ and $\omega_i^t$ be the global model and the local model of the $i$-th party in round $t\in \{1,...,T\}$, respectively. Since we are working in a \textit{Cross-silo FL} setting, the main differences between a federated optimization scheme and a distributed one would be the unbalanced data and non-IID data.\\
+In a general FL optimization framework, we want to minimize the objective function:
+
+\begin{equation}
+\label{eqn:objective}
+F(\omega) = \mathbb{E}_{i \sim D}\Big[ F_i (\omega_g) \Big], \qquad F_i(\omega_g) = \mathbb{E}_{z \sim D^i}\Bigl[ l_i (\omega_g, z) \Bigr]
+\end{equation}
+
+Here, $l_i(\omega_g, z)$ represents the local loss function of client i (with local dataset $D^i$). As stated in \cite*{wang2021}, the objective function in \ref{eqn:objective}
+can take the form of an empirical risk minimization objective function:
+
+\begin{equation}
+  \label{eqn:empirical_objective}
+  F(\omega_g) = \sum_{i=1}^N \alpha_i F_i(\omega_g) \text{ where } F_i (\omega_g) = \frac{1}{|D^i|} \sum_{z \in D^i} l_i(\omega_g, z) \text{ and } \sum_{i=1}^N \alpha_i = 1
+\end{equation}
+
+If $\alpha_i = \frac{|D^i|}{\sum_{i=1}^N |D^i|}$, the objective function in \ref{eqn:empirical_objective} would be the empirical risk minimization objective function of $D = \cup_i D^i$. We recall that \ref{eqn:objective} is an optimization problem that could be solved using Stochastic Descent: $\omega_g^{t+1} = \omega_g^t - \eta_t \nabla F (\omega_g^t)$ where $\eta_t$ is the learning rate at time $t$. In practice, we will use an unbiased estimator of the gradient of the local loss $g_i (\omega_g^t)$ such that $\mathbb{E}_{z \sim D^i} \Bigl[ g_i (\omega_g^t) \Bigr] = \nabla F_i (\omega_g^t)$ using Stochastic Gradient Descent (SGD).
+
+In \cite*{mcmahan2023a}, it was introduced the \textbf{FederatedAveraging} algorithm (FedAvg).
+
+\begin{algorithm}[H]
+  \label{alg:FedAvg}
+  \caption{FedAvg}
+  \begin{algorithmic}[1]
+    \Require{local datasets $D^i$ $\forall i \in \{1,\dots, N\}$, number of parties $N$, number of communication rounds $T$, number of local epochs $E$, learning rate $\eta$ for SGD, local minibatch size $B$.}
+    \Ensure{global model $\omega^T_g$.}
+    \Statex
+    \Procedure{Server execution}{}
+    \State Initialize $\omega_g^0$
+    \For {round $t = 1,\dots, T$}
+      \State $S_t$  (Selection of clients)
+      \For {client $k \in S_t$ \textbf{in parallel}}
+        \State $\omega_k^{t+1} \gets ClientUpdate(k, \omega_g^t)$
+      \EndFor
+      \State $\omega_g^{t+1} \gets \sum_{k \in S_t} \frac{|D^k|}{\sum_{k \in S_t} |D^k|} \omega_k^{t+1}$
+    \EndFor
+    \EndProcedure
+
+    \Procedure{$ClientUpdate(k, \omega_g^t)$}{}
+    \State $\omega_k^t \gets \omega_g^t$
+    \State $\mathcal{B} \gets$ Batches of $D^k$ of size $B$
+    \For {local epoch $i=1,\dots,E$}
+      \For {batch $\mathbf{b} \in \mathcal{B}$}
+        \State $\omega_k^t \gets \omega_k^t - \eta \nabla l(\omega_k^t; \mathbf{b})$
+      \EndFor
+    \EndFor
+    \State return $\omega_k^t$ to the server.
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+As we see, \textit{FedAvg} took into account a client selection strategy. Since we are focusing in a framework where the clients are limited, we will not consider any subset of clients each round: all the clients will participate.\\
+The algorithm is quite simple, the server is simply averaging the local models' weights, with a constant parameter determining the contribution of each client given the size of the local dataset.\\
+Each client performs multiple local epochs, which reduces the communication rounds. However, these local updates can lead to a worse performance since the local objective functions differ from each other. This makes the algorithm not robust against non-IID data. There are several works that try to tackle this problem and a lot of FedAvg variants have been proposed in order to mitigate the divergence between the local updates. We will review some of the more relevant of them, starting with \textit{FedProx}.
+
+\section{FedProx}
+
+In \cite*{li2020}, a generalization of \textit{FedAvg} was proposed where the local function to minimize $F_k(\omega_k)$ was modified adding a proximal term:
+
+\begin{equation}
+  \min_{\omega_k} h_k (\omega_k, \omega_g^t) = F_k(\omega_k) + \frac{\mu}{2} \lVert \omega_k - \omega_g^t \rVert^2, \qquad \mu \geq 0
+\end{equation}
+
+The basic idea, is to restrict the local updates to be closer to the actual global model. In the original proposal, it was stated that a constant number of local epochs per round each time could be not feasible because of the device / system heterogeneity. Since this work is not focused on system heterogeneity, it will not be mentioned the theoretical convergence results.
+
+\textit{FedAvg} is a particular case when $\mu = 0$, a fixed number of local epochs $E$ is set and all the local solvers are SGD. As $\mu$ increases, the function becomes more restrictive meaning that it will take longer to converge. This algorithm doesn't restrict us to any local solver, so it's not necessary to compute the estimation of the gradient using SGD.
+When the data across clients is IID, a positive $\mu$ could decelerate the convergence, some heuristics could be applied such as decreasing $\mu$ as long as the loss functions continues to decrease. Following the experiments in \cite*{li2020}, the possible values of $\mu$ that will be used in this work are selected from the finite set $\{0.001, 0.01, 0.1, 1\}$
+
+\section{FedNova}
+
+This algorithm was first introduced in \cite*{wang2020}, in order to study its main contributions we are changing the original notation of \textit{FedAvg}. We have seen that the client updates its model at round $t$ starting with a shared, global model $\omega_g^t$. Then, it applies SGD with its local data for a fixed number of epochs E.
+We recall that, for each epoch, and for each batch $\mathbf{b} = \{\mathbf{x}, y\} \in \mathcal{B} \subset D^i$, the i-th client performs $\omega_i^t = \omega_i^t - \eta \nabla l_i(\omega_i^t, \mathbf{b})$. After the round, the client will have a locally updated model $\omega_i^{t+1}$. After all the clients have updated their models, it aggregates them following the formula: $\omega_g^{t+1} = \sum_{k \in S_t} \frac{|D^k|}{\sum_{k\in S_t} |D^k|} w_k^{t+1}$.
+We can now consider the difference between the global client's starting model $\omega_g^t$ and its locally updated model $\omega_i^{t+1}$, we will denote $\Delta \omega_i^t \coloneqq \omega_g^t - \omega_i^{t+1}$, the difference between the global model at time $t$ and the local model of client $i$ at time $t+1$.
+The server would then collect $\Delta \omega_k^t$ $\forall k \in \{1,\dots, N\}$ and update the global model. For example, in \textit{FedAvg}: $\omega_g^{t+1} = \omega_g^t + \sum_{k \in S_t} \alpha_k \Delta \omega_k^t = \omega_g^t - \sum_{k \in S_t} \alpha_k \eta \sum_{j=1}^{\tau_k} g_k(\omega_k^{t, j})$ where $\alpha_k = \frac{|D^k|}{\sum_{k\in S_t} |D^k|}$, $\tau_k = \lfloor \frac{E_k |D^k|}{B} \rfloor$ with $B$ being the mini-batch size and $E_k$ the local number of epochs of client $k$, $\omega_k^{t,j}$ is the client k's model after the j-th SGD update at time $t$, $\eta$ is the learning rate (same for all clients) and $g_k$ is the stochastic gradient over a mini-batch $\mathbf{b} \in \mathcal{B}$.\\
+As stated in \cite*{wang2020}, different $E_k$ across clients and rounds means that $FedAvg$ algorithm converges to a surrogate objective instead of $F(\omega)$ from (\ref{eqn:objective}).
+This algorithm considers that different parties compute a different number of local steps ($\tau_k$) because of computation constraints or different sizes of local datasets. When $\tau_{k} > \tau_{k'}$, client $k$ will have a major influence over the global update rule compared to client $k'$. That's why the authors proposed to normalize and scale the local updates according to the number of local steps.
+
+\textbf{[PONER IMAGEN QUE SE VEA LAS DIRECCIONES DE LOS GRADIENTES CUANDO NO SE NORMALIZA Y CUANDO SE NORMALIZA]}
