@@ -195,5 +195,5 @@ With data heterogeneity, \textit{FedAvg} suffers from client-drift, since each l
 \end{algorithm}
 
 From the SCAFFOLD's algorithm, it can be noted that the clients maintain the state of $c_k$ and the server maintain $c$, which are initialized at 0.
-In comparison with the previous algorithms, here the local update formula is: $\omega_k^t = \omega_k^t - \eta (\nabla l (\omega_k^t, \mathbf{b}) - c_k + c)$. Intuitively, the local gradient $\nabla l (\omega_k^t, \mathbf{b})$ moves towards to the local optimum for client $k$, the correction $c - c_k$ ensures that the update change its direction towards the global optimum.
+In comparison with the previous algorithms, here the local update formula is: $\omega_k^t = \omega_k^t - \eta (\nabla l (\omega_k^t, \mathbf{b}) - c_k + c)$. Intuitively, the local gradient $\nabla l (\omega_k^t, \mathbf{b})$ moves towards the local optimum for client $k$, the correction $c - c_k$ ensures that the update change its direction towards the global optimum.
 As we can see, in line 20, there are two options for computing $c_i^+$: $\nabla l(\omega_g^t)$ or $c_k - c + \frac{1}{\tau_k \eta} (\omega_g^t - \omega_k^t)$.

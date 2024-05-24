@@ -1,2 +1,42 @@
 \chapter{Introduction}
 \label{ch:Introduction}
+
+\section{Deep Learning Models}
+
+\subsection{Multilayer Perceptrons}
+A Multilayer Perceptron (MLP), also known as feedforward neural network, is a mathematical model mainly used in supervised learning. Essentially, an MLP is a directed acyclic graph which represents the composition of functions. Each function or \textbf{layer} is a collection of neurons. A neuron is defined as:
+
+\begin{equation}
+    \label{eqn:neuron}
+    y = f(\mathbf{x}; \theta) = \omega^T \mathbf{x} + b, \qquad \theta = (\omega, b)
+\end{equation}
+
+The term \textit{perceptron} refers to a linear classifier consisting of one layer \cite{rosenblatt1958}, $f(\mathbf{x}; \theta) = \mathbb{I}(\omega^T \mathbf{x} + b > 0)$.
+Here, $\mathbb{I}(a>0)$ is the Heaviside function, which is non-differentiable. In MLP, the activation function from the original perceptron $\mathbb{I}$ is usually replaced by another differentiable function $\psi \colon \mathbb{R} \to \mathbb{R}$. The internal layers of MLP are usually named \textbf{hidden layers}, the last one is called \textbf{output layer}. The dimensionality of the hidden layers determines the \textbf{width} of the neural network \cite{goodfellow2016}. Each layer $l$ consists of many units $\mathbf{z}_l$ which are computed as a linear transformation of the units from the previous layer $l-1$ passed element-wise through the activation function \cite{murphy2022}:
+\begin{equation*}
+    \mathbf{z}_l = \psi_l (\mathbf{W}_l \mathbf{z}_{l-1} + \mathbf{b}_l)
+\end{equation*}
+
+We can choose different activation functions that will define our model and impact in the performance of the training. If we use a linear activation function $\psi_l (x) = K_l x$ then our neural network becomes just a linear model \cite{murphy2022}, that's why usually non-linear activation functions are used, since we would like to capture non-linear relationships between the input data and the output. Also, the Universal Approximation Theorem states that a neural network with a single hidden layer and non-linear activation functions can approximate any continuous function on a compact subset of $\mathbb{R}^n$ to any desired degree of accuracy.
+Since the goal of an MLP is to approximate some function $f^*$ (for example, for a classifier $y = f^*(\mathbf{x})$), non-linear activation functions are necessary to achieve this level of approximation.
+However, they can be used when we know the problem is linearly separable (think of two separate clusters of points in $\mathbb{R}^2$ in a classifier model) or in the output layer, for example when the MLP acts as a regression model.\\
+If we change the Heaviside function by the sigmoid (logistic) function $\sigma(x) = \frac{1}{1+e^{-x}}$ we get a smooth approximation of $\mathbb{I}$. Another choice of activation function could be $tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$ which has a similar shape but its image is $(-1,1)$. Both are valid activation function and have been used. However, since we need to compute gradients in the optimization process in order to update the weights, a $\mathbf{0}$ gradient would be a problem, since it will make hard to train a model using gradient descent (vanishing gradient problem).
+Both functions have an almost horizontal slope (gradient near 0) for large positive and negative inputs. Also, $\lVert \frac{d}{dx} \sigma(x) \rVert = \lVert \sigma(x)(1-\sigma(x)) \rVert \leq \frac{1}{4} < 1$, therefore several multiplications will quickly approximate to zero. Although they are used in practice (for example, $\sigma(\cdot)$ is used in the output layer for binary regression problems), in order to train deep models we need non-saturating activation functions for the hidden layers.
+One of the most used is \textit{rectified linear unit}: $ReLU(x) = \max (a,0) = a \mathbb{I}(a>0)$. The gradient of $ReLU'(z) \neq 0$ as long as $z$ is positive: this function don't require input normalization to prevent them from saturating.
+As stated in \cite*{glorot2011}, the rectifier activation function allows a network to easily obtain sparse representations, the \textit{hard} saturation (gradients being exactly 0) help supervised training: experimental results suggest that networks with ReLU activation functions in the hidden layers have better convergence performance than using sigmoid \cite{krizhevsky2017}.
+There has been a lot of activation functions proposed in the last years, [TERMINAR ESTO] .\\
+
+The neural network tries to approximate the target function $\mathbf{y} = F(\mathbf{x})$, the \textit{true} relation between the variables. The network, $f(x;\theta)$, \textit{learns} by searching the parameters $\boldsymbol{\theta}$ that minimizes a loss function $J(\boldsymbol{\theta})$, which measures the distance between the output and the target or the proximity between probability densities of random variables \cite*{calin2020}. If we consider a $k$-class classification problem with $\mathcal{X} \subset \mathbb{R}^d$ the feature space and $\mathcal{Y} = \{1,\dots, k\}$ the label space, given the dataset $D = \{(\mathbf{x}_1, y_1),\cdots,(\mathbf{x}_n, y_n)\}$ and a MLP $f\colon \mathcal{X} \to \mathbb{R}^k$ with a softmax as the output layer.
+For any loss function $J(\boldsymbol{\theta}) = J(f(\mathbf{x}, \boldsymbol{\theta}), y)$, assuming there is a joint distribution $P(\mathbf{x},y)$ over $\mathcal{X}$ and $\mathcal{Y}$, the \textbf{risk} of $f$ is defined as $R_J (f) = \mathbb{E}\Bigl[ J(f(\mathbf{x}; \boldsymbol{\theta}), y) \Bigr] = \int J(f(\mathbf{x}; \theta), y) dP(\mathbf{x}, y)$ and the \textbf{empirical risk} is defined as $\hat{R}_J (f) = \mathbb{E}_D \Bigl[ J(f(\mathbf{x}; \boldsymbol{\theta}), y) \Bigr]$ assuming that $\{(\mathbf{x}_i, y_i)\}_{i=1}^n$ are IID samples from $P(\mathbf{x}, y)$.
+Since the nonlinearity of an MLP makes the loss function to become non-convex, it's trained using iterative, gradient-based optimizers. Most neural networks, and in particular the models that will be used in this work, are trained using maximum likelihood: the loss function is the negative log-likelihood \cite{goodfellow2016}. That is, we will compute the \textit{cross-entropy} between the training data and the model distribution:
+
+\begin{equation}
+    J(\theta) = -\mathbb{E}_{\mathbf{x}, \mathbf{y} \sim \hat{\rho}_{data}} \log \rho_{model} (\mathbf{y} | \mathbf{x})
+\end{equation}
+In a $k$-class classification model with a cross-entropy loss function, the empirical risk to minimize is $\hat{R}_J (f) = -\frac{1}{n}\sum_{i=1}^n \sum_{j=1}^k \mathbf{y}_{ij} \log f_j (\mathbf{x}_i; \boldsymbol{\theta})$, where $\mathbf{y}_{ij}$ is the j-th element of the one-hot encoded label of $\mathbf{x}_i$ such that $\mathbf{1}^T \mathbf{y}_i = 1$, $\forall i$, and $f_j$ is the j-th element of the softmax output layer of $f$ \cite{zhang2018}.       \\
+
+
+\subsection{Convolutional Neural Networks}
+
+
+\section{Other ML models}
