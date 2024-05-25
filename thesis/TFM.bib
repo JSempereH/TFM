@@ -14,6 +14,22 @@
   file = {/home/javier/Zotero/storage/3RFUWDFU/Calin - 2020 - Deep Learning Architectures A Mathematical Approa.pdf}
 }
 
+@misc{dauphin2014,
+  title = {Identifying and Attacking the Saddle Point Problem in High-Dimensional Non-Convex Optimization},
+  author = {Dauphin, Yann and Pascanu, Razvan and Gulcehre, Caglar and Cho, Kyunghyun and Ganguli, Surya and Bengio, Yoshua},
+  year = {2014},
+  month = jun,
+  number = {arXiv:1406.2572},
+  eprint = {1406.2572},
+  primaryclass = {cs, math, stat},
+  publisher = {arXiv},
+  urldate = {2024-05-24},
+  abstract = {A central challenge to many fields of science and engineering involves minimizing non-convex error functions over continuous, high dimensional spaces. Gradient descent or quasi-Newton methods are almost ubiquitously used to perform such minimizations, and it is often thought that a main source of difficulty for these local methods to find the global minimum is the proliferation of local minima with much higher error than the global minimum. Here we argue, based on results from statistical physics, random matrix theory, neural network theory, and empirical evidence, that a deeper and more profound difficulty originates from the proliferation of saddle points, not local minima, especially in high dimensional problems of practical interest. Such saddle points are surrounded by high error plateaus that can dramatically slow down learning, and give the illusory impression of the existence of a local minimum. Motivated by these arguments, we propose a new approach to second-order optimization, the saddle-free Newton method, that can rapidly escape high dimensional saddle points, unlike gradient descent and quasi-Newton methods. We apply this algorithm to deep or recurrent neural network training, and provide numerical evidence for its superior optimization performance. This work extends the results of Pascanu et al. (2014).},
+  archiveprefix = {arxiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/7QCEKUB7/Dauphin et al. - 2014 - Identifying and attacking the saddle point problem.pdf}
+}
+
 @inproceedings{glorot2011,
   title = {Deep {{Sparse Rectifier Neural Networks}}},
   booktitle = {Proceedings of the {{Fourteenth International Conference}} on {{Artificial Intelligence}} and {{Statistics}}},
@@ -133,6 +149,22 @@
   file = {/home/javier/Zotero/storage/6K22P9BR/Murphy - 2022 - Probabilistic machine learning an introduction.pdf}
 }
 
+@article{qian1999,
+  title = {On the Momentum Term in Gradient Descent Learning Algorithms},
+  author = {Qian, Ning},
+  year = {1999},
+  month = jan,
+  journal = {Neural Networks: The Official Journal of the International Neural Network Society},
+  volume = {12},
+  number = {1},
+  pages = {145--151},
+  issn = {1879-2782},
+  doi = {10.1016/s0893-6080(98)00116-6},
+  abstract = {A momentum term is usually included in the simulations of connectionist learning algorithms. Although it is well known that such a term greatly improves the speed of learning, there have been few rigorous studies of its mechanisms. In this paper, I show that in the limit of continuous time, the momentum parameter is analogous to the mass of Newtonian particles that move through a viscous medium in a conservative force field. The behavior of the system near a local minimum is equivalent to a set of coupled and damped harmonic oscillators. The momentum term improves the speed of convergence by bringing some eigen components of the system closer to critical damping. Similar results can be obtained for the discrete time case used in computer simulations. In particular, I derive the bounds for convergence on learning-rate and momentum parameters, and demonstrate that the momentum term can increase the range of learning rate over which the system converges. The optimal condition for convergence is also analyzed.},
+  langid = {english},
+  pmid = {12662723}
+}
+
 @article{rosenblatt1958,
   title = {The Perceptron: {{A}} Probabilistic Model for Information Storage and Organization in the Brain.},
   shorttitle = {The Perceptron},
@@ -147,6 +179,22 @@
   urldate = {2024-05-22},
   abstract = {The first of these questions is in the province of sensory physiology, and is the only one for which appreciable understanding has been achieved. This article will be concerned primarily with the second and third questions, which are still subject to a vast amount of speculation, and where the few relevant facts currently supplied by neurophysiology have not yet been integrated into an acceptable theory. With regard to the second question, two alternative positions have been maintained. The first suggests that storage of sensory information is in the form of coded representations or images, with some sort of one-to-one mapping between the sensory stimulus},
   langid = {english}
+}
+
+@misc{ruder2017,
+  title = {An Overview of Gradient Descent Optimization Algorithms},
+  author = {Ruder, Sebastian},
+  year = {2017},
+  month = jun,
+  number = {arXiv:1609.04747},
+  eprint = {1609.04747},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  urldate = {2024-05-24},
+  abstract = {Gradient descent optimization algorithms, while increasingly popular, are often used as black-box optimizers, as practical explanations of their strengths and weaknesses are hard to come by. This article aims to provide the reader with intuitions with regard to the behaviour of different algorithms that will allow her to put them to use. In the course of this overview, we look at different variants of gradient descent, summarize challenges, introduce the most common optimization algorithms, review architectures in a parallel and distributed setting, and investigate additional strategies for optimizing gradient descent.},
+  archiveprefix = {arxiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/EL94DSBJ/Ruder - 2017 - An overview of gradient descent optimization algor.pdf}
 }
 
 @inproceedings{smestad2023,
@@ -164,6 +212,39 @@
   archiveprefix = {arxiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/3WCT4EXX/Smestad and Li - 2023 - A Systematic Literature Review on Client Selection.pdf}
+}
+
+@misc{sun2019,
+  title = {A {{Survey}} of {{Optimization Methods}} from a {{Machine Learning Perspective}}},
+  author = {Sun, Shiliang and Cao, Zehui and Zhu, Han and Zhao, Jing},
+  year = {2019},
+  month = oct,
+  number = {arXiv:1906.06821},
+  eprint = {1906.06821},
+  primaryclass = {cs, math, stat},
+  publisher = {arXiv},
+  urldate = {2024-05-24},
+  abstract = {Machine learning develops rapidly, which has made many theoretical breakthroughs and is widely applied in various fields. Optimization, as an important part of machine learning, has attracted much attention of researchers. With the exponential growth of data amount and the increase of model complexity, optimization methods in machine learning face more and more challenges. A lot of work on solving optimization problems or improving optimization methods in machine learning has been proposed successively. The systematic retrospect and summary of the optimization methods from the perspective of machine learning are of great significance, which can offer guidance for both developments of optimization and machine learning research. In this paper, we first describe the optimization problems in machine learning. Then, we introduce the principles and progresses of commonly used optimization methods. Next, we summarize the applications and developments of optimization methods in some popular machine learning fields. Finally, we explore and give some challenges and open problems for the optimization in machine learning.},
+  archiveprefix = {arxiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/UJ6PH7EH/Sun et al. - 2019 - A Survey of Optimization Methods from a Machine Le.pdf}
+}
+
+@misc{sun2019a,
+  title = {Optimization for Deep Learning: Theory and Algorithms},
+  shorttitle = {Optimization for Deep Learning},
+  author = {Sun, Ruoyu},
+  year = {2019},
+  month = dec,
+  number = {arXiv:1912.08957},
+  eprint = {1912.08957},
+  primaryclass = {cs, math, stat},
+  publisher = {arXiv},
+  urldate = {2024-05-24},
+  abstract = {When and why can a neural network be successfully trained? This article provides an overview of optimization algorithms and theory for training neural networks. First, we discuss the issue of gradient explosion/vanishing and the more general issue of undesirable spectrum, and then discuss practical solutions including careful initialization and normalization methods. Second, we review generic optimization methods used in training neural networks, such as SGD, adaptive gradient methods and distributed methods, and existing theoretical results for these algorithms. Third, we review existing research on the global issues of neural network training, including results on bad local minima, mode connectivity, lottery ticket hypothesis and infinitewidth analysis.},
+  archiveprefix = {arxiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/CTWKWQCM/Sun - 2019 - Optimization for deep learning theory and algorit.pdf}
 }
 
 @misc{wang2020,
@@ -196,6 +277,18 @@
   archiveprefix = {arxiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/JBBWY97N/Wang et al. - 2021 - A Field Guide to Federated Optimization.pdf}
+}
+
+@article{y1983,
+  title = {A Method of Solving a Convex Programming Problem with Convergence Rate {{O}}(1/K**2)},
+  author = {Y, Nesterov},
+  year = {1983},
+  journal = {Doklady Akademii Nauk SSSR},
+  volume = {269},
+  number = {3},
+  pages = {543},
+  urldate = {2024-05-25},
+  file = {/home/javier/Zotero/storage/PHFGDURC/1370017280653524239.html}
 }
 
 @misc{zhang2018,

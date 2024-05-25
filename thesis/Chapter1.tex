@@ -28,13 +28,66 @@ There has been a lot of activation functions proposed in the last years, [TERMIN
 
 The neural network tries to approximate the target function $\mathbf{y} = F(\mathbf{x})$, the \textit{true} relation between the variables. The network, $f(x;\theta)$, \textit{learns} by searching the parameters $\boldsymbol{\theta}$ that minimizes a loss function $J(\boldsymbol{\theta})$, which measures the distance between the output and the target or the proximity between probability densities of random variables \cite*{calin2020}. If we consider a $k$-class classification problem with $\mathcal{X} \subset \mathbb{R}^d$ the feature space and $\mathcal{Y} = \{1,\dots, k\}$ the label space, given the dataset $D = \{(\mathbf{x}_1, y_1),\cdots,(\mathbf{x}_n, y_n)\}$ and a MLP $f\colon \mathcal{X} \to \mathbb{R}^k$ with a softmax as the output layer.
 For any loss function $J(\boldsymbol{\theta}) = J(f(\mathbf{x}, \boldsymbol{\theta}), y)$, assuming there is a joint distribution $P(\mathbf{x},y)$ over $\mathcal{X}$ and $\mathcal{Y}$, the \textbf{risk} of $f$ is defined as $R_J (f) = \mathbb{E}\Bigl[ J(f(\mathbf{x}; \boldsymbol{\theta}), y) \Bigr] = \int J(f(\mathbf{x}; \theta), y) dP(\mathbf{x}, y)$ and the \textbf{empirical risk} is defined as $\hat{R}_J (f) = \mathbb{E}_D \Bigl[ J(f(\mathbf{x}; \boldsymbol{\theta}), y) \Bigr]$ assuming that $\{(\mathbf{x}_i, y_i)\}_{i=1}^n$ are IID samples from $P(\mathbf{x}, y)$.
-Since the nonlinearity of an MLP makes the loss function to become non-convex, it's trained using iterative, gradient-based optimizers. Most neural networks, and in particular the models that will be used in this work, are trained using maximum likelihood: the loss function is the negative log-likelihood \cite{goodfellow2016}. That is, we will compute the \textit{cross-entropy} between the training data and the model distribution:
+Since the nonlinearity of an MLP makes the loss function to become non-convex, it's trained using iterative, gradient-based optimizers. Most neural networks, and in particular the models that will be used in this work, are trained using maximum likelihood: the loss function is the negative log-likelihood \footnote{Empirical risk minimization is equivalent to Maximum Likelihood Estimation when the risk is defined as the negative of the likelihood. Note that ERM does not limit itself to that particular class of risk functions.} \cite{goodfellow2016}. That is, we will compute the \textit{cross-entropy}\footnote{This is valid for a loss consisting of a negative log-likelihood, not only for the negative log-likelihodd of a softmax distribution.} between the training data and the model distribution:
 
 \begin{equation}
-    J(\theta) = -\mathbb{E}_{\mathbf{x}, \mathbf{y} \sim \hat{\rho}_{data}} \log \rho_{model} (\mathbf{y} | \mathbf{x})
+    J(\theta) = -\mathbb{E}_{\mathbf{x}, y \sim D} \log_{P(\mathbf{x}, y)} (y | \mathbf{x})
 \end{equation}
-In a $k$-class classification model with a cross-entropy loss function, the empirical risk to minimize is $\hat{R}_J (f) = -\frac{1}{n}\sum_{i=1}^n \sum_{j=1}^k \mathbf{y}_{ij} \log f_j (\mathbf{x}_i; \boldsymbol{\theta})$, where $\mathbf{y}_{ij}$ is the j-th element of the one-hot encoded label of $\mathbf{x}_i$ such that $\mathbf{1}^T \mathbf{y}_i = 1$, $\forall i$, and $f_j$ is the j-th element of the softmax output layer of $f$ \cite{zhang2018}.       \\
+In a $k$-class classification model with a cross-entropy loss function, the empirical risk to minimize is $\hat{R}_J (f) = -\frac{1}{n}\sum_{i=1}^n \sum_{j=1}^k \mathbf{y}_{ij} \log f_j (\mathbf{x}_i; \boldsymbol{\theta})$, where $\mathbf{y}_{ij}$ is the j-th element of the one-hot encoded label of $\mathbf{x}_i$ such that $\mathbf{1}^T \mathbf{y}_i = 1$, $\forall i$, and $f_j$ is the j-th element of the softmax output layer of $f$ \cite{zhang2018}.\\
+Typically, the minimization of $J(\boldsymbol{\theta})$ is achieved using a gradient descent algorithm. Large training datasets are good for generalization, but since $\nabla_{\boldsymbol{\theta}} J (\boldsymbol{\theta}) \frac{1}{n}\sum_{i=1}^n \nabla_{\boldsymbol{\theta}} l(f(\mathbf{x}; \boldsymbol{\theta}), y)$ has a computational complexity of $\mathcal{O}(n)$ for each step \cite{goodfellow2016}, this approach is prohibitive for $n$ in a scale of millions. Optimization algorithms that use the whole dataset are called \textbf{batch}\footnote{The term \textit{batch} may also refer to a subset of the training set. The size of a minibatch is usually called \textit{batch size}.} gradient methods.
+When only a single sample is used each step, the method is called \textbf{stochastic}. The \textbf{Minibatch Stochastic Gradient Descent} (MSGD) algorithm (and its variants) is preferred, since the gradient direction in SGD oscillates because of the additional noise added by random sampling \cite{sun2019}.
+The MSGD algorithm makes and estimation of the gradient selecting randomly a \textit{minibatch} $b = \{(\mathbf{x}, y)^{(1)},\cdots, (\mathbf{x}, y)^{(m)}\}$, $m<n$ such as:
 
+\begin{equation}
+    \label{eqn:gradient_estimate}
+    \mathbf{g} = \frac{1}{m} \nabla_{\boldsymbol{\theta}} \sum_{i=1}^m l(f(\mathbf{x}^{(i)}; \boldsymbol{\theta}), y^{(i)})
+\end{equation}
+
+Each step of the MSGD algorithm, the parameters $\boldsymbol{\theta}$ are updated given a learning rate $\eta > 0$: $\boldsymbol{\theta} = \boldsymbol{\theta} - \eta \mathbf{g}$. A constant learning rate during training may lead to a zone where the gradient estimate "jumps around" a local minimum, although if the network is complex enough to represent the underlying function, a constant learning rate usually works well in practice \cite{sun2019a}. In some implementations, the learning rate is updated during training, an example could be multiplying by a factor $0<\gamma<1$ each $T$ number of steps\footnote{This is actually what the \textit{StepLR} class does in the popular Python package torch.optim.}.
+Here, we encounter some challenges \cite{ruder2017}:
+
+\begin{itemize}
+    \item A small $\eta$ leads to slow convergence of vanilla MSGD, while if it's too large the loss function will fluctuate around the minimum or diverge.\\
+    \item A learning rate scheduler needs to be defined at the beginning and it's not adapted to dataset's characteristics.\\
+    \item Since $J(\boldsymbol{\theta})$ is non-convex (recall that affine transformations followed by an activation function such as ReLU is non-covex). A key challenge is avoiding getting trapped in suboptimal local minima. Also, according to \cite{dauphin2014}, the difficulty comes from saddle points present in high-dimensional non-convex optimization that are hard for SGD to scape, since the gradient is close to zero in all dimensions.
+\end{itemize}
+
+There are several gradient-based variants that try to tackle these challenges. For example, a momentum term can be used to help accelerate MSGD and dampen oscillations \cite{qian1999}.
+Momentum stores the gradient of the past step to adjust the new direction:
+
+\begin{align}
+    \label{eqn:SGD_momentum}
+    \begin{split}
+    \mathbf{v}_t &= \alpha \mathbf{v}_{t-1} + \eta \nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta}) \qquad \eta>0, \hspace*{.3 em} \alpha \in [0,1] \\
+    \boldsymbol{\theta} &= \boldsymbol{\theta} - \mathbf{v}_t
+    \end{split}
+\end{align}
+
+The momentum term increases the updates for dimensions whose gradients point in the same direction, allowing the algorithm to build momentum and move more efficiently towards the minimum. Conversely, it reduces updates for dimensions whose gradients change direction, dampening out oscillations and preventing the algorithm from getting stuck in local minima \cite{ruder2017}.\\
+
+Another variant is \textbf{Nesterov accelerated gradient} \cite{y1983}, which is an extension of Gradient Descent with momentum where the computation of the gradient is performed using projected parameters and not the actual values:
+
+\begin{align}
+    \label{eqn:Nesterov_accelerated_gradient}
+    \begin{split}
+        \mathbf{v}_t &= \alpha \mathbf{v}_{t-1} + \eta \nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta} - \alpha \mathbf{v}_{t-1}) \\
+        \boldsymbol{\theta} &= \boldsymbol{\theta} - \mathbf{v}_t
+    \end{split}
+\end{align}
+
+Here, similar to GD with momentum, $\mathbf{v}_t$ is the direction and speed at which the parameters should be tweaked and $\alpha$ determines how quickly the previous gradients will decay. Nesterov Accelerated Gradient tries to tackle the exploding gradient case: where the velocity added to the parameters gives an unwanted high loss. In this case, if the velocity update lead to a bad loss, the gradients will redirect the update back to $\boldsymbol{\theta}$.
+
+[PONER IMAGEN QUE COMPARE MOMENTUM CON NAG]
+
+Still, with the previous algorithms the hyperparameters $\eta$ and $\alpha$ need to be fixed or changed during training a heuristic way. With the \textbf{Adaptative Gradient Algorithm} (\textbf{Adagrad}), the learning rate change depending on the parameters: it performs larger updates for infrequent parameters and smaller updates for frequent parameters. That's it, each parameter is updated with a different learning rate each step.
+We set $g_{t,i}$ the gradient estimate w.r.t the parameter $\theta_i$ at step $t$. The Adagrad update rule is:
+
+\begin{equation}
+    \theta_{t+1, i} = \theta_{t,i} - \frac{\eta}{\sqrt{G_{t,i} + \epsilon}} g_{t,i}
+\end{equation}
+
+Where $G_{t,i}$ is the sum of squares of the gradients w.r.t $\theta_i$ up to step $t$, and $\epsilon > 0$ is the decimal smallest number in the machine, in order to avoid division by zero. With Adagrad, the selection of $\eta$ is irrelevant since the term will be scaled by the root. Most implementations just fix it at $0.01$. The problem with this algorithm is that the accumulated sums will increase during training and eventually the learning rate will be close to zero, therefore the parameters are not updated at a certain point.
+In order to fix this, \textbf{Adadelta} restricts the number of accumulated gradients to some fixed size.
 
 \subsection{Convolutional Neural Networks}
 
