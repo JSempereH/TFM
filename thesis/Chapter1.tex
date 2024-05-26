@@ -87,8 +87,38 @@ We set $g_{t,i}$ the gradient estimate w.r.t the parameter $\theta_i$ at step $t
 \end{equation}
 
 Where $G_{t,i}$ is the sum of squares of the gradients w.r.t $\theta_i$ up to step $t$, and $\epsilon > 0$ is the decimal smallest number in the machine, in order to avoid division by zero. With Adagrad, the selection of $\eta$ is irrelevant since the term will be scaled by the root. Most implementations just fix it at $0.01$. The problem with this algorithm is that the accumulated sums will increase during training and eventually the learning rate will be close to zero, therefore the parameters are not updated at a certain point.
-In order to fix this, \textbf{Adadelta} restricts the number of accumulated gradients to some fixed size.
+In order to fix this, \textbf{Adadelta} restricts the number of accumulated gradients to some fixed size $w$ \cite{zeiler2012}. Since storing $w$ previous squared gradients is inefficient, it was proposed to compute an exponentially decaying average of the squared gradients, given a decay constant $\rho \in (0,1)$, similar to that used in Momentum. So, let $\mathbf{g}_t$ be the estimate of $\nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta}_t)$, $\mathbf{v}$ and $\mathbf{u}$ the square average and the accumulated variable resp., both initialized at $\mathbf{0}$ and $\lambda>0$ the weight decay, the Adadelta algorithm is:
 
+\begin{align}
+    \label{eqn:Adadelta}
+    \begin{split}
+        \mathbf{g}_t &\gets \mathbf{g_t} + \lambda \boldsymbol{\theta}_{t-1}\\
+        \mathbf{v}_t &\gets \mathbf{v}_{t-1} \rho + \mathbf{g}_t^2 (1-\rho)\\
+        \Delta \mathbf{x}_t &\gets \frac{\sqrt{\mathbf{u}_{t-1} + \epsilon}}{\sqrt{\mathbf{v}_t + \epsilon}} \mathbf{g}_t\\
+        \mathbf{u}_t &\gets \mathbf{u}_{t-1} \rho + \Delta \mathbf{x}_t^2 (1-\rho)\\
+        \boldsymbol{\theta}_t &\gets \boldsymbol{\theta}_{t-1} - \gamma \Delta \mathbf{x}_t
+    \end{split}
+\end{align}
+
+Where the operations between vectors like the square is elementwise, i.e. $\mathbf{g}^2 = \mathbf{g} \odot \mathbf{g}$.\\
+Another first-order gradient-base optimization algorithm for stochastic objective functions that is computationally efficient and compares favorably to other adaptive learning-method algorithms is \textbf{Adaptive Moment Estimation} (\textbf{Adam}) \cite{kingma2017}. In addition to storing an exponentially decaying average of squared gradients $\mathbf{v}_t$ like Adadelta, this algorithm also keeps an exponentially decaying average of past gradients $\mathbf{m}_t$, similar to momentum.
+Let $\beta_1, \beta_2 \in [0,1)$ be the exponential decay rates for the moment estimates:
+
+\begin{align}
+    \label{eqn:Adam}
+    \begin{split}
+    \mathbf{g}_t &\gets \nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta}_{t-1}) \\
+    \mathbf{m}_t &\gets \beta_1 \mathbf{m}_{t-1} + (1-\beta_1)\mathbf{g}_t \quad \text{ (Biased first moment estimate)}\\
+    \mathbf{v}_t &\gets \beta_2 \mathbf{v}_{t-1} + (1-\beta_2) \mathbf{g}_t^2 \quad \text{ (Biased second raw moment estimate)}\\
+    \mathbf{\hat{m}}_t &\gets \mathbf{m}_t / (1-\beta_1^t) \quad \text{ (Bias-corrected first moment estimate)}\\
+    \mathbf{\hat{v}}_t &\gets \mathbf{v}_t / (1-\beta_2^t) \quad \text{ (Bias-corrected second raw moment estimate)}\\
+    \boldsymbol{\theta}_t &\gets \boldsymbol{\theta}_{t-1} - \alpha \mathbf{\hat{m}}_t / \bigl( \sqrt{\mathbf{\hat{v}}_t} + \epsilon \bigr)
+    \end{split}
+\end{align}
+
+According to \cite{kingma2017}, good default settings (in their machine learning experiments) are $\alpha=0.001$, $\beta_1=0.9$ and $\beta_2 = 0.999$.
+
+[EXPLICAR BACKPROPAGATION]
 \subsection{Convolutional Neural Networks}
 
 
