@@ -5,6 +5,8 @@ from torch.utils.data import DataLoader
 import torch.nn as nn
 from datasets import *
 from strategies import *
+import csv
+import hydra
 
 
 class bcolors:
@@ -43,16 +45,9 @@ def are_models_equal(model_list: List[nn.Module]):
 
 
 def print_block(sentence):
-    # Calculate the length of the sentence for formatting
     sentence_length = len(sentence)
-
-    # Print the top border
     print("#" * (sentence_length + 4))
-
-    # Print the sentence with borders
     print("# " + sentence + " #")
-
-    # Print the bottom border
     print("#" * (sentence_length + 4))
 
 
@@ -110,7 +105,7 @@ def get_dataloaders(
         train_dl, val_dl, test_dl = load_non_iid_dataloaders_quantity_based(
             cfg.labels_per_party, cfg.dataset
         )
-    elif cfg.iid == "Non_IID_Qunatity_Skew":
+    elif cfg.iid == "Non_IID_Quantity_Skew":
         if cfg.beta is None:
             raise NameError(
                 "Beta argument for Dirichlet Non-IID partition strategy not defined."
@@ -130,3 +125,50 @@ def select_fl_strategy(cfg: DictConfig) -> Strategy:
         return FedAvg()
     elif cfg.fl_strategy == "FedProx":
         return FedProx(cfg.mu)
+
+
+def save_metrics_to_csv(epoch, train_loss, train_accuracy, server_name: str):
+    hydra_cfg = hydra.core.hydra_config.HydraConfig.get()
+    filepath = (
+        hydra_cfg["runtime"]["output_dir"] + "/" + server_name + "_train_metrics.csv"
+    )
+    with open(filepath, mode="a", newline="") as file:
+        writer = csv.writer(file)
+        # If it's an empty csv file, write header
+        if file.tell() == 0:
+            writer.writerow(["epoch", "train_loss", "train_accuracy"])
+        # Escribir las métricas
+        writer.writerow([epoch, train_loss, train_accuracy])
+
+
+def check_config_parameters(cfg: DictConfig) -> None:
+    if len(cfg.list_of_epochs) != cfg.num_clients:
+        raise RuntimeError(
+            f"{bcolors.FAIL}Number of clients != len(list_of_epochs).{bcolors.ENDC}"
+        )
+    if cfg.dataset not in ["CIFAR10", "MNIST", "FashionMNIST"]:
+        raise RuntimeError(
+            f"{bcolors.FAIL}Wrong Dataset name, the possible datasets are: CIFAR10, MNIST or FashionMNIST.{bcolors.ENDC}"
+        )
+    if cfg.iid == "IID" and any(
+        param is not None for param in [cfg.beta, cfg.labels_per_party, cfg.noise_level]
+    ):
+        raise RuntimeError(
+            f"{bcolors.FAIL}Partition strategy IID is not compatible with arguments beta, labels_per_party nor noise_level.{bcolors.ENDC}"
+        )
+    if cfg.iid == "Non_IID_Dirichlet" and cfg.beta is None:
+        raise RuntimeError(
+            f"{bcolors.FAIL}Partition strategy Non_IID_Dirichlet needs a beta argument.{bcolors.ENDC}"
+        )
+    if cfg.iid == "Non_IID_Quantity_Skew" and cfg.beta is None:
+        raise RuntimeError(
+            f"{bcolors.FAIL}Partition strategy Non_IID_Quantity_Skew needs a beta argument.{bcolors.ENDC}"
+        )
+    if cfg.iid == "Non_IID_Noise" and cfg.noise_level is None:
+        raise RuntimeError(
+            f"{bcolors.FAIL}Partition strategy Non_IID_Noise needs a noise_level argument.{bcolors.ENDC}"
+        )
+    if cfg.iid == "Non_IID_Dirichlet" and any(
+        param is not None for param in [cfg.labels_per_party, cfg.noise_level]
+    ):
+        pass  # TODO: Finish the checks

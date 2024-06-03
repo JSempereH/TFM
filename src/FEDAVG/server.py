@@ -13,7 +13,14 @@ class Client:
         self.local_train_dataloader = local_train_dataloader
         self.local_val_dataloader = local_val_dataloader
         self.n_epochs = n_epochs
-        self.metrics = {"loss": [], "accuracy": []}
+        self.metrics = {
+            "train_loss": [],
+            "train_accuracy": [],
+            "val_loss": [],
+            "val_accuracy": [],
+            "test_loss": [],
+            "test_accuracy": [],
+        }
 
     def get_parameters(self):
         """Return the parameters of the current net."""
@@ -49,15 +56,15 @@ class Client:
     def evaluate(self):
         """Use current net to test on local_val_dataloader"""
         loss, accuracy = test(self.net, self.local_val_dataloader)
-        self.metrics["loss"].append(loss)
-        self.metrics["accuracy"].append(accuracy)
+        self.metrics["test_loss"].append(loss)
+        self.metrics["test_accuracy"].append(accuracy)
 
 
 class Central_Server:
     def __init__(self, global_net, test_dl):
         self.global_net = global_net
         self.test_dl = test_dl
-        self.metrics = {"loss": [], "accuracy": []}
+        self.metrics = {"global_loss": [], "global_accuracy": []}
 
     def get_parameters(self):
         """Return the parameters of the gloabl net."""
@@ -65,5 +72,5 @@ class Central_Server:
 
     def test(self):
         loss, accuracy = test(self.global_net, self.test_dl)
-        self.metrics["loss"].append(loss)
-        self.metrics["accuracy"].append(accuracy)
+        self.metrics["global_loss"].append(loss)
+        self.metrics["global_accuracy"].append(accuracy)

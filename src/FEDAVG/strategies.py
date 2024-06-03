@@ -16,7 +16,7 @@ class FedAvg(Strategy):
         self,
         global_model: nn.Module,
         list_local_models: List[nn.Module],
-        list_len_datasets: List[nn.Module],
+        list_len_datasets: List[int],
     ):
         global_params = global_model.state_dict()
         num_clients = len(list_local_models)

@@ -7,25 +7,25 @@ from utils import (
     print_experiment_config,
     get_dataloaders,
     select_fl_strategy,
+    check_config_parameters,
 )
 from strategies import FedAvg, FedProx
 import copy
 import hydra
 from omegaconf import DictConfig
 import os
+import logging
+
+log = logging.getLogger(__name__)
 
 
 @hydra.main(version_base="1.3", config_path=os.getcwd(), config_name="config")
 def main(cfg: DictConfig) -> None:
+    check_config_parameters(cfg)
+
     working_dir = os.getcwd()
     print(f"The current working directory is {working_dir} \n")
     print_experiment_config(cfg)
-    # To access elements of the config
-
-    # TODO: Make an utils' function to check that the config parameters are valid
-    if len(cfg.list_of_epochs) != cfg.num_clients:
-        raise RuntimeError(f"Number of clients != len(list_of_epochs).")
-
     train_dl, val_dl, test_dl = get_dataloaders(cfg)
 
     list_clients = []
@@ -46,7 +46,7 @@ def main(cfg: DictConfig) -> None:
         list_clients.append(client)
 
     print(
-        f"\nAre models equal?: {are_models_equal([client.net for client in list_clients]) and are_models_equal([list_clients[0].net, central_server.global_net])}"
+        f"\nAre models equal at initialization?: {are_models_equal([client.net for client in list_clients]) and are_models_equal([list_clients[0].net, central_server.global_net])}"
     )
 
     strategy = select_fl_strategy(cfg)
@@ -57,14 +57,6 @@ def main(cfg: DictConfig) -> None:
             client.fit(
                 client.get_parameters(), strategy, global_net=central_server.global_net
             )
-
-        # Aggregation strategy
-        first_weight_tensor = None
-
-        for name, param in central_server.global_net.named_parameters():
-            first_weight_tensor = param
-            break
-        # print(f"Before FedAvg: {first_weight_tensor}")
 
         strategy.aggregation(
             global_model=central_server.global_net,
@@ -90,19 +82,3 @@ def main(cfg: DictConfig) -> None:
 
 if __name__ == "__main__":
     main()
-
-# NUM_CLIENTS = 3
-# LIST_OF_EPOCHS = [2, 2, 2]
-# SAME_INITIAL_WEIGHTS = True
-# N_ROUNDS = 2
-# MU = 0.01
-# DATASET_NAME = "CIFAR10"
-# IID = "Non_IID_Noise"
-
-# BETA = 0.5  # beta argument for Dirichlet Distribution, needed for IID = 'Non_IID_Dirichlet' or 'Non_IID_Qunatity_Skew'
-# LABELS_PER_PARTY = [
-#     2,
-#     2,
-#     6,
-# ]  # Which labels belong to the each client, for IID = 'Non_IID_Quantity_Based'
-# NOISE_LEVEL = 0.1  # Sigma argument in Gaussian distribution, for IID = 'Non_IID_Noise'

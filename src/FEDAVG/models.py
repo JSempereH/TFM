@@ -3,7 +3,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
 from typing import List, Tuple
+from utils import save_metrics_to_csv
 
+# TODO: This must come from the Hydra's config
 DEVICE = torch.device("cpu")
 CRITERION = torch.nn.CrossEntropyLoss()
 OPTIMIZER = "ADAM"
@@ -59,6 +61,12 @@ def train(net, trainloader, epochs: int, server_name: str):
         pbar.set_description(
             f"Epoch {epoch+1}: train loss {epoch_loss}, accuracy {epoch_acc}"
         )
+        save_metrics_to_csv(
+            epoch=epoch + 1,
+            train_loss=epoch_loss.item(),
+            train_accuracy=epoch_acc,
+            server_name=server_name,
+        )
 
 
 def train_fedprox(
@@ -96,6 +104,12 @@ def train_fedprox(
         pbar.set_description(
             f"Epoch {epoch+1}: train loss {epoch_loss}, accuracy {epoch_acc}"
         )
+        save_metrics_to_csv(
+            epoch=epoch + 1,
+            train_loss=epoch_loss.item(),
+            train_accuracy=epoch_acc,
+            server_name=server_name,
+        )
 
 
 def test(net, testloader) -> Tuple[float, float]:
@@ -104,7 +118,7 @@ def test(net, testloader) -> Tuple[float, float]:
     correct, total, loss = 0, 0, 0.0
     net.eval()
     with torch.no_grad():
-        for images, labels in testloader:
+        for images, labels in tqdm(testloader, desc=f"Test", colour="yellow"):
             images, labels = images.to(DEVICE), labels.to(DEVICE)
             outputs = net(images)
             loss += criterion(outputs, labels).item()

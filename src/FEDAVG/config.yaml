@@ -1,5 +1,5 @@
-dataset: CIFAR10
-iid: IID # IID | Non_IID_Dirichlet | Non_IID_Quantity_Based | Non_IID_Qunatity_Skew | Non_IID_Noise
+dataset: CIFAR10 # CIFAR10 | MNIST | FashionMNIST
+iid: IID # IID | Non_IID_Dirichlet | Non_IID_Quantity_Based | Non_IID_Quantity_Skew | Non_IID_Noise
 fl_strategy: FedProx # FedAvg | FedProx
 num_clients: 3
 list_of_epochs: [2,2,2]
