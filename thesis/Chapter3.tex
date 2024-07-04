@@ -1,7 +1,47 @@
 \chapter{Multi-Party Computation}
 
-\section{Defining Multi-Party Computation}
+\section{Basic concepts}
+
+Multi-Party Computation (MPC) is a cryptographic framework where $n$ parties want to compute a function using their data but without revealing its own data to any other party.
+More precisely, we consider $P_i$,  with its input $x_i$, $i=1,\cdots, n$. An MPC protocol aims to compute a function $z = f(x_1,\cdots, x_n)$ and after execution, the party $P_i$ only knows $x_i$ (its own input data) and $z$ (the output).\\
+It could be the case that some parties decide to share its input with other parties, in order to break the privacy of all parties. In this theoretical framework, we say that an \textit{adversary} corrupts a subset of the parties. The more parties are corrupted, the easier to break the privacy of the protocol. In order to classify the security of certain MPC protocol, it is said that the protocol is secure as long as the adversary corrupts at most $t$ parties, usually $t< n/2$ or $t< n/3$.
+In this chapter, we will focus on \textit{linear secret-sharing schemes}, where parties hold distributed versions of intermediate results of the computations.\\
+A secret-sharing scheme is a method to split a secret into shares in such way that it's not possible to learn anything from the shares as long as each party only holds a maximum of these. Surpass the maximum, and the shares can reveal the secrets.
+
+Se consider a finite field $\mathbb{F}$, let $s \in \mathbb{F}$ and denote $[n]$ as the index set $\{1,\cdots,n\}$, A secret-sharing scheme of $n$ parties with threshold $t$ provides method for computing a set of values (shares) $[[s]] = (s_1,\cdots, s_n) \in \mathbb{F}^n$ such that, for any set $A \subseteq [n]$, $|A| \leq t$, the set of shares $\{s_i\}_{i\in A}$ does not leak anything about $s$. And for any set $B \subseteq [n]$, $|B|>t$, $s$ can be reconstructed using the set $\{s_i\}_{i\in B}$ \cite{escudero2022}.
+
+Since we are dealing with \textit{linear} secret-sharing schemes, it holds that if $[[a]] = (a_1,\cdots, a_n)$ and $[[b]] = (b_1,\cdots, b_n)$ then $[[a\pm b]] = (a_1 \pm b_1, \cdots, a_n \pm b_n)$.
+Given a linear secret-sharing scheme $[[\cdot]]$, it could be possible to define the product of two shared values $[[a \cdot b]]$, but it would possibly require some interaction between parties.
+
+We present the widely used \textbf{Shamir secret-sharing scheme}
 
 \section{Protocol Examples}
 
+
 \section{Private Set Intersection}
+One widely used application of MPC is \textbf{Private Set Intersection} (\textbf{PSI}), which allows to compute the common elements between datasets' parties (for simplicity, we will focus on two parties).
+Given a party $P_i$ with a dataset $D^i$, $i=1,2$, we want to compute $D^1 (j) \cap D^2 (j)$ being $D^i(j)$ the j-th column (set) from the i-th party's dataset. For example, if $D$ consist in a single list of phone numbers, $D^1 \cap D^2$ would be the common phone contacts between party 1 and party 2. Another example could be that the datasets $D^1$ and $D^2$ have the fields:\\
+
+\begin{minipage}{0.4\textwidth}
+\begin{itemize}
+    \item $D^1(1) \coloneqq$ National Identity Number
+    \item $D^1(2) \coloneqq$ Name
+    \item $D^1(3) \coloneqq$ Surname
+    \item $D^1(4) \coloneqq$ Annual Salary (\$)
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\begin{itemize}
+\item $D^2(1) \coloneqq$ National Identity Number
+\item $D^2(2) \coloneqq$ Age
+\item $D^2(3) \coloneqq$ Genre
+\end{itemize}
+\end{minipage}
+
+\vspace*{1 em}
+
+If we would like to know the mean annual salary by genre, first we would need to \textit{merge} both datasets, mapping the National Identity Number.
+With PSI, we could compute $D^1(1) \cap D^2(1)$, this  gives us the NIN of the people with complete data, i.e. the people whose personal data are in both datasets, so it is known both the annual salary and the genre.
+With that intersection, we could get two subsets from $D^1$ and $D^2$ and then use another MPC protocol (in this case, we are interested in the operation \textit{GroupBy}).\\
+
+As an informal introduction of the problem, we define two sets: $X = \{x_1,\cdots, x_n\}$ and $Y = \{y_1,\cdots, y_m\}$, $n,m\in\mathbb{N}$

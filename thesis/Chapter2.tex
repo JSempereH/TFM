@@ -32,7 +32,7 @@ Some of these challenges are shared with \textit{Cross-Silo FL}. The main differ
 
 We will begin by studying the FedAvg algorithm \cite{mcmahan2023a}, which is de facto approach for Federated Learning (FL). We will establish notation, examine some of its properties, and explore issues that arise when data is not independently identically distributed (statistical heterogeneity). Following that, various approaches that have been proposed to address this problem will be developed, and the performance of each will be analyzed across different training architectures.
 
-\section{FedAvg}
+\section{Objective function}
 
 Let $D = \{(\mathbf{x}, y)\}$ be the global dataset\footnote{Here, the global dataset is the union of the different local datasets, $D = \cup_{i=1}^N D^i$ . In practical cases, there is no such dataset in order to ensure data privacy. However, we will consider it to conduct a performance study of the various algorithms.} and $D^i \subset D$ the $i$-th party's local dataset, $i=1,...,N$.
 Let $\omega_g^t$ and $\omega_i^t$ be the global model and the local model of the $i$-th party in round $t\in \{1,...,T\}$, respectively. Since we are working in a \textit{Cross-silo FL} setting, the main differences between a federated optimization scheme and a distributed one would be the unbalanced data and non-IID data.\\
@@ -53,7 +53,74 @@ can take the form of an empirical risk minimization objective function:
 
 If $\alpha_i = \frac{|D^i|}{\sum_{i=1}^N |D^i|}$, the objective function in \ref{eqn:empirical_objective} would be the empirical risk minimization objective function of $D = \cup_i D^i$. We recall that \ref{eqn:objective} is an optimization problem that could be solved using Stochastic Descent: $\omega_g^{t+1} = \omega_g^t - \eta_t \nabla F (\omega_g^t)$ where $\eta_t$ is the learning rate at time $t$. In practice, we will use an unbiased estimator of the gradient of the local loss $g_i (\omega_g^t)$ such that $\mathbb{E}_{z \sim D^i} \Bigl[ g_i (\omega_g^t) \Bigr] = \nabla F_i (\omega_g^t)$ using Stochastic Gradient Descent (SGD).
 
+\section{Statistical heterogeneity}
+In a real-world scenario, the data distributed among parties is Non-IID, the distribution from each party differs from the global distribution. Each client has its own local optima, which may be very different from the actual global optima.
+Under a IID setting, the global optima is \textit{close} to the local optima, but under a Non-IID settig, there is a \textit{drift} in the local updates, especially if the number of local epochs changes between parties.\\
+
+In order to simulate a Non-IID setting, it has been chosen the same strategy as \cite{li2021}, the datasets will be partitioned into multiple subsets. Let the local data distribution be $P(x_i, y_i) = P(x_i|y_i)P(y_i) = P(y_i | x_i)P(x_i)$. From a distribution perspective, the following Non-IID cases summarized in \cite{kairouz2021} are considered:
+
+\begin{itemize}
+  \item \textbf{Label distribution skew:} Different $P(y_i)$ across parties.
+  \item \textbf{Feature distribution skew:} Different $P(x_i)$ across parties.
+  \item \textbf{Same label but different features:} Different $P(x_i | y_i)$ across parties.
+  \item \textbf{Same features but different labels:} Different $P(y_i | x_i)$ across parties.
+  \item \textbf{Quantity skew:} Although the parties have the same $P(x_i, y_i)$, $|D^i|$ differs.
+\end{itemize}
+
+For the \textbf{label distribution skew}, it will be used two settings. The first one, is a quantity-based label imbalance, where each party possesses data samples corresponding to a fixed number of labels. An extreme case is where each party only has data from a unique label.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/2-Federated_Learning/Example_Quantity_based_3_clients.png}
+  \caption{Example of label distribution skew with 3 clients, each one holding data from different labels.}
+\end{figure}
+
+
+The second setting is a distribution-based label imbalance, where the Dirichlet distribution $Dir(\boldsymbol{\beta})$  is used to assign different proportion of each label across parties. Given N parties, the probability density function from the Dirichlet distribution is defined as:
+
+\begin{equation*}
+  f(\mathbf{x}, \boldsymbol{\beta}) = \frac{1}{\boldsymbol{\beta}} \prod_{i=1}^N x_i^{\beta_i - 1}, \quad \sum_{i=1}^N x_i = 1, \hspace*{.3 em} x_i \in [0,1], \hspace*{.3 em} \beta_i > 0
+\end{equation*}
+
+where the normalizing constant $B(\boldsymbol{\beta})$ is the multivariate beta function.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/2-Federated_Learning/Example_Dirichlet_beta_0_5_3_clients.png}
+  \caption{Example of label distribution skew with 3 clients using the Dirichlet distribution with $\boldsymbol{\beta}=(0.5, 0.5, 0.5)$.}
+\end{figure}
+
+For the \textbf{feature distribution skew}, it will be used a noise-based feature imabalance, where different levels of Gaussian noise will be added for each party. Given $\sigma > 0$, for party $i$, a noise $N(0, \sigma \frac{i}{N})$ will be added to its local features. Increasing $\sigma$ will increase the dissimilarity among parties. Note that although $P(x_i)$ differs, $P(y_i | x_i)$ is the same across parties.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.4\textwidth]{figures/2-Federated_Learning/Example_noise_based_feature_imabalance_original.png}
+\includegraphics[width=0.4\textwidth]{figures/2-Federated_Learning/Example_noise_based_feature_imabalance_Gaussian_0.3.png}
+\caption{Example of feature distribution skew with $\sigma=0.3$}
+\end{figure}
+
+It will be not considered the case where $P(y_i | x_i)$ differs, because then a distributed learning setting would make no sense (same feature should be classified as a different label across parties). Different $P(x_i | y_i)$ will neither be considered since we are focusing in a Horizontal FL setting. For the quantity skew, it will be used $Dir(\boldsymbol{\beta})$ to assign different proportion of the whole dataset to each party.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/2-Federated_Learning/Example_Quantity_skew_3_clients.png}
+  \caption{Example of quantity skew with 3 clients using the Dirichlet distribution with $\boldsymbol{\beta}=(0.5, 0.5, 0.5)$.}
+\end{figure}
+
+For the rest of the chapter, these Non-IID Data will be applied in order to see the effect in the model's accuracy. The model used is a very simple\footnote{The aim of these experiments is to check the accuracy degradation between different Non-IID settings. It is not necessary to train the best model in order to achieve a high test accuracy, since the IID settings will serve as a baseline to compare between Non-IID cases. Note that the number of possible experiments combining all these settings is huge, and the whole project has been made with a low-spec laptop without a GPU.} CNN described in Figure \ref{fig:CNN_used}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/2-Federated_Learning/convnet_model.png}
+  \caption{CNN used for all the following experiments.}
+  \label{fig:CNN_used}
+\end{figure}
+
+
+
+\section{FedAvg}
 In \cite*{mcmahan2023a}, it was introduced the \textbf{FederatedAveraging} algorithm (FedAvg).
+
 
 \begin{algorithm}[H]
   \label{alg:FedAvg}
@@ -87,7 +154,10 @@ In \cite*{mcmahan2023a}, it was introduced the \textbf{FederatedAveraging} algor
 \end{algorithm}
 
 As we see, \textit{FedAvg} took into account a client selection strategy. Since we are focusing in a framework where the clients are limited, we will not consider any subset of clients each round: all the clients will participate.\\
-The algorithm is quite simple, the server is simply averaging the local models' weights, with a constant parameter determining the contribution of each client given the size of the local dataset.\\
+The algorithm is quite simple, the server is averaging the local models' weights, with a constant parameter determining the contribution of each client given the size of the local dataset.\\
+
+[PONER AQUI EXPERIMENTOS HECHOS CON FEDAVG]
+
 Each client performs multiple local epochs, which reduces the communication rounds. However, these local updates can lead to a worse performance since the local objective functions differ from each other. This makes the algorithm not robust against non-IID data. There are several works that try to tackle this problem and a lot of FedAvg variants have been proposed in order to mitigate the divergence between the local updates. We will review some of the more relevant of them, starting with \textit{FedProx}.
 
 \section{FedProx}
