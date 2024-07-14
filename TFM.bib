@@ -1,3 +1,33 @@
+@book{bishop2006,
+  title = {Pattern Recognition and Machine Learning},
+  author = {Bishop, Christopher M.},
+  year = {2006},
+  series = {Information Science and Statistics},
+  publisher = {Springer},
+  address = {New York},
+  isbn = {978-0-387-31073-2},
+  langid = {english},
+  lccn = {Q327 .B52 2006},
+  file = {/home/javier/Zotero/storage/N2QAVMF2/Bishop - 2006 - Pattern recognition and machine learning.pdf}
+}
+
+@misc{caldas2019,
+  title = {{{LEAF}}: {{A Benchmark}} for {{Federated Settings}}},
+  shorttitle = {{{LEAF}}},
+  author = {Caldas, Sebastian and Duddu, Sai Meher Karthik and Wu, Peter and Li, Tian and Kone{\v c}n{\'y}, Jakub and McMahan, H. Brendan and Smith, Virginia and Talwalkar, Ameet},
+  year = {2019},
+  month = dec,
+  number = {arXiv:1812.01097},
+  eprint = {1812.01097},
+  primaryclass = {cs, stat},
+  publisher = {arXiv},
+  urldate = {2024-06-03},
+  abstract = {Modern federated networks, such as those comprised of wearable devices, mobile phones, or autonomous vehicles, generate massive amounts of data each day. This wealth of data can help to learn models that can improve the user experience on each device. However, the scale and heterogeneity of federated data presents new challenges in research areas such as federated learning, meta-learning, and multi-task learning. As the machine learning community begins to tackle these challenges, we are at a critical time to ensure that developments made in these areas are grounded with realistic benchmarks. To this end, we propose LEAF, a modular benchmarking framework for learning in federated settings. LEAF includes a suite of open-source federated datasets, a rigorous evaluation framework, and a set of reference implementations, all geared towards capturing the obstacles and intricacies of practical federated environments.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/6ZC7FA2G/Caldas et al. - 2019 - LEAF A Benchmark for Federated Settings.pdf}
+}
+
 @book{calin2020,
   title = {Deep {{Learning Architectures}}: {{A Mathematical Approach}}},
   shorttitle = {Deep {{Learning Architectures}}},
@@ -14,6 +44,22 @@
   file = {/home/javier/Zotero/storage/3RFUWDFU/Calin - 2020 - Deep Learning Architectures A Mathematical Approa.pdf}
 }
 
+@misc{damadi2023,
+  title = {The {{Backpropagation}} Algorithm for a Math Student},
+  author = {Damadi, Saeed and Moharrer, Golnaz and Cham, Mostafa},
+  year = {2023},
+  month = may,
+  number = {arXiv:2301.09977},
+  eprint = {2301.09977},
+  primaryclass = {cs, math},
+  publisher = {arXiv},
+  urldate = {2024-05-26},
+  abstract = {A Deep Neural Network (DNN) is a composite function of vector-valued functions, and in order to train a DNN, it is necessary to calculate the gradient of the loss function with respect to all parameters. This calculation can be a non-trivial task because the loss function of a DNN is a composition of several nonlinear functions, each with numerous parameters. The Backpropagation (BP) algorithm leverages the composite structure of the DNN to efficiently compute the gradient. As a result, the number of layers in the network does not significantly impact the complexity of the calculation. The objective of this paper is to express the gradient of the loss function in terms of a matrix multiplication using the Jacobian operator. This can be achieved by considering the total derivative of each layer with respect to its parameters and expressing it as a Jacobian matrix. The gradient can then be represented as the matrix product of these Jacobian matrices. This approach is valid because the chain rule can be applied to a composition of vector-valued functions, and the use of Jacobian matrices allows for the incorporation of multiple inputs and outputs. By providing concise mathematical justifications, the results can be made understandable and useful to a broad audience from various disciplines.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/AT3GAHGP/Damadi et al. - 2023 - The Backpropagation algorithm for a math student.pdf}
+}
+
 @misc{dauphin2014,
   title = {Identifying and Attacking the Saddle Point Problem in High-Dimensional Non-Convex Optimization},
   author = {Dauphin, Yann and Pascanu, Razvan and Gulcehre, Caglar and Cho, Kyunghyun and Ganguli, Surya and Bengio, Yoshua},
@@ -25,9 +71,20 @@
   publisher = {arXiv},
   urldate = {2024-05-24},
   abstract = {A central challenge to many fields of science and engineering involves minimizing non-convex error functions over continuous, high dimensional spaces. Gradient descent or quasi-Newton methods are almost ubiquitously used to perform such minimizations, and it is often thought that a main source of difficulty for these local methods to find the global minimum is the proliferation of local minima with much higher error than the global minimum. Here we argue, based on results from statistical physics, random matrix theory, neural network theory, and empirical evidence, that a deeper and more profound difficulty originates from the proliferation of saddle points, not local minima, especially in high dimensional problems of practical interest. Such saddle points are surrounded by high error plateaus that can dramatically slow down learning, and give the illusory impression of the existence of a local minimum. Motivated by these arguments, we propose a new approach to second-order optimization, the saddle-free Newton method, that can rapidly escape high dimensional saddle points, unlike gradient descent and quasi-Newton methods. We apply this algorithm to deep or recurrent neural network training, and provide numerical evidence for its superior optimization performance. This work extends the results of Pascanu et al. (2014).},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/7QCEKUB7/Dauphin et al. - 2014 - Identifying and attacking the saddle point problem.pdf}
+}
+
+@misc{escudero2022,
+  title = {An {{Introduction}} to {{Secret-Sharing-Based Secure Multiparty Computation}}},
+  author = {Escudero, Daniel},
+  year = {2022},
+  number = {2022/062},
+  urldate = {2024-07-01},
+  abstract = {This text serves as a general guide to secure multiparty computation based on secret-sharing, focusing more on practical aspects of the techniques and constructions rather than their theoretical grounds. It is intended to serve as an introductory reference text for readers interested in the area, assuming essentially no background in these topics. This work in progress currently includes an introduction to several core concepts in secure multiparty computation, an overview of simulation-based security, and detailed constructions for honest and two-thirds honest majority MPC, and also dishonest majority in the preprocessing model.},
+  annotation = {Publication info: Preprint.},
+  file = {/home/javier/Zotero/storage/RCU454DE/Escudero - 2022 - An Introduction to Secret-Sharing-Based Secure Mul.pdf}
 }
 
 @inproceedings{glorot2011,
@@ -43,6 +100,22 @@
   abstract = {While logistic sigmoid neurons are more biologically plausible than hyperbolic tangent neurons, the latter work better for training multi-layer neural networks. This paper shows that rectifying neurons are an even better model of biological neurons and yield equal or better performance than hyperbolic tangent networks in spite of the hard non-linearity and non-differentiability at zero, creating sparse representations with true zeros which seem remarkably suitable for naturally sparse data. Even though they can take advantage of semi-supervised setups with extra-unlabeled data, deep rectifier networks can reach their best performance without requiring any unsupervised pre-training on purely supervised tasks with large labeled datasets. Hence, these results can be seen as a new milestone in the attempts at understanding the difficulty in training deep but purely supervised neural networks, and closing the performance gap between neural networks learnt with and without unsupervised pre-training.},
   langid = {english},
   file = {/home/javier/Zotero/storage/VSVF7YY6/Glorot et al. - 2011 - Deep Sparse Rectifier Neural Networks.pdf}
+}
+
+@misc{goodfellow2014,
+  title = {Generative {{Adversarial Networks}}},
+  author = {Goodfellow, Ian J. and {Pouget-Abadie}, Jean and Mirza, Mehdi and Xu, Bing and {Warde-Farley}, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
+  year = {2014},
+  month = jun,
+  number = {arXiv:1406.2661},
+  eprint = {1406.2661},
+  primaryclass = {cs, stat},
+  publisher = {arXiv},
+  urldate = {2024-07-14},
+  abstract = {We propose a new framework for estimating generative models via an adversarial process, in which we simultaneously train two models: a generative model G that captures the data distribution, and a discriminative model D that estimates the probability that a sample came from the training data rather than G. The training procedure for G is to maximize the probability of D making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions G and D, a unique solution exists, with G recovering the training data distribution and D equal to 1/2 everywhere. In the case where G and D are defined by multilayer perceptrons, the entire system can be trained with backpropagation. There is no need for any Markov chains or unrolled approximate inference networks during either training or generation of samples. Experiments demonstrate the potential of the framework through qualitative and quantitative evaluation of the generated samples.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/MYCMBECN/Goodfellow et al. - 2014 - Generative Adversarial Networks.pdf}
 }
 
 @book{goodfellow2016,
@@ -67,9 +140,42 @@
   publisher = {arXiv},
   urldate = {2024-05-15},
   abstract = {Federated learning (FL) is a machine learning setting where many clients (e.g. mobile devices or whole organizations) collaboratively train a model under the orchestration of a central server (e.g. service provider), while keeping the training data decentralized. FL embodies the principles of focused data collection and minimization, and can mitigate many of the systemic privacy risks and costs resulting from traditional, centralized machine learning and data science approaches. Motivated by the explosive growth in FL research, this paper discusses recent advances and presents an extensive collection of open problems and challenges.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/SYCUPYBQ/Kairouz et al. - 2021 - Advances and Open Problems in Federated Learning.pdf}
+}
+
+@misc{kairouz2021a,
+  title = {Advances and {{Open Problems}} in {{Federated Learning}}},
+  author = {Kairouz, Peter and McMahan, H. Brendan and Avent, Brendan and Bellet, Aur{\'e}lien and Bennis, Mehdi and Bhagoji, Arjun Nitin and Bonawitz, Kallista and Charles, Zachary and Cormode, Graham and Cummings, Rachel and D'Oliveira, Rafael G. L. and Eichner, Hubert and Rouayheb, Salim El and Evans, David and Gardner, Josh and Garrett, Zachary and Gasc{\'o}n, Adri{\`a} and Ghazi, Badih and Gibbons, Phillip B. and Gruteser, Marco and Harchaoui, Zaid and He, Chaoyang and He, Lie and Huo, Zhouyuan and Hutchinson, Ben and Hsu, Justin and Jaggi, Martin and Javidi, Tara and Joshi, Gauri and Khodak, Mikhail and Kone{\v c}n{\'y}, Jakub and Korolova, Aleksandra and Koushanfar, Farinaz and Koyejo, Sanmi and Lepoint, Tancr{\`e}de and Liu, Yang and Mittal, Prateek and Mohri, Mehryar and Nock, Richard and {\"O}zg{\"u}r, Ayfer and Pagh, Rasmus and Raykova, Mariana and Qi, Hang and Ramage, Daniel and Raskar, Ramesh and Song, Dawn and Song, Weikang and Stich, Sebastian U. and Sun, Ziteng and Suresh, Ananda Theertha and Tram{\`e}r, Florian and Vepakomma, Praneeth and Wang, Jianyu and Xiong, Li and Xu, Zheng and Yang, Qiang and Yu, Felix X. and Yu, Han and Zhao, Sen},
+  year = {2021},
+  month = mar,
+  number = {arXiv:1912.04977},
+  eprint = {1912.04977},
+  primaryclass = {cs, stat},
+  publisher = {arXiv},
+  urldate = {2024-06-30},
+  abstract = {Federated learning (FL) is a machine learning setting where many clients (e.g. mobile devices or whole organizations) collaboratively train a model under the orchestration of a central server (e.g. service provider), while keeping the training data decentralized. FL embodies the principles of focused data collection and minimization, and can mitigate many of the systemic privacy risks and costs resulting from traditional, centralized machine learning and data science approaches. Motivated by the explosive growth in FL research, this paper discusses recent advances and presents an extensive collection of open problems and challenges.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/43V86CIJ/Kairouz et al. - 2021 - Advances and Open Problems in Federated Learning.pdf}
+}
+
+@misc{karimireddy2021,
+  title = {{{SCAFFOLD}}: {{Stochastic Controlled Averaging}} for {{Federated Learning}}},
+  shorttitle = {{{SCAFFOLD}}},
+  author = {Karimireddy, Sai Praneeth and Kale, Satyen and Mohri, Mehryar and Reddi, Sashank J. and Stich, Sebastian U. and Suresh, Ananda Theertha},
+  year = {2021},
+  month = apr,
+  number = {arXiv:1910.06378},
+  eprint = {1910.06378},
+  primaryclass = {cs, math, stat},
+  publisher = {arXiv},
+  urldate = {2024-06-29},
+  abstract = {Federated Averaging (FEDAVG) has emerged as the algorithm of choice for federated learning due to its simplicity and low communication cost. However, in spite of recent research efforts, its performance is not fully understood. We obtain tight convergence rates for FEDAVG and prove that it suffers from `client-drift' when the data is heterogeneous (non-iid), resulting in unstable and slow convergence.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/BT7U6ME8/Karimireddy et al. - 2021 - SCAFFOLD Stochastic Controlled Averaging for Fede.pdf}
 }
 
 @misc{kingma2017,
@@ -84,7 +190,7 @@
   publisher = {arXiv},
   urldate = {2024-05-26},
   abstract = {We introduce Adam, an algorithm for first-order gradient-based optimization of stochastic objective functions, based on adaptive estimates of lower-order moments. The method is straightforward to implement, is computationally efficient, has little memory requirements, is invariant to diagonal rescaling of the gradients, and is well suited for problems that are large in terms of data and/or parameters. The method is also appropriate for non-stationary objectives and problems with very noisy and/or sparse gradients. The hyper-parameters have intuitive interpretations and typically require little tuning. Some connections to related algorithms, on which Adam was inspired, are discussed. We also analyze the theoretical convergence properties of the algorithm and provide a regret bound on the convergence rate that is comparable to the best known results under the online convex optimization framework. Empirical results demonstrate that Adam works well in practice and compares favorably to other stochastic optimization methods. Finally, we discuss AdaMax, a variant of Adam based on the infinity norm.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/K6U7DNVH/Kingma and Ba - 2017 - Adam A Method for Stochastic Optimization.pdf}
 }
@@ -117,7 +223,7 @@
   publisher = {arXiv},
   urldate = {2023-12-16},
   abstract = {Federated Learning is a distributed learning paradigm with two key challenges that differentiate it from traditional distributed optimization: (1) significant variability in terms of the systems characteristics on each device in the network (systems heterogeneity), and (2) non-identically distributed data across the network (statistical heterogeneity). In this work, we introduce a framework, FedProx, to tackle heterogeneity in federated networks. FedProx can be viewed as a generalization and re-parametrization of FedAvg, the current state-of-the-art method for federated learning. While this re-parameterization makes only minor modifications to the method itself, these modifications have important ramifications both in theory and in practice. Theoretically, we provide convergence guarantees for our framework when learning over data from non-identical distributions (statistical heterogeneity), and while adhering to device-level systems constraints by allowing each participating device to perform a variable amount of work (systems heterogeneity). Practically, we demonstrate that FedProx allows for more robust convergence than FedAvg across a suite of realistic federated datasets. In particular, in highly heterogeneous settings, FedProx demonstrates significantly more stable and accurate convergence behavior relative to FedAvg---improving absolute test accuracy by 22\% on average.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   file = {/home/javier/Zotero/storage/9D2E5TRQ/Li et al. - 2020 - Federated Optimization in Heterogeneous Networks.pdf;/home/javier/Zotero/storage/DGCZVR7F/1812.html}
 }
 
@@ -133,7 +239,7 @@
   publisher = {arXiv},
   urldate = {2024-01-12},
   abstract = {Due to the increasing privacy concerns and data regulations, training data have been increasingly fragmented, forming distributed databases of multiple "data silos" (e.g., within different organizations and countries). To develop effective machine learning services, there is a must to exploit data from such distributed databases without exchanging the raw data. Recently, federated learning (FL) has been a solution with growing interests, which enables multiple parties to collaboratively train a machine learning model without exchanging their local data. A key and common challenge on distributed databases is the heterogeneity of the data distribution among the parties. The data of different parties are usually non-independently and identically distributed (i.e., non-IID). There have been many FL algorithms to address the learning effectiveness under non-IID data settings. However, there lacks an experimental study on systematically understanding their advantages and disadvantages, as previous studies have very rigid data partitioning strategies among parties, which are hardly representative and thorough. In this paper, to help researchers better understand and study the non-IID data setting in federated learning, we propose comprehensive data partitioning strategies to cover the typical non-IID data cases. Moreover, we conduct extensive experiments to evaluate state-of-the-art FL algorithms. We find that non-IID does bring significant challenges in learning accuracy of FL algorithms, and none of the existing state-of-the-art FL algorithms outperforms others in all cases. Our experiments provide insights for future studies of addressing the challenges in "data silos".},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   file = {/home/javier/Zotero/storage/IQ9PYUR9/Li et al. - 2021 - Federated Learning on Non-IID Data Silos An Exper.pdf;/home/javier/Zotero/storage/UKIJ3SD9/2102.html}
 }
 
@@ -148,7 +254,7 @@
   publisher = {arXiv},
   urldate = {2024-01-12},
   abstract = {Modern mobile devices have access to a wealth of data suitable for learning models, which in turn can greatly improve the user experience on the device. For example, language models can improve speech recognition and text entry, and image models can automatically select good photos. However, this rich data is often privacy sensitive, large in quantity, or both, which may preclude logging to the data center and training there using conventional approaches. We advocate an alternative that leaves the training data distributed on the mobile devices, and learns a shared model by aggregating locally-computed updates. We term this decentralized approach Federated Learning. We present a practical method for the federated learning of deep networks based on iterative model averaging, and conduct an extensive empirical evaluation, considering five different model architectures and four datasets. These experiments demonstrate the approach is robust to the unbalanced and non-IID data distributions that are a defining characteristic of this setting. Communication costs are the principal constraint, and we show a reduction in required communication rounds by 10-100x as compared to synchronized stochastic gradient descent.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   file = {/home/javier/Zotero/storage/EBNMC2MY/McMahan et al. - 2023 - Communication-Efficient Learning of Deep Networks .pdf;/home/javier/Zotero/storage/3WPBK7V8/1602.html}
 }
 
@@ -164,6 +270,22 @@
   isbn = {978-0-262-36930-5 978-0-262-04682-4},
   langid = {english},
   file = {/home/javier/Zotero/storage/6K22P9BR/Murphy - 2022 - Probabilistic machine learning an introduction.pdf}
+}
+
+@misc{oshea2015,
+  title = {An {{Introduction}} to {{Convolutional Neural Networks}}},
+  author = {O'Shea, Keiron and Nash, Ryan},
+  year = {2015},
+  month = dec,
+  number = {arXiv:1511.08458},
+  eprint = {1511.08458},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  urldate = {2024-05-26},
+  abstract = {The field of machine learning has taken a dramatic twist in recent times, with the rise of the Artificial Neural Network (ANN). These biologically inspired computational models are able to far exceed the performance of previous forms of artificial intelligence in common machine learning tasks. One of the most impressive forms of ANN architecture is that of the Convolutional Neural Network (CNN). CNNs are primarily used to solve difficult image-driven pattern recognition tasks and with their precise yet simple architecture, offers a simplified method of getting started with ANNs.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/GN92FWJP/O'Shea and Nash - 2015 - An Introduction to Convolutional Neural Networks.pdf}
 }
 
 @article{qian1999,
@@ -209,9 +331,27 @@
   publisher = {arXiv},
   urldate = {2024-05-24},
   abstract = {Gradient descent optimization algorithms, while increasingly popular, are often used as black-box optimizers, as practical explanations of their strengths and weaknesses are hard to come by. This article aims to provide the reader with intuitions with regard to the behaviour of different algorithms that will allow her to put them to use. In the course of this overview, we look at different variants of gradient descent, summarize challenges, introduce the most common optimization algorithms, review architectures in a parallel and distributed setting, and investigate additional strategies for optimizing gradient descent.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/EL94DSBJ/Ruder - 2017 - An overview of gradient descent optimization algor.pdf}
+}
+
+@article{rumelhart1986,
+  title = {Learning Representations by Back-Propagating Errors},
+  author = {Rumelhart, David E. and Hinton, Geoffrey E. and Williams, Ronald J.},
+  year = {1986},
+  month = oct,
+  journal = {Nature},
+  volume = {323},
+  number = {6088},
+  pages = {533--536},
+  publisher = {Nature Publishing Group},
+  issn = {1476-4687},
+  doi = {10.1038/323533a0},
+  urldate = {2024-05-26},
+  abstract = {We describe a new learning procedure, back-propagation, for networks of neurone-like units. The procedure repeatedly adjusts the weights of the connections in the network so as to minimize a measure of the difference between the actual output vector of the net and the desired output vector. As a result of the weight adjustments, internal `hidden' units which are not part of the input or output come to represent important features of the task domain, and the regularities in the task are captured by the interactions of these units. The ability to create useful new features distinguishes back-propagation from earlier, simpler methods such as the perceptron-convergence procedure1.},
+  copyright = {1986 Springer Nature Limited},
+  langid = {english}
 }
 
 @inproceedings{smestad2023,
@@ -226,7 +366,7 @@
   doi = {10.1145/3593434.3593438},
   urldate = {2024-05-11},
   abstract = {With the arising concerns of privacy within machine learning, federated learning (FL) was invented in 2017, in which the clients, such as mobile devices, train a model and send the update to the centralized server. Choosing clients randomly for FL can harm learning performance due to different reasons. Many studies have proposed approaches to address the challenges of client selection of FL. However, no systematic literature review (SLR) on this topic existed. This SLR investigates the state of the art of client selection in FL and answers the challenges, solutions, and metrics to evaluate the solutions. We systematically reviewed 47 primary studies. The main challenges found in client selection are heterogeneity, resource allocation, communication costs, and fairness. The client selection schemes aim to improve the original random selection algorithm by focusing on one or several of the aforementioned challenges. The most common metric used is testing accuracy versus communication rounds, as testing accuracy measures the successfulness of the learning and preferably in as few communication rounds as possible, as they are very expensive. Although several possible improvements can be made with the current state of client selection, the most beneficial ones are evaluating the impact of unsuccessful clients and gaining a more theoretical understanding of the impact of fairness in FL.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/3WCT4EXX/Smestad and Li - 2023 - A Systematic Literature Review on Client Selection.pdf}
 }
@@ -242,7 +382,7 @@
   publisher = {arXiv},
   urldate = {2024-05-24},
   abstract = {Machine learning develops rapidly, which has made many theoretical breakthroughs and is widely applied in various fields. Optimization, as an important part of machine learning, has attracted much attention of researchers. With the exponential growth of data amount and the increase of model complexity, optimization methods in machine learning face more and more challenges. A lot of work on solving optimization problems or improving optimization methods in machine learning has been proposed successively. The systematic retrospect and summary of the optimization methods from the perspective of machine learning are of great significance, which can offer guidance for both developments of optimization and machine learning research. In this paper, we first describe the optimization problems in machine learning. Then, we introduce the principles and progresses of commonly used optimization methods. Next, we summarize the applications and developments of optimization methods in some popular machine learning fields. Finally, we explore and give some challenges and open problems for the optimization in machine learning.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/UJ6PH7EH/Sun et al. - 2019 - A Survey of Optimization Methods from a Machine Le.pdf}
 }
@@ -259,9 +399,40 @@
   publisher = {arXiv},
   urldate = {2024-05-24},
   abstract = {When and why can a neural network be successfully trained? This article provides an overview of optimization algorithms and theory for training neural networks. First, we discuss the issue of gradient explosion/vanishing and the more general issue of undesirable spectrum, and then discuss practical solutions including careful initialization and normalization methods. Second, we review generic optimization methods used in training neural networks, such as SGD, adaptive gradient methods and distributed methods, and existing theoretical results for these algorithms. Third, we review existing research on the global issues of neural network training, including results on bad local minima, mode connectivity, lottery ticket hypothesis and infinitewidth analysis.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/CTWKWQCM/Sun - 2019 - Optimization for deep learning theory and algorit.pdf}
+}
+
+@article{sun2023,
+  title = {Adversarial {{Attacks Against Deep Generative Models}} on {{Data}}: {{A Survey}}},
+  shorttitle = {Adversarial {{Attacks Against Deep Generative Models}} on {{Data}}},
+  author = {Sun, Hui and Zhu, Tianqing and Zhang, Zhiqiu and Jin, Dawei and Xiong, Ping and Zhou, Wanlei},
+  year = {2023},
+  month = apr,
+  journal = {IEEE Transactions on Knowledge and Data Engineering},
+  volume = {35},
+  number = {4},
+  pages = {3367--3388},
+  issn = {1041-4347, 1558-2191, 2326-3865},
+  doi = {10.1109/TKDE.2021.3130903},
+  urldate = {2024-07-14},
+  abstract = {Deep generative models have gained much attention given their ability to generate data for applications as varied as healthcare to financial technology to surveillance, and many more - the most popular models being generative adversarial networks (GANs) and variational auto-encoders (VAEs). Yet, as with all machine learning models, ever is the concern over security breaches and privacy leaks and deep generative models are no exception. In fact, these models have advanced so rapidly in recent years that work on their security is still in its infancy. In an attempt to audit the current and future threats against these models, and to provide a roadmap for defense preparations in the short term, we prepared this comprehensive and specialized survey on the security and privacy preservation of GANs and VAEs. Our focus is on the inner connection between attacks and model architectures and, more specifically, on five components of deep generative models: the training data, the latent code, the generators/decoders of GANs/VAEs, the discriminators/encoders of GANs/VAEs, and the generated data. For each model, component and attack, we review the current research progress and identify the key challenges. The paper concludes with a discussion of possible future attacks and research directions in the field.},
+  copyright = {https://creativecommons.org/licenses/by/4.0/legalcode},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/J2ANEYZQ/Sun et al. - 2023 - Adversarial Attacks Against Deep Generative Models.pdf}
+}
+
+@misc{wagh2018,
+  title = {{{SecureNN}}: {{Efficient}} and {{Private Neural Network Training}}},
+  shorttitle = {{{SecureNN}}},
+  author = {Wagh, Sameer and Gupta, Divya and Chandran, Nishanth},
+  year = {2018},
+  number = {2018/442},
+  urldate = {2024-07-01},
+  abstract = {Neural Networks (NN) provide a powerful method for machine learning training and inference. To effectively train, it is desirable for multiple parties to combine their data -- however, doing so conflicts with data privacy. In this work, we provide novel three-party secure computation protocols for various NN building blocks such as matrix multiplication, convolutions, Rectified Linear Units, Maxpool, normalization and so on. This enables us to construct three-party secure protocols for training and inference of several NN architectures such that no single party learns any information about the data. Experimentally, we implement our system over Amazon EC2 servers in different settings. {\textbackslash}{\textbackslash} Our work advances the state-of-the-art of secure computation for neural networks in three ways: {\textbackslash}begin\{enumerate\} {\textbackslash}item Scalability: We are the first work to provide neural network training on Convolutional Neural Networks (CNNs) that have an accuracy of \${$>$}99{\textbackslash}\%\$ on the MNIST dataset; {\textbackslash}item Performance: For secure inference, our system outperforms prior 2 and 3-server works (SecureML, MiniONN, Chameleon, Gazelle) by \$6{\textbackslash}times\$-\$113{\textbackslash}times\$ (with larger gains obtained in more complex networks). Our total execution times are \$2-4{\textbackslash}times\$ faster than even just the online times of these works. For secure training, compared to the only prior work (SecureML) that considered a much smaller fully connected network, our protocols are \$79{\textbackslash}times\$ and \$7{\textbackslash}times\$ faster than their 2 and 3-server protocols. In the WAN setting, these improvements are more dramatic and we obtain an improvement of \$553{\textbackslash}times\$! {\textbackslash}item Security: Our protocols provide two kinds of security: full security (privacy and correctness) against one semi-honest corruption and the notion of privacy against one malicious corruption [Araki{\textasciitilde}{\textbackslash}etal{\textasciitilde}CCS'16]. All prior works only provide semi-honest security and ours is the first system to provide any security against malicious adversaries for the secure computation of complex algorithms such as neural network inference and training. {\textbackslash}end\{enumerate\} Our gains come from a significant improvement in communication through the elimination of expensive garbled circuits and oblivious transfer protocols.},
+  annotation = {Publication info: Published elsewhere. 19th Privacy Enhancing Technologies Symposium (PETS 2019)},
+  file = {/home/javier/Zotero/storage/A5X7WWN4/Wagh et al. - 2018 - SecureNN Efficient and Private Neural Network Tra.pdf}
 }
 
 @misc{wang2020,
@@ -275,7 +446,7 @@
   publisher = {arXiv},
   urldate = {2024-05-15},
   abstract = {In federated optimization, heterogeneity in the clients' local datasets and computation speeds results in large variations in the number of local updates performed by each client in each communication round. Naive weighted aggregation of such models causes objective inconsistency, that is, the global model converges to a stationary point of a mismatched objective function which can be arbitrarily different from the true objective. This paper provides a general framework to analyze the convergence of federated heterogeneous optimization algorithms. It subsumes previously proposed methods such as FedAvg and FedProx and provides the first principled understanding of the solution bias and the convergence slowdown due to objective inconsistency. Using insights from this analysis, we propose FedNova, a normalized averaging method that eliminates objective inconsistency while preserving fast error convergence.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/6BJW2WEK/Wang et al. - 2020 - Tackling the Objective Inconsistency Problem in He.pdf}
 }
@@ -291,9 +462,23 @@
   publisher = {arXiv},
   urldate = {2024-05-14},
   abstract = {Federated learning and analytics are a distributed approach for collaboratively learning models (or statistics) from decentralized data, motivated by and designed for privacy protection. The distributed learning process can be formulated as solving federated optimization problems, which emphasize communication efficiency, data heterogeneity, compatibility with privacy and system requirements, and other constraints that are not primary considerations in other problem settings. This paper provides recommendations and guidelines on formulating, designing, evaluating and analyzing federated optimization algorithms through concrete examples and practical implementation, with a focus on conducting effective simulations to infer real-world performance. The goal of this work is not to survey the current literature, but to inspire researchers and practitioners to design federated learning algorithms that can be used in various practical applications.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/JBBWY97N/Wang et al. - 2021 - A Field Guide to Federated Optimization.pdf}
+}
+
+@incollection{xu2019,
+  title = {Modeling Tabular Data Using Conditional {{GAN}}},
+  booktitle = {Proceedings of the 33rd {{International Conference}} on {{Neural Information Processing Systems}}},
+  author = {Xu, Lei and Skoularidou, Maria and {Cuesta-Infante}, Alfredo and Veeramachaneni, Kalyan},
+  year = {2019},
+  month = dec,
+  number = {659},
+  pages = {7335--7345},
+  publisher = {Curran Associates Inc.},
+  address = {Red Hook, NY, USA},
+  urldate = {2024-07-13},
+  abstract = {Modeling the probability distribution of rows in tabular data and generating realistic synthetic data is a non-trivial task. Tabular data usually contains a mix of discrete and continuous columns. Continuous columns may have multiple modes whereas discrete columns are sometimes imbalanced making the modeling difficult. Existing statistical and deep neural network models fail to properly model this type of data. We design CTGAN, which uses a conditional generator to address these challenges. To aid in a fair and thorough comparison, we design a benchmark with 7 simulated and 8 real datasets and several Bayesian network baselines. CTGAN outperforms Bayesian methods on most of the real datasets whereas other deep learning methods could not.}
 }
 
 @article{y1983,
@@ -320,7 +505,7 @@
   publisher = {arXiv},
   urldate = {2024-05-26},
   abstract = {We present a novel per-dimension learning rate method for gradient descent called ADADELTA. The method dynamically adapts over time using only first order information and has minimal computational overhead beyond vanilla stochastic gradient descent. The method requires no manual tuning of a learning rate and appears robust to noisy gradient information, different model architecture choices, various data modalities and selection of hyperparameters. We show promising results compared to other methods on the MNIST digit classification task using a single machine and on a large scale voice dataset in a distributed cluster environment.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/TPZSZLST/Zeiler - 2012 - ADADELTA An Adaptive Learning Rate Method.pdf}
 }
@@ -336,7 +521,7 @@
   publisher = {arXiv},
   urldate = {2024-05-24},
   abstract = {Deep neural networks (DNNs) have achieved tremendous success in a variety of applications across many disciplines. Yet, their superior performance comes with the expensive cost of requiring correctly annotated large-scale datasets. Moreover, due to DNNs' rich capacity, errors in training labels can hamper performance. To combat this problem, mean absolute error (MAE) has recently been proposed as a noise-robust alternative to the commonly-used categorical cross entropy (CCE) loss. However, as we show in this paper, MAE can perform poorly with DNNs and challenging datasets. Here, we present a theoretically grounded set of noise-robust loss functions that can be seen as a generalization of MAE and CCE. Proposed loss functions can be readily applied with any existing DNN architecture and algorithm, while yielding good performance in a wide range of noisy label scenarios. We report results from experiments conducted with CIFAR-10, CIFAR-100 and FASHIONMNIST datasets and synthetically generated noisy labels.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/GIXJLZB3/Zhang and Sabuncu - 2018 - Generalized Cross Entropy Loss for Training Deep N.pdf}
 }
@@ -352,7 +537,7 @@
   publisher = {arXiv},
   urldate = {2024-05-11},
   abstract = {This white paper describes recent advances in Gboard(Google Keyboard)'s use of federated learning, DP-Follow-the-Regularized-Leader (DP-FTRL) algorithm, and secure aggregation techniques to train machine learning (ML) models for suggestion, prediction and correction intelligence from many users' typing data. Gboard's investment in those privacy technologies allows users' typing data to be processed locally on device, to be aggregated as early as possible, and to have strong anonymization and differential privacy where possible. Technical strategies and practices have been established to allow ML models to be trained and deployed with meaningfully formal DP guarantees and high utility. The paper also looks ahead to how technologies such as trusted execution environments may be used to further improve the privacy and security of Gboard's ML models.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/ZEU4USGI/Zhang et al. - 2023 - Private Federated Learning in Gboard.pdf}
 }
@@ -366,6 +551,6 @@
   doi = {10.48550/arXiv.1806.00582},
   urldate = {2024-01-12},
   abstract = {Federated learning enables resource-constrained edge compute devices, such as mobile phones and IoT devices, to learn a shared model for prediction, while keeping the training data local. This decentralized approach to train models provides privacy, security, regulatory and economic benefits. In this work, we focus on the statistical challenge of federated learning when local data is non-IID. We first show that the accuracy of federated learning reduces significantly, by up to 55\% for neural networks trained for highly skewed non-IID data, where each client device trains only on a single class of data. We further show that this accuracy reduction can be explained by the weight divergence, which can be quantified by the earth mover's distance (EMD) between the distribution over classes on each device and the population distribution. As a solution, we propose a strategy to improve training on non-IID data by creating a small subset of data which is globally shared between all the edge devices. Experiments show that accuracy can be increased by 30\% for the CIFAR-10 dataset with only 5\% globally shared data.},
-  archiveprefix = {arxiv},
+  archiveprefix = {arXiv},
   file = {/home/javier/Zotero/storage/7T3IPGCR/Zhao et al. - 2018 - Federated Learning with Non-IID Data.pdf;/home/javier/Zotero/storage/EMHTM8BJ/1806.html}
 }

@@ -1,4 +1,4 @@
-\documentclass[twoside]{book}
+\documentclass[oneside, openany]{book}
 \usepackage[utf8]{inputenc}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{amssymb, amsmath, mathtools}
@@ -13,7 +13,10 @@
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage{tikz}
+
+\let\cleardoublepage=\clearpage
 
 \addbibresource{TFM.bib}
 
@@ -23,6 +26,8 @@
 \include{Chapter2}
 \include{Chapter3}
 \include{chapter4}
+\backmatter
+\include{apprendixA}
 
 \printbibliography
 \end{document}

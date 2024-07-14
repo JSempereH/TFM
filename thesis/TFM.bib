@@ -1,3 +1,16 @@
+@book{bishop2006,
+  title = {Pattern Recognition and Machine Learning},
+  author = {Bishop, Christopher M.},
+  year = {2006},
+  series = {Information Science and Statistics},
+  publisher = {Springer},
+  address = {New York},
+  isbn = {978-0-387-31073-2},
+  langid = {english},
+  lccn = {Q327 .B52 2006},
+  file = {/home/javier/Zotero/storage/N2QAVMF2/Bishop - 2006 - Pattern recognition and machine learning.pdf}
+}
+
 @misc{caldas2019,
   title = {{{LEAF}}: {{A Benchmark}} for {{Federated Settings}}},
   shorttitle = {{{LEAF}}},
@@ -87,6 +100,22 @@
   abstract = {While logistic sigmoid neurons are more biologically plausible than hyperbolic tangent neurons, the latter work better for training multi-layer neural networks. This paper shows that rectifying neurons are an even better model of biological neurons and yield equal or better performance than hyperbolic tangent networks in spite of the hard non-linearity and non-differentiability at zero, creating sparse representations with true zeros which seem remarkably suitable for naturally sparse data. Even though they can take advantage of semi-supervised setups with extra-unlabeled data, deep rectifier networks can reach their best performance without requiring any unsupervised pre-training on purely supervised tasks with large labeled datasets. Hence, these results can be seen as a new milestone in the attempts at understanding the difficulty in training deep but purely supervised neural networks, and closing the performance gap between neural networks learnt with and without unsupervised pre-training.},
   langid = {english},
   file = {/home/javier/Zotero/storage/VSVF7YY6/Glorot et al. - 2011 - Deep Sparse Rectifier Neural Networks.pdf}
+}
+
+@misc{goodfellow2014,
+  title = {Generative {{Adversarial Networks}}},
+  author = {Goodfellow, Ian J. and {Pouget-Abadie}, Jean and Mirza, Mehdi and Xu, Bing and {Warde-Farley}, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
+  year = {2014},
+  month = jun,
+  number = {arXiv:1406.2661},
+  eprint = {1406.2661},
+  primaryclass = {cs, stat},
+  publisher = {arXiv},
+  urldate = {2024-07-14},
+  abstract = {We propose a new framework for estimating generative models via an adversarial process, in which we simultaneously train two models: a generative model G that captures the data distribution, and a discriminative model D that estimates the probability that a sample came from the training data rather than G. The training procedure for G is to maximize the probability of D making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions G and D, a unique solution exists, with G recovering the training data distribution and D equal to 1/2 everywhere. In the case where G and D are defined by multilayer perceptrons, the entire system can be trained with backpropagation. There is no need for any Markov chains or unrolled approximate inference networks during either training or generation of samples. Experiments demonstrate the potential of the framework through qualitative and quantitative evaluation of the generated samples.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/MYCMBECN/Goodfellow et al. - 2014 - Generative Adversarial Networks.pdf}
 }
 
 @book{goodfellow2016,
@@ -375,6 +404,25 @@
   file = {/home/javier/Zotero/storage/CTWKWQCM/Sun - 2019 - Optimization for deep learning theory and algorit.pdf}
 }
 
+@article{sun2023,
+  title = {Adversarial {{Attacks Against Deep Generative Models}} on {{Data}}: {{A Survey}}},
+  shorttitle = {Adversarial {{Attacks Against Deep Generative Models}} on {{Data}}},
+  author = {Sun, Hui and Zhu, Tianqing and Zhang, Zhiqiu and Jin, Dawei and Xiong, Ping and Zhou, Wanlei},
+  year = {2023},
+  month = apr,
+  journal = {IEEE Transactions on Knowledge and Data Engineering},
+  volume = {35},
+  number = {4},
+  pages = {3367--3388},
+  issn = {1041-4347, 1558-2191, 2326-3865},
+  doi = {10.1109/TKDE.2021.3130903},
+  urldate = {2024-07-14},
+  abstract = {Deep generative models have gained much attention given their ability to generate data for applications as varied as healthcare to financial technology to surveillance, and many more - the most popular models being generative adversarial networks (GANs) and variational auto-encoders (VAEs). Yet, as with all machine learning models, ever is the concern over security breaches and privacy leaks and deep generative models are no exception. In fact, these models have advanced so rapidly in recent years that work on their security is still in its infancy. In an attempt to audit the current and future threats against these models, and to provide a roadmap for defense preparations in the short term, we prepared this comprehensive and specialized survey on the security and privacy preservation of GANs and VAEs. Our focus is on the inner connection between attacks and model architectures and, more specifically, on five components of deep generative models: the training data, the latent code, the generators/decoders of GANs/VAEs, the discriminators/encoders of GANs/VAEs, and the generated data. For each model, component and attack, we review the current research progress and identify the key challenges. The paper concludes with a discussion of possible future attacks and research directions in the field.},
+  copyright = {https://creativecommons.org/licenses/by/4.0/legalcode},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/J2ANEYZQ/Sun et al. - 2023 - Adversarial Attacks Against Deep Generative Models.pdf}
+}
+
 @misc{wagh2018,
   title = {{{SecureNN}}: {{Efficient}} and {{Private Neural Network Training}}},
   shorttitle = {{{SecureNN}}},
@@ -417,6 +465,20 @@
   archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/JBBWY97N/Wang et al. - 2021 - A Field Guide to Federated Optimization.pdf}
+}
+
+@incollection{xu2019,
+  title = {Modeling Tabular Data Using Conditional {{GAN}}},
+  booktitle = {Proceedings of the 33rd {{International Conference}} on {{Neural Information Processing Systems}}},
+  author = {Xu, Lei and Skoularidou, Maria and {Cuesta-Infante}, Alfredo and Veeramachaneni, Kalyan},
+  year = {2019},
+  month = dec,
+  number = {659},
+  pages = {7335--7345},
+  publisher = {Curran Associates Inc.},
+  address = {Red Hook, NY, USA},
+  urldate = {2024-07-13},
+  abstract = {Modeling the probability distribution of rows in tabular data and generating realistic synthetic data is a non-trivial task. Tabular data usually contains a mix of discrete and continuous columns. Continuous columns may have multiple modes whereas discrete columns are sometimes imbalanced making the modeling difficult. Existing statistical and deep neural network models fail to properly model this type of data. We design CTGAN, which uses a conditional generator to address these challenges. To aid in a fair and thorough comparison, we design a benchmark with 7 simulated and 8 real datasets and several Bayesian network baselines. CTGAN outperforms Bayesian methods on most of the real datasets whereas other deep learning methods could not.}
 }
 
 @article{y1983,

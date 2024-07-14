@@ -21,7 +21,26 @@ Horizontal Federated Learning (HFL) and Vertical Federated learning (VFL) are tw
     \item \textbf{VFL:} The data  is vertically partitioned, each party has different features for the same set of samples.
 \end{itemize}
 
-[\textbf{PONER TABLAS QUE ILUSTREN HFL Y VFL}]
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/2-Federated_Learning/HFL.png}
+  \caption{Example of HFL. Each node has different samples but with the same attributes.}
+  \label{fig:HFL}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.40\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/2-Federated_Learning/VFL_1.png} % Primera imagen
+    \end{minipage}\hspace*{2.5 em}
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/2-Federated_Learning/VFL_2.png} % Segunda imagen
+    \end{minipage}
+    \caption{Example of VFL. Each node has common samples but with different attributes. It may happen that not all elements are common or aligned.}
+    \label{fig:VFL}
+\end{figure}
 
 HFL and VFL are not mutually exclusive, in some cases a combination of both schemes may be applied. This work will focus on HFL. Also, we will only study \textit{Cross-Silo Federated Learning (Cross-Silo FL)},
 which is a variation of FL that addresses the scenario where data is distributed across different organizations, usually few parties, each maintaining control over its own data.
@@ -54,6 +73,8 @@ can take the form of an empirical risk minimization objective function:
 If $\alpha_i = \frac{|D^i|}{\sum_{i=1}^N |D^i|}$, the objective function in \ref{eqn:empirical_objective} would be the empirical risk minimization objective function of $D = \cup_i D^i$. We recall that \ref{eqn:objective} is an optimization problem that could be solved using Stochastic Descent: $\omega_g^{t+1} = \omega_g^t - \eta_t \nabla F (\omega_g^t)$ where $\eta_t$ is the learning rate at time $t$. In practice, we will use an unbiased estimator of the gradient of the local loss $g_i (\omega_g^t)$ such that $\mathbb{E}_{z \sim D^i} \Bigl[ g_i (\omega_g^t) \Bigr] = \nabla F_i (\omega_g^t)$ using Stochastic Gradient Descent (SGD).
 
 \section{Statistical heterogeneity}
+\label{sec:statistical_heterogeneity}
+
 In a real-world scenario, the data distributed among parties is Non-IID, the distribution from each party differs from the global distribution. Each client has its own local optima, which may be very different from the actual global optima.
 Under a IID setting, the global optima is \textit{close} to the local optima, but under a Non-IID settig, there is a \textit{drift} in the local updates, especially if the number of local epochs changes between parties.\\
 
@@ -73,6 +94,7 @@ For the \textbf{label distribution skew}, it will be used two settings. The firs
   \centering
   \includegraphics[width=0.6\textwidth]{figures/2-Federated_Learning/Example_Quantity_based_3_clients.png}
   \caption{Example of label distribution skew with 3 clients, each one holding data from different labels.}
+  \label{fig:label_distribution_skew}
 \end{figure}
 
 
@@ -88,6 +110,7 @@ where the normalizing constant $B(\boldsymbol{\beta})$ is the multivariate beta 
   \centering
   \includegraphics[width=0.6\textwidth]{figures/2-Federated_Learning/Example_Dirichlet_beta_0_5_3_clients.png}
   \caption{Example of label distribution skew with 3 clients using the Dirichlet distribution with $\boldsymbol{\beta}=(0.5, 0.5, 0.5)$.}
+  \label{fig:label_distribution_skew_Dirichlet}
 \end{figure}
 
 For the \textbf{feature distribution skew}, it will be used a noise-based feature imabalance, where different levels of Gaussian noise will be added for each party. Given $\sigma > 0$, for party $i$, a noise $N(0, \sigma \frac{i}{N})$ will be added to its local features. Increasing $\sigma$ will increase the dissimilarity among parties. Note that although $P(x_i)$ differs, $P(y_i | x_i)$ is the same across parties.
@@ -97,6 +120,7 @@ For the \textbf{feature distribution skew}, it will be used a noise-based featur
 \includegraphics[width=0.4\textwidth]{figures/2-Federated_Learning/Example_noise_based_feature_imabalance_original.png}
 \includegraphics[width=0.4\textwidth]{figures/2-Federated_Learning/Example_noise_based_feature_imabalance_Gaussian_0.3.png}
 \caption{Example of feature distribution skew with $\sigma=0.3$}
+\label{fig:feature_distribution_skew_sigma_03}
 \end{figure}
 
 It will be not considered the case where $P(y_i | x_i)$ differs, because then a distributed learning setting would make no sense (same feature should be classified as a different label across parties). Different $P(x_i | y_i)$ will neither be considered since we are focusing in a Horizontal FL setting. For the quantity skew, it will be used $Dir(\boldsymbol{\beta})$ to assign different proportion of the whole dataset to each party.
@@ -105,6 +129,7 @@ It will be not considered the case where $P(y_i | x_i)$ differs, because then a 
   \centering
   \includegraphics[width=0.6\textwidth]{figures/2-Federated_Learning/Example_Quantity_skew_3_clients.png}
   \caption{Example of quantity skew with 3 clients using the Dirichlet distribution with $\boldsymbol{\beta}=(0.5, 0.5, 0.5)$.}
+  \label{fig:Quantity_skew_Dir_05}
 \end{figure}
 
 For the rest of the chapter, these Non-IID Data will be applied in order to see the effect in the model's accuracy. The model used is a very simple\footnote{The aim of these experiments is to check the accuracy degradation between different Non-IID settings. It is not necessary to train the best model in order to achieve a high test accuracy, since the IID settings will serve as a baseline to compare between Non-IID cases. Note that the number of possible experiments combining all these settings is huge, and the whole project has been made with a low-spec laptop without a GPU.} CNN described in Figure \ref{fig:CNN_used}
@@ -153,12 +178,68 @@ In \cite*{mcmahan2023a}, it was introduced the \textbf{FederatedAveraging} algor
   \end{algorithmic}
 \end{algorithm}
 
-As we see, \textit{FedAvg} took into account a client selection strategy. Since we are focusing in a framework where the clients are limited, we will not consider any subset of clients each round: all the clients will participate.\\
+As we see from Algorithm 1, \textit{FedAvg} took into account a client selection strategy. Since we are focusing in a framework where the clients are limited, we will not consider any subset of clients each round: all the clients will participate.\\
 The algorithm is quite simple, the server is averaging the local models' weights, with a constant parameter determining the contribution of each client given the size of the local dataset.\\
+In order to test the performance of FedAvg in different Non-IID settings, it has been used the CNN architecture described in Figure \ref{fig:CNN_used}, using CIFAR10 dataset and with a hyperparameter selection based on \cite{li2021}. First, the local metrics for each client is shown: these metrics are computed on $D^i$, for $i=1,2,3$. With each setting, $D^i$ changes and also its cardinal. How the data is partitioned is explained in section \ref{sec:statistical_heterogeneity}.
+We begin with a IID setting in a 50 communication rounds FL training, each client performs only 2 local epochs and after the aggregation step, each client evaluates its model on the local test dataset, which has a similar distribution as the local train dataset (local test dataset represents the 10\% of $D^i$).
 
-[PONER AQUI EXPERIMENTOS HECHOS CON FEDAVG]
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_IID_CIFAR10_222.png}
+  \caption{Local metrics for 3 clients in 50 communication rounds using FedAvg with a IID setting over the CIFAR10 dataset.}
+  \label{fig:FedAvg_IID}
+\end{figure}
 
-Each client performs multiple local epochs, which reduces the communication rounds. However, these local updates can lead to a worse performance since the local objective functions differ from each other. This makes the algorithm not robust against non-IID data. There are several works that try to tackle this problem and a lot of FedAvg variants have been proposed in order to mitigate the divergence between the local updates. We will review some of the more relevant of them, starting with \textit{FedProx}.
+From Figure \ref{fig:FedAvg_IID} we can see that the model converges with a local accuracy $~60\%$ for all clients and the model's behavior is similar between clients. Next experiment will simulate a Non-IID setting with label distribution skew (see Figure \ref{fig:label_distribution_skew_Dirichlet}) with $\boldsymbol{\beta} = (1,1,1)$ and 2 local epochs for each client. Given the randomness from sampling, the label distribution can change significantly between clients:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_Dir_1_CIFAR10_222.png}
+  \caption{Local metrics for 3 clients in 50 communication rounds using FedAvg with a Non-IID setting over the CIFAR10 dataset. Label distribution skew using the Dirichlet distribution with $\boldsymbol{\beta} = (1, 1, 1)$ }
+  \label{fig:FedAvg_label_Dirichlet_05}
+\end{figure}
+
+From Figure \ref{fig:FedAvg_label_Dirichlet_05}, we can see that different $P(y_i)$ between clients could deteriorate the model performance, in this example, the third client had a very different distribution from the first and second client. In the aggregation step, the model deteriorates since it has been trained with a very different loss landscape.
+In the next experiment, the Non-IID setting will be simulated with a Quantity skew using the Dirichlet distribution $Dir(\boldsymbol{\beta})$, $\boldsymbol{\beta} = (0.5, 0.5, 0.5)$, see Figure \ref{fig:Quantity_skew_Dir_05} for an example of this data partition.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_Dir_05_Quantity_CIFAR10_242.png}
+  \caption{Local metrics for 3 clients in 50 communication rounds using FedAvg with a Non-IID setting over the CIFAR10 dataset. Quantity skew using the Dirichlet distribution with $\boldsymbol{\beta} = (0.5, 0.5, 0.5)$ }
+  \label{fig:FedAvg_Quantity_Dirichlet_05}
+\end{figure}
+
+In Figure \ref{fig:FedAvg_Quantity_Dirichlet_05}, the client with more samples (client 2) has a steady training progress, while the clients with less samples (client 1 and 3) have more errors in training step, although all clients have similar performance while testing its model, therefore, the clients with less data may see an improvement participating in a FL framework when the distribution $P(x_i, y_i)$ remains the same across clients but $|D^i|$ differs.\\
+Now, we'll how FedAvg handles a situation where $P(y_i)$ is different across clients (label distribution skew), see Figure \ref{fig:label_distribution_skew} for an example of this data partition. In the experiment, the first client has the first 2 labels, the second client the next 3 labels and the third client the remaining 5 labels.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_Label_Per_Party_235.png}
+  \caption{Local metrics for 3 clients in 50 communication rounds using FedAvg with a Non-IID setting over the CIFAR10 dataset. Label distribution skew, the first client data from 2 classes, the second client from 3 classes and the third client from the 5 remaining classes.}
+  \label{fig:FedAvg_Labels_Per_Party}
+\end{figure}
+
+As we can see from Figure \ref{fig:FedAvg_Labels_Per_Party}, the more labels a client has the better the performance. Since client 1 only has 2 labels, the aggregated global model doesn't classify correctly in its target domain. Recall from Algorithm \ref{alg:FedAvg} that each client's weight is proportional to its dataset's cardinal. Therefore, since client 1 has fewer data samples, this client's weights from the locally trained model looses importance against the others models.\\
+For the next example, we will use the feature distribution skew, see Figure \ref{fig:feature_distribution_skew_sigma_03} for an example of this kind of assymetry using a Normal distribution $N(0, \sigma= 0.3)$. For the experiment, it will be used a $\sigma=0.5$.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_Noise_0.5_CIFAR10.png}
+  \caption{Local metrics for 3 clients in 50 communication rounds using FedAvg with a Non-IID setting over the CIFAR10 dataset. Feature distribution skew, noise level $\sigma = 0.5$}
+  \label{fig:FedAvg_Noise_level}
+\end{figure}
+
+From Figure \ref{fig:FedAvg_Noise_level} we can see that although the clients seem to converge, the model's performance is worst in comparison with a IID setting.\\
+Even though in a real scenario there wouldn't be a global test dataset, a comparison between different data partition settings in addition to a centralized training scenario will be tested with the union of all clients' datasets. This will serve to see how good the global model performs in comparison with a centralized model.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/2-Federated_Learning/FedAvg_central_metrics.png}
+  \caption{Test metric for different data distribution settings using (theoretical) global dataset $D$ compared with a centralized setting.}
+  \label{fig:FedAvg_Central_Metrics}
+\end{figure}
+
+As it can be seen from Figure \ref{fig:FedAvg_Central_Metrics}, the centralized, IID, quantity skew and feature distribution skew settings perform quite similar, being both label distribution skew settings the ones that degrades the model the most. From Algorithm \ref{alg:FedAvg}, each client performs multiple local epochs, which reduces the communication rounds. However, these local updates can lead to a worse performance since the local objective functions differ from each other. This makes the algorithm not robust against non-IID data. There are several works that try to tackle this problem and a lot of FedAvg variants have been proposed in order to mitigate the divergence between the local updates. We will review some of the more relevant of them, starting with \textit{FedProx}.
 
 \section{FedProx}
 
@@ -172,6 +253,68 @@ The basic idea, is to restrict the local updates to be closer to the actual glob
 
 \textit{FedAvg} is a particular case when $\mu = 0$, a fixed number of local epochs $E$ is set and all the local solvers are SGD. As $\mu$ increases, the function becomes more restrictive meaning that it will take longer to converge. This algorithm doesn't restrict us to any local solver, so it's not necessary to compute the estimation of the gradient using SGD.
 When the data across clients is IID, a positive $\mu$ could decelerate the convergence, some heuristics could be applied such as decreasing $\mu$ as long as the loss functions continues to decrease. Following the experiments in \cite*{li2020}, the possible values of $\mu$ that will be used in this work are selected from the finite set $\{0.001, 0.01, 0.1, 1\}$
+
+\begin{figure}[H]
+    \centering
+
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/2-Federated_Learning/FedProx_IID_Mu_0.001.png}
+    \end{subfigure}
+    \vspace{1em} % Space between images
+
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/2-Federated_Learning/FedProx_IID_Mu_0.01.png}
+    \end{subfigure}
+    \vspace{1em} % Space between images
+
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/2-Federated_Learning/FedProx_Dirichlet_1_mu_0.1.png}
+    \end{subfigure}
+    \vspace{1em} % Space between images
+
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/2-Federated_Learning/FedProx_IID_Mu_1.png}
+    \end{subfigure}
+
+    \caption{Local metrics for 3 clients in 50 communication rounds using FedProx with a IID setting over the CIFAR10 dataset, $\mu \in \{0.001, 0.01, 0.1, 1\}$}
+    \label{fig:FedProx_IID}
+\end{figure}
+
+Seeing Figure \ref{fig:FedAvg_Quantity_Dirichlet_05}, according to \cite*{li2020} and \cite*{li2021}, A larger $\mu$  could decrease the model's convergence even in an IID setting. As of today, only heuristics are available to choose $\mu$; some of them consist of reducing the parameter as training progresses, similar to adjusting the learning rate. The rest of Non-IID setting experiments metrics with FedProx can be seen in Appendix A, for the label distribution skew using $Dir(\boldsymbol{\beta} = (1,1,1))$ see Figure \ref{fig:FedProx_Non_IID_Dirichlet_1}, for a label distribution skew with different labels per party see Figure \ref{fig:FedProx_Non_IID_LabelsPerParty}, for a label quantity distribution skew using $Dir(\boldsymbol{\beta}=(0.5,0.5,0.5))$ see Figure \ref{fig:FedProx_Non_IID_LabelQuantitySkeqDir_05} and for a feature distribution skew with noise level $\sigma = 0.5$ see Figure \ref{fig:FedProx_Non_IID_NoiseLevel_05}.\\
+Now only a few cases will be shown where with different values of mu a similar or better result has been obtained compared to FedAvg under the same conditions.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/2-Federated_Learning/FedProx_Dirichlet_1_mu_0.1.png}
+  \caption{Local metrics for FedProx, $\mu = 0.1$, label distribution skew using $Dir(\boldsymbol{\beta})$, $\boldsymbol{\beta} = (1,1,1)$}
+  \label{fig:FedProx_LabelsSkewDir_1_Mu_0.1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/2-Federated_Learning/FedProx_LabelsPerParty_mu_0.01.png}
+  \caption{Local metrics for FedProx, $\mu = 0.01$, label distribution skew with a disjoint partition of $[2,3,5]$.}
+  \label{fig:FedProx_LabelsPerParty_Mu_0.01}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/2-Federated_Learning/FedProx_QuantitySkew_Dir_05_Mu_0.1.png}
+  \caption{Local metrics for FedProx, $\mu = 0.1$, label quantity skew using $Dir(\boldsymbol{\beta})$, $\boldsymbol{\beta} = (0.5,0.5,0.5)$.}
+  \label{fig:FedProx_LabelsQuantitySkew_Dir_05_Mu_0.1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/2-Federated_Learning/FedProx_NoiseLevel_Mu_0.1.png}
+  \caption{Local metrics for FedProx, $\mu = 0.1$, feature distribution skew using a noise level of $\sigma = 0.5$.}
+  \label{fig:FedProx_LabelsQuantitySkew_Dir_05_Mu_0.1}
+\end{figure}
+
 
 \section{FedNova}
 
