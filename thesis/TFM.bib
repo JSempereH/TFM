@@ -1,3 +1,27 @@
+@inproceedings{abadi2016,
+  title = {Deep {{Learning}} with {{Differential Privacy}}},
+  booktitle = {Proceedings of the 2016 {{ACM SIGSAC Conference}} on {{Computer}} and {{Communications Security}}},
+  author = {Abadi, Mart{\'i}n and Chu, Andy and Goodfellow, Ian and McMahan, H. Brendan and Mironov, Ilya and Talwar, Kunal and Zhang, Li},
+  year = {2016},
+  month = oct,
+  eprint = {1607.00133},
+  primaryclass = {cs, stat},
+  pages = {308--318},
+  doi = {10.1145/2976749.2978318},
+  urldate = {2024-07-21},
+  abstract = {Machine learning techniques based on neural networks are achieving remarkable results in a wide variety of domains. Often, the training of models requires large, representative datasets, which may be crowdsourced and contain sensitive information. The models should not expose private information in these datasets. Addressing this goal, we develop new algorithmic techniques for learning and a refined analysis of privacy costs within the framework of differential privacy. Our implementation and experiments demonstrate that we can train deep neural networks with non-convex objectives, under a modest privacy budget, and at a manageable cost in software complexity, training efficiency, and model quality.},
+  archiveprefix = {arXiv},
+  file = {/home/javier/Zotero/storage/B3DN6FNY/1607.html}
+}
+
+@article{agrawal,
+  title = {Information {{Sharing Across Private Databases}}},
+  author = {Agrawal, Rakesh and Evfimievski, Alexandre and Srikant, Ramakrishnan},
+  abstract = {Literature on information integration across databases tacitly assumes that the data in each database can be revealed to the other databases. However, there is an increasing need for sharing information across autonomous entities in such a way that no information apart from the answer to the query is revealed. We formalize the notion of minimal information sharing across private databases, and develop protocols for intersection, equijoin, intersection size, and equijoin size. We also show how new applications can be built using the proposed protocols.},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/7GE9EUV3/Agrawal et al. - Information Sharing Across Private Databases.pdf}
+}
+
 @book{bishop2006,
   title = {Pattern Recognition and Machine Learning},
   author = {Bishop, Christopher M.},
@@ -9,6 +33,16 @@
   langid = {english},
   lccn = {Q327 .B52 2006},
   file = {/home/javier/Zotero/storage/N2QAVMF2/Bishop - 2006 - Pattern recognition and machine learning.pdf}
+}
+
+@misc{bureau,
+  title = {Why the {{Census Bureau Chose Differential Privacy}}},
+  author = {Bureau, US Census},
+  journal = {Census.gov},
+  urldate = {2024-07-18},
+  abstract = {This brief describing how disclosure avoidance methods are being applied to 2020 Census data products and implications of those methods for data users.},
+  chapter = {Government},
+  howpublished = {https://www.census.gov/library/publications/2023/decennial/c2020br-03.html}
 }
 
 @misc{caldas2019,
@@ -76,6 +110,37 @@
   file = {/home/javier/Zotero/storage/7QCEKUB7/Dauphin et al. - 2014 - Identifying and attacking the saddle point problem.pdf}
 }
 
+@article{deng2012,
+  title = {The {{MNIST Database}} of {{Handwritten Digit Images}} for {{Machine Learning Research}} [{{Best}} of the {{Web}}]},
+  author = {Deng, Li},
+  year = {2012},
+  month = nov,
+  journal = {IEEE Signal Processing Magazine},
+  volume = {29},
+  number = {6},
+  pages = {141--142},
+  issn = {1558-0792},
+  doi = {10.1109/MSP.2012.2211477},
+  urldate = {2024-07-18},
+  abstract = {In this issue, ``Best of the Web'' presents the modified National Institute of Standards and Technology (MNIST) resources, consisting of a collection of handwritten digit images used extensively in optical character recognition and machine learning research.},
+  file = {/home/javier/Zotero/storage/2RVI7BVG/6296535.html}
+}
+
+@article{dwork2013,
+  title = {The {{Algorithmic Foundations}} of {{Differential Privacy}}},
+  author = {Dwork, Cynthia and Roth, Aaron},
+  year = {2013},
+  journal = {Foundations and Trends{\textregistered} in Theoretical Computer Science},
+  volume = {9},
+  number = {3-4},
+  pages = {211--407},
+  issn = {1551-305X, 1551-3068},
+  doi = {10.1561/0400000042},
+  urldate = {2024-07-18},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/X9UQ3UBZ/Dwork and Roth - 2013 - The Algorithmic Foundations of Differential Privac.pdf}
+}
+
 @misc{escudero2022,
   title = {An {{Introduction}} to {{Secret-Sharing-Based Secure Multiparty Computation}}},
   author = {Escudero, Daniel},
@@ -85,6 +150,23 @@
   abstract = {This text serves as a general guide to secure multiparty computation based on secret-sharing, focusing more on practical aspects of the techniques and constructions rather than their theoretical grounds. It is intended to serve as an introductory reference text for readers interested in the area, assuming essentially no background in these topics. This work in progress currently includes an introduction to several core concepts in secure multiparty computation, an overview of simulation-based security, and detailed constructions for honest and two-thirds honest majority MPC, and also dishonest majority in the preprocessing model.},
   annotation = {Publication info: Preprint.},
   file = {/home/javier/Zotero/storage/RCU454DE/Escudero - 2022 - An Introduction to Secret-Sharing-Based Secure Mul.pdf}
+}
+
+@inproceedings{fredrikson2015,
+  title = {Model {{Inversion Attacks}} That {{Exploit Confidence Information}} and {{Basic Countermeasures}}},
+  booktitle = {Proceedings of the 22nd {{ACM SIGSAC Conference}} on {{Computer}} and {{Communications Security}}},
+  author = {Fredrikson, Matt and Jha, Somesh and Ristenpart, Thomas},
+  year = {2015},
+  month = oct,
+  pages = {1322--1333},
+  publisher = {ACM},
+  address = {Denver Colorado USA},
+  doi = {10.1145/2810103.2813677},
+  urldate = {2024-07-20},
+  abstract = {Machine-learning (ML) algorithms are increasingly utilized in privacy-sensitive applications such as predicting lifestyle choices, making medical diagnoses, and facial recognition. In a model inversion attack, recently introduced in a case study of linear classifiers in personalized medicine by Fredrikson et al. [13], adversarial access to an ML model is abused to learn sensitive genomic information about individuals. Whether model inversion attacks apply to settings outside theirs, however, is unknown.},
+  isbn = {978-1-4503-3832-5},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/QP44QBGP/Fredrikson et al. - 2015 - Model Inversion Attacks that Exploit Confidence In.pdf}
 }
 
 @inproceedings{glorot2011,
@@ -127,6 +209,31 @@
   address = {Cambridge, Massachusetts},
   isbn = {978-0-262-03561-3},
   lccn = {Q325.5 .G66 2016}
+}
+
+@misc{gupta2018,
+  title = {Distributed Learning of Deep Neural Network over Multiple Agents},
+  author = {Gupta, Otkrist and Raskar, Ramesh},
+  year = {2018},
+  month = oct,
+  number = {arXiv:1810.06060},
+  eprint = {1810.06060},
+  primaryclass = {cs, stat},
+  publisher = {arXiv},
+  urldate = {2024-07-17},
+  abstract = {In domains such as health care and finance, shortage of labeled data and computational resources is a critical issue while developing machine learning algorithms. To address the issue of labeled data scarcity in training and deployment of neural network-based systems, we propose a new technique to train deep neural networks over several data sources. Our method allows for deep neural networks to be trained using data from multiple entities in a distributed fashion. We evaluate our algorithm on existing datasets and show that it obtains performance which is similar to a regular neural network trained on a single machine. We further extend it to incorporate semi-supervised learning when training with few labeled samples, and analyze any security concerns that may arise. Our algorithm paves the way for distributed training of deep neural networks in data sensitive applications when raw data may not be shared directly.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/C482SX8G/1810.pdf}
+}
+
+@article{jordon2019,
+  title = {{{PATE-GAN}}: {{GENERATING SYNTHETIC DATA WITH DIFFERENTIAL PRIVACY GUARANTEES}}},
+  author = {Jordon, James and Yoon, Jinsung},
+  year = {2019},
+  abstract = {Machine learning has the potential to assist many communities in using the large datasets that are becoming more and more available. Unfortunately, much of that potential is not being realized because it would require sharing data in a way that compromises privacy. In this paper, we investigate a method for ensuring (differential) privacy of the generator of the Generative Adversarial Nets (GAN) framework. The resulting model can be used for generating synthetic data on which algorithms can be trained and validated, and on which competitions can be conducted, without compromising the privacy of the original dataset. Our method modifies the Private Aggregation of Teacher Ensembles (PATE) framework and applies it to GANs. Our modified framework (which we call PATE-GAN) allows us to tightly bound the influence of any individual sample on the model, resulting in tight differential privacy guarantees and thus an improved performance over models with the same guarantees. We also look at measuring the quality of synthetic data from a new angle; we assert that for the synthetic data to be useful for machine learning researchers, the relative performance of two algorithms (trained and tested) on the synthetic dataset should be the same as their relative performance (when trained and tested) on the original dataset. Our experiments, on various datasets, demonstrate that PATE-GAN consistently outperforms the stateof-the-art method with respect to this and other notions of synthetic data quality.},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/GEMI26U7/Jordon and Yoon - 2019 - PATE-GAN GENERATING SYNTHETIC DATA WITH DIFFERENT.pdf}
 }
 
 @misc{kairouz2021,
@@ -243,6 +350,14 @@
   file = {/home/javier/Zotero/storage/IQ9PYUR9/Li et al. - 2021 - Federated Learning on Non-IID Data Silos An Exper.pdf;/home/javier/Zotero/storage/UKIJ3SD9/2102.html}
 }
 
+@article{long,
+  title = {G-{{PATE}}: {{Scalable Differentially Private Data Generator}} via {{Private Aggregation}} of {{Teacher Discriminators}}},
+  author = {Long, Yunhui and Wang, Boxin and Yang, Zhuolin and Kailkhura, Bhavya and Zhang, Aston and Gunter, Carl A and Li, Bo},
+  abstract = {Recent advances in machine learning have largely benefited from the massive accessible training data. However, large-scale data sharing has raised great privacy concerns. In this work, we propose a novel privacy-preserving data Generative model based on the PATE framework (G-PATE), aiming to train a scalable differentially private data generator which preserves high generated data utility. Our approach leverages generative adversarial nets to generate data, combined with private aggregation among different discriminators to ensure strong privacy guarantees. Compared to existing approaches, G-PATE significantly improves the use of privacy budgets. In particular, we train a student data generator with an ensemble of teacher discriminators and propose a novel private gradient aggregation mechanism to ensure differential privacy on all information that flows from teacher discriminators to the student generator. In addition, with random projection and gradient discretization, the proposed gradient aggregation mechanism is able to effectively deal with high-dimensional gradient vectors. Theoretically, we prove that G-PATE ensures differential privacy for the data generator. Empirically, we demonstrate the superiority of G-PATE over prior work through extensive experiments. We show that G-PATE is the first work being able to generate high-dimensional image data with high data utility under limited privacy budgets ("  1). Our code is available at https://github.com/AI-secure/G-PATE.},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/7YNGZ28G/Long et al. - G-PATE Scalable Differentially Private Data Gener.pdf}
+}
+
 @misc{mcmahan2023a,
   title = {Communication-{{Efficient Learning}} of {{Deep Networks}} from {{Decentralized Data}}},
   author = {McMahan, H. Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and y Arcas, Blaise Ag{\"u}era},
@@ -286,6 +401,22 @@
   archiveprefix = {arXiv},
   langid = {english},
   file = {/home/javier/Zotero/storage/GN92FWJP/O'Shea and Nash - 2015 - An Introduction to Convolutional Neural Networks.pdf}
+}
+
+@misc{papernot2017,
+  title = {Semi-Supervised {{Knowledge Transfer}} for {{Deep Learning}} from {{Private Training Data}}},
+  author = {Papernot, Nicolas and Abadi, Mart{\'i}n and Erlingsson, {\'U}lfar and Goodfellow, Ian and Talwar, Kunal},
+  year = {2017},
+  month = mar,
+  number = {arXiv:1610.05755},
+  eprint = {1610.05755},
+  primaryclass = {cs, stat},
+  publisher = {arXiv},
+  urldate = {2024-07-18},
+  abstract = {Some machine learning applications involve training data that is sensitive, such as the medical histories of patients in a clinical trial. A model may inadvertently and implicitly store some of its training data; careful analysis of the model may therefore reveal sensitive information.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/K43LB78Z/Papernot et al. - 2017 - Semi-supervised Knowledge Transfer for Deep Learni.pdf}
 }
 
 @article{qian1999,
@@ -352,6 +483,31 @@
   abstract = {We describe a new learning procedure, back-propagation, for networks of neurone-like units. The procedure repeatedly adjusts the weights of the connections in the network so as to minimize a measure of the difference between the actual output vector of the net and the desired output vector. As a result of the weight adjustments, internal `hidden' units which are not part of the input or output come to represent important features of the task domain, and the regularities in the task are captured by the interactions of these units. The ability to create useful new features distinguishes back-propagation from earlier, simpler methods such as the perceptron-convergence procedure1.},
   copyright = {1986 Springer Nature Limited},
   langid = {english}
+}
+
+@techreport{sahu2017,
+  title = {Review {{Paper}} on {{Secure Hash Algorithm With Its Variants}}},
+  author = {Sahu, Aradhana and Ghosh, Samarendra},
+  year = {2017},
+  month = may,
+  doi = {10.13140/RG.2.2.13855.05289},
+  file = {/home/javier/Zotero/storage/KJE4ZSD3/Sahu and Ghosh - 2017 - Review Paper on Secure Hash Algorithm With Its Var.pdf}
+}
+
+@misc{shokri2017,
+  title = {Membership {{Inference Attacks}} against {{Machine Learning Models}}},
+  author = {Shokri, Reza and Stronati, Marco and Song, Congzheng and Shmatikov, Vitaly},
+  year = {2017},
+  month = mar,
+  number = {arXiv:1610.05820},
+  eprint = {1610.05820},
+  primaryclass = {cs, stat},
+  publisher = {arXiv},
+  urldate = {2024-07-20},
+  abstract = {We quantitatively investigate how machine learning models leak information about the individual data records on which they were trained. We focus on the basic membership inference attack: given a data record and black-box access to a model, determine if the record was in the model's training dataset. To perform membership inference against a target model, we make adversarial use of machine learning and train our own inference model to recognize differences in the target model's predictions on the inputs that it trained on versus the inputs that it did not train on.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/4535AX8C/1610.pdf}
 }
 
 @inproceedings{smestad2023,
@@ -467,6 +623,19 @@
   file = {/home/javier/Zotero/storage/JBBWY97N/Wang et al. - 2021 - A Field Guide to Federated Optimization.pdf}
 }
 
+@article{wood2018,
+  title = {Differential {{Privacy}}: {{A Primer}} for a {{Non-Technical Audience}}},
+  shorttitle = {Differential {{Privacy}}},
+  author = {Wood, Alexandra and Altman, Micah and Bembenek, Aaron and Bun, Mark and Gaboardi, Marco and Honaker, James and Nissim, Kobbi and O'Brien, David and Steinke, Thomas and Vadhan, Salil},
+  year = {2018},
+  journal = {SSRN Electronic Journal},
+  issn = {1556-5068},
+  doi = {10.2139/ssrn.3338027},
+  urldate = {2024-07-20},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/7Z5BJLU2/Wood et al. - 2018 - Differential Privacy A Primer for a Non-Technical.pdf}
+}
+
 @incollection{xu2019,
   title = {Modeling Tabular Data Using Conditional {{GAN}}},
   booktitle = {Proceedings of the 33rd {{International Conference}} on {{Neural Information Processing Systems}}},
@@ -491,6 +660,23 @@
   pages = {543},
   urldate = {2024-05-25},
   file = {/home/javier/Zotero/storage/PHFGDURC/1370017280653524239.html}
+}
+
+@misc{yousefpour2022,
+  title = {Opacus: {{User-Friendly Differential Privacy Library}} in {{PyTorch}}},
+  shorttitle = {Opacus},
+  author = {Yousefpour, Ashkan and Shilov, Igor and Sablayrolles, Alexandre and Testuggine, Davide and Prasad, Karthik and Malek, Mani and Nguyen, John and Ghosh, Sayan and Bharadwaj, Akash and Zhao, Jessica and Cormode, Graham and Mironov, Ilya},
+  year = {2022},
+  month = aug,
+  number = {arXiv:2109.12298},
+  eprint = {2109.12298},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  urldate = {2024-07-21},
+  abstract = {We introduce Opacus, a free, open-source PyTorch library for training deep learning models with differential privacy (hosted at opacus.ai). Opacus is designed for simplicity, flexibility, and speed. It provides a simple and user-friendly API, and enables machine learning practitioners to make a training pipeline private by adding as little as two lines to their code. It supports a wide variety of layers, including multi-head attention, convolution, LSTM, GRU (and generic RNN), and embedding, right out of the box and provides the means for supporting other user-defined layers. Opacus computes batched per-sample gradients, providing higher efficiency compared to the traditional ``micro batch'' approach. In this paper we present Opacus, detail the principles that drove its implementation and unique features, and benchmark it against other frameworks for training models with differential privacy as well as standard PyTorch.},
+  archiveprefix = {arXiv},
+  langid = {english},
+  file = {/home/javier/Zotero/storage/ZMZ7796A/Yousefpour et al. - 2022 - Opacus User-Friendly Differential Privacy Library.pdf}
 }
 
 @misc{zeiler2012,
