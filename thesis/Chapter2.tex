@@ -409,4 +409,32 @@ With data heterogeneity, \textit{FedAvg} suffers from client-drift, since each l
 
 From the SCAFFOLD's algorithm, it can be noted that the clients maintain the state of $c_k$ and the server maintain $c$, which are initialized at 0.
 In comparison with the previous algorithms, here the local update formula is: $\omega_k^t = \omega_k^t - \eta (\nabla l (\omega_k^t, \mathbf{b}) - c_k + c)$. Intuitively, the local gradient $\nabla l (\omega_k^t, \mathbf{b})$ moves towards the local optimum for client $k$, the correction $c - c_k$ ensures that the update change its direction towards the global optimum.
-As we can see, in line 20, there are two options for computing $c_i^+$: $\nabla l(\omega_g^t)$ or $c_k - c + \frac{1}{\tau_k \eta} (\omega_g^t - \omega_k^t)$.
+As we can see, in line 20, there are two options for computing $c_i^+$: $\nabla l(\omega_g^t)$ or $c_k - c + \frac{1}{\tau_k \eta} (\omega_g^t - \omega_k^t)$, that is, computing the gradient of the local data at the global model or reusing the previously computed gradients. The first approach is more stable but the second one has lower computation cost.
+
+\section{Other algorithms to train with Non-IID data}
+
+Among several algorithms that can be used for training a FL model under a non-IID setting, we mention some of the most performant:\\
+
+\textbf{FedNAG} \cite{yang2022}: Using Nesterov Accelerated Gradient as the optimizer has proved to be a more efficient paradigm that training with FedAvg or FedSGD. For a basic description of this method see Section \ref{sec:optimizer} and Equation \ref{eqn:Nesterov_accelerated_gradient}. In the FL context, this stochastic gradient descent variant is modified as follow:\\
+Let $\boldsymbol{w}_i (t)$ and $\boldsymbol{v}_i(t)$ denote the model parameter and momentum parameter in client i at $t$th iteration. Each $\tau$ iterations (local epochs) leads to a global aggregation, $t = k\tau$, $k=1,2,...$ (the original paper assumes that all clients perform the same number of local epochs). In each iteration, client $i$ performs:
+
+\begin{align*}
+  \boldsymbol{v}_i(t) &= \gamma \boldsymbol{v}_i(t-1) - \eta \nabla F_i (\boldsymbol{w}_i(t-1))\\
+  \boldsymbol{w}_i(t) &= \boldsymbol{w}_i(t-1) - \gamma \boldsymbol{v}_i (t-1) + (1+\gamma) \boldsymbol{v}_i(t)\\
+  &= \boldsymbol{w}_i(t-1) + \gamma \boldsymbol{v}_i(t) - \eta \nabla F_i(\boldsymbol{w}_i(t-1))
+\end{align*}
+
+In the aggregation step, the central sever performs:
+
+\begin{align*}
+  \boldsymbol{v}(t) = \frac{\sum_{i} |D^i| \boldsymbol{v}_i(t)}{\sum_j |D^j|} \\
+  \boldsymbol{w}(t) = \frac{\sum_{i} |D^i| \boldsymbol{w}_i(t)}{\sum_j |D^j|}
+\end{align*}
+
+\textbf{FedADAGRAD} and \textbf{FedADAM}: Based on Adagrad optimizer explain in Equation \ref{eqn:Adagrad} and ADAM optimizer explained in equation \ref{eqn:Adam}, \cite{reddi2021} proposed an adaptive federated version of these algorithms in order to improve the convergence results of FedAvg, following its notation FedAvg's update can be expressed as:
+
+\begin{equation*}
+  \omega_g^{t+1} = \omega_g^t - \frac{1}{N} \sum_{i=1}^N (\omega_g^t - \omega_i^t)
+\end{equation*}
+
+Let $\Delta_i^t \colon = \omega_i^t - \omega_g^t$ and $\Delta_t \colon = \frac{1}{N} \sum_{i=1}^N \Delta_i^t$. The server update in FedAvg is like applying SGD to $-\Delta_t$ with learning rate $\eta=1$ (see FedOpt algorithm in \cite{reddi2021}). Therefore, the will perform the local training for each epoch $k$ computing the unbiased gradient estimate $g_{i,k}^t$ of $\nabla F_i(\omega_{i,k}^t; x)$ and updating the weights $\omega_{i,k+1}^t = \omega_{i,k}^t - \eta_l g_{i,k}^t$. After computing all local epochs of training, each client computes $\Delta_i^t = \omega_i^t - \omega_g^t$. Then, the server will get $\Delta_t = \frac{1}{N}\sum_{i=1}^N \Delta_i^t$ and the first moment estimate (with the decay parameters $\beta_1,\beta_2 \in [0,1)$) $m_t = \beta_1 m_{t-1} + (1-\beta_1)\Delta_t$. Then, adapting the optimizers from Section \ref{sec:optimizer}, FedAagrad computes the second moment estimate $v_t = v_{t-1} + \Delta_t^2$ and FedAdam $v_t = \beta_2 v_{t-1} + (1-\beta_2)\Delta_t^2$. Finally, the global model is updated $\omega_g^{t+1} = \omega_g^t + \eta \frac{m_t}{\sqrt{v_t} + \epsilon}$.

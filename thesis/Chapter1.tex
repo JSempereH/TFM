@@ -54,10 +54,8 @@ Although not all use cases of this technology can be listed, such as collaborati
     \item \textbf{E-commerce:} E-commerce platforms thrive on understanding consumer behavior to offer personalized recommendations and targeted advertisements. However, this reliance on user data raises concerns about privacy infringement. PEML solutions like multi-party computation enable e-commerce companies to collaborate with data providers and advertisers without directly exposing individual user preferences. By jointly analyzing encrypted data, these platforms can tailor offerings to user interests while preserving user anonymity.
 \end{itemize}
 
-\section{Deep Learning Models}
 
-
-\subsection{Multilayer Perceptrons}
+\section{Multilayer Perceptrons}
 \label{sec:Multilayer_Perceptron}
 A Multilayer Perceptron (MLP), also known as feedforward neural network, is a mathematical model mainly used in supervised learning. Essentially, an MLP is a directed acyclic graph which represents the composition of functions. Each function or \textbf{layer} is a collection of neurons. A neuron is defined as:
 
@@ -90,7 +88,7 @@ Since the nonlinearity of an MLP makes the loss function to become non-convex, i
 \end{equation}
 In a $k$-class classification model with a cross-entropy loss function, the empirical risk to minimize is $\hat{R}_J (f) = -\frac{1}{n}\sum_{i=1}^n \sum_{j=1}^k \mathbf{y}_{ij} \log f_j (\mathbf{x}_i; \boldsymbol{\theta})$, where $\mathbf{y}_{ij}$ is the j-th element of the one-hot encoded label of $\mathbf{x}_i$ such that $\mathbf{1}^T \mathbf{y}_i = 1$, $\forall i$, and $f_j$ is the j-th element of the softmax output layer of $f$ \cite{zhang2018}.\\
 
-\subsection{Optimizer}
+\section{Optimizer}
 \label{sec:optimizer}
 Typically, the minimization of $J(\boldsymbol{\theta})$ is achieved using a gradient descent algorithm. Large training datasets are good for generalization, but since $\nabla_{\boldsymbol{\theta}} J (\boldsymbol{\theta}) \frac{1}{n}\sum_{i=1}^n \nabla_{\boldsymbol{\theta}} l(f(\mathbf{x}; \boldsymbol{\theta}), y)$ has a computational complexity of $\mathcal{O}(n)$ for each step \cite{goodfellow2016}, this approach is prohibitive for $n$ in a scale of millions. Optimization algorithms that use the whole dataset are called \textbf{batch}\footnote{The term \textit{batch} may also refer to a subset of the training set. The size of a minibatch is usually called \textit{batch size}.} gradient methods.
 When only a single sample is used each step, the method is called \textbf{stochastic}. The \textbf{Minibatch Stochastic Gradient Descent} (MSGD) algorithm (and its variants) is preferred, since the gradient direction in SGD oscillates because of the additional noise added by random sampling \cite{sun2019}.
@@ -141,6 +139,7 @@ Still, with the previous algorithms the hyperparameters $\eta$ and $\alpha$ need
 We set $g_{t,i}$ the gradient estimate w.r.t the parameter $\theta_i$ at step $t$. The Adagrad update rule is:
 
 \begin{equation}
+    \label{eqn:Adagrad}
     \theta_{t+1, i} = \theta_{t,i} - \frac{\eta}{\sqrt{G_{t,i} + \epsilon}} g_{t,i}
 \end{equation}
 
@@ -178,8 +177,7 @@ According to \cite{kingma2017}, good default settings (in their machine learning
 
 In order to use this gradient-based algorithms we need to compute $\nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta})$, which is done using the \textbf{Backpropagation} algorithm \cite{rumelhart1986}, which leverages the composite structure of the neural network to efficiently compute the gradient \cite{damadi2023}.
 
-\subsection{Convolutional Neural Networks}
+\section{Convolutional Neural Networks}
 
 When the input data is an image, a better approach for learning about $p(y | \mathbf{x})$ is to use Convolutional Neural Networks (CNN), since MLP tend to struggle with the computational complexity required to compute image data and the width required to train this kind of data may lead to overfitting \cite{oshea2015}. CNNs are comprised of three types of layers: convolutional layers, pooling layers and fully-connected layers (which are essentially a MLP).\\
 The convolutional layer use learnable kernels:
-\section{Other ML models}

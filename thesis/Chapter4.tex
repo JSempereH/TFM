@@ -1,10 +1,8 @@
 \chapter{Advanced strategies for Privacy-Enhancing Machine Learning}
 
-This final chapter delves into advanced strategies for enhancing privacy in machine learning, spotlighting three pivotal concepts: Differential Privacy, Homomorphic Encryption, and Generative Models. Each of these strategies offers unique mechanisms for ensuring that sensitive data remains secure and confidential throughout the machine learning lifecycle.
+This final chapter delves into advanced strategies for enhancing privacy in machine learning, spotlighting two pivotal concepts: Differential Privacy and Generative Models. Each of these strategies offers unique mechanisms for ensuring that sensitive data remains secure and confidential throughout the machine learning lifecycle.
 
 \textbf{Differential Privacy} provides a robust mathematical framework for ensuring that the output of a machine learning model does not compromise the privacy of individual data points. By incorporating controlled noise into the data or the learning process, differential privacy aims to make it difficult for adversaries to infer any specific information about an individual, even if they have access to the model's output.
-
-\textbf{Homomorphic Encryption} represents a groundbreaking cryptographic technique that enables computation on encrypted data without the need to decrypt it. This allows data to remain confidential throughout the computation process, ensuring that sensitive information is never exposed, even during analysis. Homomorphic encryption is particularly relevant for scenarios where data needs to be processed by untrusted third parties.
 
 \textbf{Generative Models}, like Variational Autoencoders (VAEs) and Generative Adversarial Networks (GANs), offer innovative approaches to creating synthetic data that can be used for training machine learning models. These synthetic datasets can mimic the statistical properties of real data without exposing any sensitive information, providing a valuable tool for data sharing and collaborative research without compromising privacy.
 
@@ -99,16 +97,6 @@ Despite these challenges, Differential Privacy remains a powerful tool for priva
 
 
 
-\section{Homomorphic Encryption}
-
-Homomorphic encryption is a type of encryption that allows someone to perform calculations on encrypted data without decrypting it. This means that you can work with the data and get results, even though you cannot see the original data.
-There are three types of HE:
-
-\begin{itemize}
-    \item \textbf{Partially Homomorphic Encryption (PHE):} Supports only one type of operation (either addition or multiplication).
-    \item \textbf{Somewhat Homomorphic Encryption (SHE):} Supports a limited number of both addition and multiplication operations.
-    \item \textbf{Fully homomorphic encryption (FHE):}
-\end{itemize}
 
 \section{Generative Models}
 
@@ -226,15 +214,15 @@ For the second test, the Iris dataset has been used, which contains 4 continuous
 
 \begin{figure}[htbp]
     \centering
-    \begin{minipage}[b]{0.4\textwidth}
+    \begin{minipage}[b]{0.5\textwidth}
       \centering
-      \includegraphics[width=0.6\textwidth]{figures/4-Advanced_Strategies/Ejemplo_Dataset_2_Real.png}
+      \includegraphics[width=0.7\textwidth]{figures/4-Advanced_Strategies/Ejemplo_Dataset_2_Real.png}
       \caption{Real samples}
     \end{minipage}
     \hfill
-    \begin{minipage}[b]{0.4\textwidth}
+    \begin{minipage}[b]{0.5\textwidth}
       \centering
-      \includegraphics[width=0.6\textwidth]{figures/4-Advanced_Strategies/Ejemplo_Dataset_2_Sintetico.png}
+      \includegraphics[width=0.7\textwidth]{figures/4-Advanced_Strategies/Ejemplo_Dataset_2_Sintetico.png}
       \caption{Synthetic samples}
     \end{minipage}
 \end{figure}
