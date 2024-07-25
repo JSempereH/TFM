@@ -293,6 +293,8 @@ Now only a few cases will be shown where with different values of mu a similar o
   \caption{Local metrics for FedProx, $\mu = 0.1$, label distribution skew using $Dir(\boldsymbol{\beta})$, $\boldsymbol{\beta} = (1,1,1)$}
   \label{fig:FedProx_LabelsSkewDir_1_Mu_0.1}
 \end{figure}
+ 
+Comparing Figure \ref{fig:FedAvg_label_Dirichlet_05} and Figure \ref{fig:FedProx_LabelsSkewDir_1_Mu_0.1} we can see that the clients' local training improves slightly, specially for client 2 and 3. However, we will compare both models using the global dataset $D$ in order to test if it hasn't been overfitted by a client whose local dataset's cardinal is way bigger that the rest of clients. 
 
 \begin{figure}[H]
   \centering
@@ -300,6 +302,8 @@ Now only a few cases will be shown where with different values of mu a similar o
   \caption{Local metrics for FedProx, $\mu = 0.01$, label distribution skew with a disjoint partition of $[2,3,5]$.}
   \label{fig:FedProx_LabelsPerParty_Mu_0.01}
 \end{figure}
+
+As we see from Figure \ref{fig:FedProx_LabelsPerParty_Mu_0.01}, a better performance has been achieved compared with the same setting using FedAvg, although the improvement is modest and mainly for client 1, whose previous accuracy was near 0 since only holds 2 labels. 
 
 \begin{figure}[H]
   \centering
@@ -312,9 +316,10 @@ Now only a few cases will be shown where with different values of mu a similar o
   \centering
   \includegraphics[width=0.8\textwidth]{figures/2-Federated_Learning/FedProx_NoiseLevel_Mu_0.1.png}
   \caption{Local metrics for FedProx, $\mu = 0.1$, feature distribution skew using a noise level of $\sigma = 0.5$.}
-  \label{fig:FedProx_LabelsQuantitySkew_Dir_05_Mu_0.1}
+  \label{fig:FedProx_Noise_Dir_05_Mu_0.1}
 \end{figure}
 
+In Figure \ref{fig:FedProx_LabelsQuantitySkew_Dir_05_Mu_0.1} all clients have a better test accuracy compared with the FedAvg experiment (in the same setting). For the feature skew, we see that the performance seen in Figure \ref{fig:FedProx_Noise_Dir_05_Mu_0.1} is similar to the one in \ref{fig:FedAvg_Noise_level}.
 
 \section{FedNova}
 
@@ -325,7 +330,12 @@ The server would then collect $\Delta \omega_k^t$ $\forall k \in \{1,\dots, N\}$
 As stated in \cite*{wang2020}, different $E_k$ across clients and rounds means that $FedAvg$ algorithm converges to a surrogate objective instead of $F(\omega)$ from (\ref{eqn:objective}).
 This algorithm considers that different parties compute a different number of local steps ($\tau_k$) because of computation constraints or different sizes of local datasets. When $\tau_{k} > \tau_{k'}$, client $k$ will have a major influence over the global update rule compared to client $k'$. That's why the authors proposed to normalize and scale the local updates according to the number of local steps.
 
-\textbf{[PONER IMAGEN QUE SE VEA LAS DIRECCIONES DE LOS GRADIENTES CUANDO NO SE NORMALIZA Y CUANDO SE NORMALIZA]}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/2-Federated_Learning/FedNova_Normalization_model_drift.png}
+  \caption{Model updates in the parameter space. Green squares and blue triangles denote the minima of global and local objectives, respectively. Source: \cite{wang2020}}
+  \label{fig:FedNova_Normalization_model_drif}
+\end{figure}
 
 \begin{algorithm}[H]
   \label{alg:FedNova}
@@ -362,8 +372,97 @@ This algorithm considers that different parties compute a different number of lo
   \end{algorithmic}
 \end{algorithm}
 
+For the next experiments, the same data distribution and initial weights will be used for both FedAvg and FedNova, starting with an IID setting:
 
-\section{SCAFFOLD}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_IID_LE_512.png}
+  \caption{Local metrics for FedAvg on a IID setting with local epochs [5,1,2].}
+  \label{fig:FedAvg_IID_LE_512}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedNova_IID_LE_512.png}
+  \caption{Local metrics for FedNova using proximal term with $\mu=0.1$ on a IID setting and local epochs [5,1,2].}
+  \label{fig:FedNova_IID_LE_512}
+\end{figure}
+
+We have used FedNova with a local loss modified as explained with FedProx, since both approach are compatible. We see a slightly improvement with FedNova compared to FedAvg in a IID setting. Note that the first client performs 5 local epochs, the second client only 1 epoch and the third client 2 epochs (assuming some kind of computational or communication constraint). However, for a label skew setting using the Dirichlet distribution, Figures \ref{fig:FedAvg_NonDirichlet_LE_512} and \ref{fig:FedNova_NonDirichlet_LE_512}, the client with more epochs (client 1) got lower test accuracy compared to the others clients, since as the client's data is scarce (see Figure \ref{fig:label_distribution_skew_Dirichlet} for each client's distribution). More local epochs doesn't mean that the client will perform better on its own local data, since the aggregation step changes all its model weights favoring the clients with more data.
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_NonDirichlet_LE_512.png}
+  \caption{Local metrics for FedAvg on a Non-IID label skew using $Dir(\boldsymbol{\beta})$, $\boldsymbol{\beta}=(0.5, 0.5, 0.5)$ setting with local epochs [5,1,2].}
+  \label{fig:FedAvg_NonDirichlet_LE_512}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedNova_NonDirichlet_LE_512.png}
+  \caption{Local metrics for FedNova using proximal term with $\mu=0.1$ on a Non-IID setting label skew using $Dir(\boldsymbol{\beta})$, $\boldsymbol{\beta}=(0.5, 0.5, 0.5)$ and local epochs [5,1,2].}
+  \label{fig:FedNova_NonDirichlet_LE_512}
+\end{figure}
+
+We see in this case that FedNova doesn't perform better than FedAvg, although we will compare the model's accuracy later with the global dataset. This is something that some articles have already commented: FedNova doesn't perform better than other approaches or even FedAvg in some Non-IID scenarios \cite{li2021}.
+In fact, in the next experiment we can see that using FedNova performs worse than FedAvg for both clients 1 and 3, where client 1 holds two labels and client 3 holds 3 labels. From the previous expriment we have seen that this setting is the one that hurts the model accuracy the most.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_QuantityBased_Labels_253_LE_512.png}
+  \caption{Local metrics for FedAvg  on a Non-IID setting Quantity-based (labels per party = [2,5,3]) and local epochs [5,1,2].}
+  \label{fig:FedAvg_QuantityBased_LabelsPerParty_253_LE_512}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedNova_QuantityBased_Labels_253_LE_512.png}
+  \caption{Local metrics for FedNova using a proximal term with $\mu=0.1$ on a Non-IID setting Quantity-based (labels per party = [2,5,3]) and local epochs [5,1,2].}
+  \label{fig:FedNova_QuantityBased_LabelsPerParty_253_LE_512}
+\end{figure}
+
+In Fugures \ref{fig:FedAvg_QuantitySkew_LE_512} and \ref{fig:FedNova_QuantitySkew_LE_512}, FedNova has slightly better results for clients 1 and 2 but client 3 doesn't converge at all, making FedAvg a more stable approach in this case.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_QuantitySkew_LE_512.png}
+  \caption{Local metrics for FedAvg  on a Non-IID Quantity Skew setting using $Dir(\boldsymbol{\beta})$, $\boldsymbol{\beta}=(0.5, 0.5, 0.5)$ and local epochs [5,1,2].}
+  \label{fig:FedAvg_QuantitySkew_LE_512}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedNova_QuantitySkew_LE_512.png}
+  \caption{Local metrics for FedNova using a proximal term with $\mu=0.1$ on a Non-IID Quantity Skew setting using $Dir(\boldsymbol{\beta})$, $\boldsymbol{\beta}=(0.5,0.5,0.5)$ and local epochs [5,1,2].}
+  \label{fig:FedNova_QuantitySkew_LE_512}
+\end{figure}
+
+Finally, for a feature skew experiment, we can see from Figures \ref{fig:FedNova_Noise_LE_512} and \ref{fig:FedNova_Noise_LE_512} that both approaches are similar, with FedNova having a slightly better test accuracy in all clients.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedAvg_Noise_LE_512.png}
+  \caption{Local metrics for FedAvg  on a Non-IID Feature Skew setting with noise level $\sigma=0.5$  and local epochs [5,1,2].}
+  \label{fig:FedAvg_Noise_LE_512}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/FedNova_Noise_LE_512.png}
+  \caption{Local metrics for FedNova using a proximal term with $\mu=0.1$ on a Non-IID Feature Skew setting with noise level $\sigma=0.5$ and local epochs [5,1,2].}
+  \label{fig:FedNova_Noise_LE_512}
+\end{figure}
+
+\section{Other algorithms to train with Non-IID data}
+
+Among several algorithms that can be used for training a FL model under a non-IID setting, we mention some of the most performant:\\
+
+\textbf{SCAFFOLD:}
 
 With data heterogeneity, \textit{FedAvg} suffers from client-drift, since each local updates it's minimizing its own local objective. SCAFFOLD tries to solve this introducing control variables for the server $c$ and the clients $c_k$ $\forall k \in \{1,\dots, N\}$.
 
@@ -409,11 +508,7 @@ With data heterogeneity, \textit{FedAvg} suffers from client-drift, since each l
 
 From the SCAFFOLD's algorithm, it can be noted that the clients maintain the state of $c_k$ and the server maintain $c$, which are initialized at 0.
 In comparison with the previous algorithms, here the local update formula is: $\omega_k^t = \omega_k^t - \eta (\nabla l (\omega_k^t, \mathbf{b}) - c_k + c)$. Intuitively, the local gradient $\nabla l (\omega_k^t, \mathbf{b})$ moves towards the local optimum for client $k$, the correction $c - c_k$ ensures that the update change its direction towards the global optimum.
-As we can see, in line 20, there are two options for computing $c_i^+$: $\nabla l(\omega_g^t)$ or $c_k - c + \frac{1}{\tau_k \eta} (\omega_g^t - \omega_k^t)$, that is, computing the gradient of the local data at the global model or reusing the previously computed gradients. The first approach is more stable but the second one has lower computation cost.
-
-\section{Other algorithms to train with Non-IID data}
-
-Among several algorithms that can be used for training a FL model under a non-IID setting, we mention some of the most performant:\\
+As we can see, in line 20, there are two options for computing $c_i^+$: $\nabla l(\omega_g^t)$ or $c_k - c + \frac{1}{\tau_k \eta} (\omega_g^t - \omega_k^t)$, that is, computing the gradient of the local data at the global model or reusing the previously computed gradients. The first approach is more stable but the second one has lower computation cost.\\
 
 \textbf{FedNAG} \cite{yang2022}: Using Nesterov Accelerated Gradient as the optimizer has proved to be a more efficient paradigm that training with FedAvg or FedSGD. For a basic description of this method see Section \ref{sec:optimizer} and Equation \ref{eqn:Nesterov_accelerated_gradient}. In the FL context, this stochastic gradient descent variant is modified as follow:\\
 Let $\boldsymbol{w}_i (t)$ and $\boldsymbol{v}_i(t)$ denote the model parameter and momentum parameter in client i at $t$th iteration. Each $\tau$ iterations (local epochs) leads to a global aggregation, $t = k\tau$, $k=1,2,...$ (the original paper assumes that all clients perform the same number of local epochs). In each iteration, client $i$ performs:

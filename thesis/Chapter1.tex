@@ -133,7 +133,6 @@ Another variant is \textbf{Nesterov accelerated gradient} \cite{y1983}, which is
 
 Here, similar to GD with momentum, $\mathbf{v}_t$ is the direction and speed at which the parameters should be tweaked and $\alpha$ determines how quickly the previous gradients will decay. Nesterov Accelerated Gradient tries to tackle the exploding gradient case: where the velocity added to the parameters gives an unwanted high loss. In this case, if the velocity update lead to a bad loss, the gradients will redirect the update back to $\boldsymbol{\theta}$.
 
-[PONER IMAGEN QUE COMPARE MOMENTUM CON NAG]
 
 Still, with the previous algorithms the hyperparameters $\eta$ and $\alpha$ need to be fixed or changed during training a heuristic way. With the \textbf{Adaptative Gradient Algorithm} (\textbf{Adagrad}), the learning rate change depending on the parameters: it performs larger updates for infrequent parameters and smaller updates for frequent parameters. That's it, each parameter is updated with a different learning rate each step.
 We set $g_{t,i}$ the gradient estimate w.r.t the parameter $\theta_i$ at step $t$. The Adagrad update rule is:
