@@ -19,6 +19,11 @@
 \usepackage{url}
 \usepackage{pdfpages}
 
+\usepackage{adjustbox}
+\usepackage{booktabs}
+
+\usepackage[11pt]{moresize}
+
 \let\cleardoublepage=\clearpage
 
 \addbibresource{TFM.bib}
@@ -26,7 +31,26 @@
 \begin{document}
 
 \includepdf[pages=-]{TECI_Caratula.pdf}
+\small{
+The aim of this paper is to introduce some topics related to Privacy Enhancing Machine Learning (or more generally, Privacy Enhancing Technologies), which I was introduced to during my internship at GMV while studying for my Master’s in Computational Statistical Information Processing. With this, I hope to simply explain some techniques and algorithms used in practice, as well as the challenges and issues that may arise when applying them.\\
+In the first section, there will be a brief explanation of what Privacy Enhancing Machine Learning is, as well as its context. Additionally, some basic concepts like the multilayer perceptron or convolutional networks, which will be used later in the paper, will be briefly defined. Some optimizers that will be useful for understanding some algorithms explained in section 2 will also be outlined.\\
+Section 2 will focus on defining and explaining the challenges of Federated Learning, explaining some of its most prominent algorithms, and showing experiments conducted to compare the performance of each one under the same configuration. In particular, I will focus on the effect of potential data asymmetries in a federated environment on the performance of each algorithm, thus studying statistical heterogeneity (one of the most relevant challenges in this branch of distributed learning).\\
+In section 3, there will be a brief mention of what it means to train models on vertically partitioned data and the formulation of SplitNN. This section could be greatly expanded if Multi-Party Computation, which is one of the key technologies within the field of PETs, were introduced. However, this would require introducing several cryptographic concepts and would go beyond the statistical context of the master’s program, in addition to the size limit of this paper.\\
+In section 4, other somewhat more advanced concepts, such as Differential Privacy, are introduced, to which a couple of algorithms related to the training of Deep Learning models are dedicated, as well as the use of generative models. A technique for generating tabular data is introduced, and a possible use in the field of PETs is mentioned, albeit with certain criticisms regarding its usability and security.
 
+Following the guidelines, the following sections are defined:
+
+\textbf{Problem Statement:} In recent years, different technologies have emerged that seek to use current discriminative and generative models trained with confidential or private data (banking data, health records, etc.). This can enable collaboration between companies and universities to jointly improve models without the need to share data, as well as boost scientific research on rare diseases or data where each research center has few data points or regulations require greater confidentiality in their processing. Currently, there are many alternatives depending on the use case, and it is still being studied to what extent they are secure.
+
+\textbf{Development:} The development of this paper will consist of the introduction of different techniques related to subjects studied in class, particularly the subjects of Neural Networks, Tools for Big Data, Optimization Techniques, Pattern Recognition Techniques, and Statistical Software. The experiments conducted to compare algorithms are my own work (unless otherwise stated), and both the code and results can be found in the GitHub repository: \url{github.com/JSempereH/TFM.}
+
+\textbf{Conclusion:} Only a few algorithms and methods could be studied. The conclusions of the experiments related to Federated Learning in section 2 align with the literature: a different distribution of data among computing nodes greatly degrades the de facto algorithm FedAvg, with FedProx being a better alternative, though not the only one. Regarding the different techniques related to PETs, only some that I worked with during my internship and that are related to Computational Statistical Information Processing could be introduced.
+
+There is currently a great economic interest in preserving privacy (due to penalties, especially in the European territory). The technologies presented here are promising but not magical. They require research, careful implementation, and supervision. They are not free from criticism and possible security flaws in certain cases, in addition to a degradation of models compared to centralized training. The aim is not to present these topics as the solution to privacy, but rather to understand, even if superficially, what they are about and what they seek to solve. I hope I have achieved this, or at least provided a good bibliography to consult material on each topic.\\
+This work has been made possible thanks to the warm welcome I received at GMV, where I was allowed to study scientific articles from the beginning and was supported in my training. In particular, I want to thank my professional tutor Juan Miguel and my colleague Daniel Hurtado for the help they have provided me. I also want to thank my academic tutor Carlos Gregorio for his guidance during the course of this work. And especially, I want to thank my boyfriend Miguel, who has put up with me while balancing the master’s studies, the work at GMV, and the writing of this document.
+}
+
+\normalfont
 \tableofcontents
 
 \include{Chapter1}

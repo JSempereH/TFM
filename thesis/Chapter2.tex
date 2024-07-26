@@ -321,6 +321,23 @@ As we see from Figure \ref{fig:FedProx_LabelsPerParty_Mu_0.01}, a better perform
 
 In Figure \ref{fig:FedProx_LabelsQuantitySkew_Dir_05_Mu_0.1} all clients have a better test accuracy compared with the FedAvg experiment (in the same setting). For the feature skew, we see that the performance seen in Figure \ref{fig:FedProx_Noise_Dir_05_Mu_0.1} is similar to the one in \ref{fig:FedAvg_Noise_level}.
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lccccc}
+        \toprule
+        & IID & Label Skew Dir(0.5) & Quantity Skew Dir(0.5) & Labels per Party & Noise $\sigma = 0.5$ \\
+        \midrule
+        FedAvg & \textbf{0.6427} & 0.4335 & 0.6192 & 0.3934 & 0.5933 \\
+        FedProx Mu 0.001 & 0.6425 & 0.4466 & 0.6309 & 0.4034 & 0.5961 \\
+        FedProx Mu 0.01 & 0.6356 & \textbf{0.4505} & \textbf{0.6494} & \textbf{0.4435} & \textbf{0.5979} \\
+        FedProx Mu 0.1 & 0.6363 & 0.4347 & 0.6396 & 0.4226 & 0.5906 \\
+        FedProx Mu 1 & 0.4443 & 0.4034 & 0.4238 & 0.3437 & 0.4375 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Top global test accuracy obtained in FedAvg and FedProx under the same settings for different values of $\mu$.}
+    \label{tab:accuracy}
+\end{table}
+
 \section{FedNova}
 
 This algorithm was first introduced in \cite*{wang2020}, in order to study its main contributions we are changing the original notation of \textit{FedAvg}. We have seen that the client updates its model at round $t$ starting with a shared, global model $\omega_g^t$. Then, it applies SGD with its local data for a fixed number of epochs E.
@@ -457,6 +474,30 @@ Finally, for a feature skew experiment, we can see from Figures \ref{fig:FedNova
   \caption{Local metrics for FedNova using a proximal term with $\mu=0.1$ on a Non-IID Feature Skew setting with noise level $\sigma=0.5$ and local epochs [5,1,2].}
   \label{fig:FedNova_Noise_LE_512}
 \end{figure}
+
+\begin{table}[h]
+    \centering
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{lccccc}
+        \toprule
+        & IID & Label Skew Dir(0.5) & Quantity Skew Dir(0.5) & Labels per Party & Noise $\sigma=0.5$ \\
+        \midrule
+        FedAvg & 0.616 & \textbf{0.4328} & 0.6246 & \textbf{0.3818} & \textbf{0.5834} \\
+        FedNova & \textbf{0.6231} & 0.427 & \textbf{0.6456} & 0.3552 & 0.5749 \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+    \caption{Top test accuracy obtained in FedAvg and FedNova under the same settings.}
+    \label{tab:fed_comparison}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/2-Federated_Learning/Global_Metrics_FedNova.png}
+  \caption{Accuracy comparison between FedAvg and FedNova on the global test dataset.}
+  \label{fig:FedNova_Global_Metrics}
+\end{figure}
+
 
 \section{Other algorithms to train with Non-IID data}
 
