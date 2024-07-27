@@ -2,7 +2,7 @@
 \label{ch:Federated_Learning}
 
 \section{Introduction}
-In the rapidly evolving landscape of artificial intelligence and machine learning, Federated Learning (FL)
+In the landscape of artificial intelligence and machine learning, Federated Learning (FL)
 has emerged as a paradigm that addresses key challenges related to privacy, data security,
  and decentralized computing. Federated Learning represents a novel approach to model training, allowing
  machine learning models to be trained collaboratively across multiple decentralized devices or servers
@@ -10,10 +10,9 @@ has emerged as a paradigm that addresses key challenges related to privacy, data
 
  Unlike traditional centralized approaches, where data is collected and processed in a central server, FL enables training on local devices following a scheme of decentralized model training.
  This decentralization ensures that data remains on the device, granting a certain degree of privacy.
- In a centralized setting, the trained model is updated based on the complete dataset, which is stored in a unique server. In the federated setting, data is distributed across local devices (parties) and training happens locally. This can be problematic, since the source
+ In a centralized setting, the trained model is updated based on the complete dataset, which is stored in a unique server. In the federated setting, data is distributed across local devices (parties or clients) and training happens locally. This can be problematic, since the source
  of the data differ, the data can differ in various ways: unbalanced datasets, different distributions, etc. This is one of the main challenges of FL:
- \textbf{non-IID data}, since this will negatively affect the performance of the model \cite{li2020}, \cite{zhao2018}, \cite{li2021}.
-
+ \textbf{non-IID data}, since this will negatively affect the performance of the model \cite{li2020}, \cite{zhao2018}, \cite{li2021}.\\
 Horizontal Federated Learning (HFL) and Vertical Federated learning (VFL) are two variations of the federated learning paradigm that differ in how they distribute and collaborate on data.
 
 \begin{itemize}
@@ -47,8 +46,7 @@ which is a variation of FL that addresses the scenario where data is distributed
 This setting is particularly relevant in industries where different organizations need to collaborate on machine learning task, such as healthcare (hospitals collaborating on medical research), finance (banks collaborating on fraud detection), epidemiological studies (international public health agencies studying disease spread),
 smart cities (urban planning authorities collaborating on public services optimization), etc. Ensuring interoperability between different silos is a huge challenge, since there needs to be a fixed standard in data format, structures and processing capabilities accross different organizations.\\
 Another flavour of FL is \textit{Cross device FL}, which was the original topology proposed \cite*{mcmahan2023a}. In this type of setting, the scale of the parties is potentially much bigger (order of millions) since it's aimed to mobile devices, IoT, apps... where the data format and architecture is usually already defined by an organization. For example, this is the kind of FL that Google uses for training Gboard's models \cite*{zhang2023}. With \textit{Cross device FL}, it's needed to take into account some technical difficulties like client selection strategy \cite*{smestad2023}, connection overheard, connection dropouts, device heterogeneity, etc.
-Some of these challenges are shared with \textit{Cross-Silo FL}. The main differences are the scale of parties, the computing resources (mobile devices vs data centers or computers) and the partition of data: \textit{cross device} tends to be HFL while \textit{cross-silo} could be HFL or VFL. Since we are focusing in \textit{cross-silo FL}, it won't be studied the implications of client selection (since we are assuming the parties are few and well-defined), the connection overheard or dropouts. The focus of this work will be mainly the statistical heterogeneity challenge, since this work serves as the final project for obtaining a MSc in Statistics.
-
+Some of these challenges are shared with \textit{Cross-Silo FL}. The main differences are the scale of parties, the computing resources (mobile devices vs data centers or computers) and the partition of data: \textit{cross device} tends to be HFL while \textit{cross-silo} could be HFL or VFL. Since we are focusing in \textit{cross-silo FL}, it won't be studied the implications of client selection (since we are assuming the parties are few and well-defined), the connection overheard or dropouts. The focus of this work will be mainly the statistical heterogeneity challenge.\\
 We will begin by studying the FedAvg algorithm \cite{mcmahan2023a}, which is de facto approach for Federated Learning (FL). We will establish notation, examine some of its properties, and explore issues that arise when data is not independently identically distributed (statistical heterogeneity). Following that, various approaches that have been proposed to address this problem will be developed, and the performance of each will be analyzed across different training architectures.
 
 \section{Objective function}
@@ -259,25 +257,25 @@ When the data across clients is IID, a positive $\mu$ could decelerate the conve
 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/2-Federated_Learning/FedProx_IID_Mu_0.001.png}
+        \includegraphics[width=0.8\linewidth]{figures/2-Federated_Learning/FedProx_IID_Mu_0.001.png}
     \end{subfigure}
     \vspace{1em} % Space between images
 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/2-Federated_Learning/FedProx_IID_Mu_0.01.png}
+        \includegraphics[width=0.8\linewidth]{figures/2-Federated_Learning/FedProx_IID_Mu_0.01.png}
     \end{subfigure}
     \vspace{1em} % Space between images
 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/2-Federated_Learning/FedProx_Dirichlet_1_mu_0.1.png}
+        \includegraphics[width=0.8\linewidth]{figures/2-Federated_Learning/FedProx_Dirichlet_1_mu_0.1.png}
     \end{subfigure}
     \vspace{1em} % Space between images
 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/2-Federated_Learning/FedProx_IID_Mu_1.png}
+        \includegraphics[width=0.8\linewidth]{figures/2-Federated_Learning/FedProx_IID_Mu_1.png}
     \end{subfigure}
 
     \caption{Local metrics for 3 clients in 50 communication rounds using FedProx with a IID setting over the CIFAR10 dataset, $\mu \in \{0.001, 0.01, 0.1, 1\}$}
@@ -293,8 +291,8 @@ Now only a few cases will be shown where with different values of mu a similar o
   \caption{Local metrics for FedProx, $\mu = 0.1$, label distribution skew using $Dir(\boldsymbol{\beta})$, $\boldsymbol{\beta} = (1,1,1)$}
   \label{fig:FedProx_LabelsSkewDir_1_Mu_0.1}
 \end{figure}
- 
-Comparing Figure \ref{fig:FedAvg_label_Dirichlet_05} and Figure \ref{fig:FedProx_LabelsSkewDir_1_Mu_0.1} we can see that the clients' local training improves slightly, specially for client 2 and 3. However, we will compare both models using the global dataset $D$ in order to test if it hasn't been overfitted by a client whose local dataset's cardinal is way bigger that the rest of clients. 
+
+Comparing Figure \ref{fig:FedAvg_label_Dirichlet_05} and Figure \ref{fig:FedProx_LabelsSkewDir_1_Mu_0.1} we can see that the clients' local training improves slightly, specially for client 2 and 3. However, we will compare both models using the global dataset $D$ in order to test if it hasn't been overfitted by a client whose local dataset's cardinal is way bigger that the rest of clients.
 
 \begin{figure}[H]
   \centering
@@ -303,7 +301,7 @@ Comparing Figure \ref{fig:FedAvg_label_Dirichlet_05} and Figure \ref{fig:FedProx
   \label{fig:FedProx_LabelsPerParty_Mu_0.01}
 \end{figure}
 
-As we see from Figure \ref{fig:FedProx_LabelsPerParty_Mu_0.01}, a better performance has been achieved compared with the same setting using FedAvg, although the improvement is modest and mainly for client 1, whose previous accuracy was near 0 since only holds 2 labels. 
+As we see from Figure \ref{fig:FedProx_LabelsPerParty_Mu_0.01}, a better performance has been achieved compared with the same setting using FedAvg, although the improvement is modest and mainly for client 1, whose previous accuracy was near 0 since only holds 2 labels.
 
 \begin{figure}[H]
   \centering
