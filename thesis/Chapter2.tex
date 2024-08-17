@@ -2,11 +2,10 @@
 \label{ch:Federated_Learning}
 
 \section{Introduction}
-In the landscape of artificial intelligence and machine learning, Federated Learning (FL)
-has emerged as a paradigm that addresses key challenges related to privacy, data security,
- and decentralized computing. Federated Learning represents a novel approach to model training, allowing
+Let's assume we are a hospital that wants to train a predictive model for skin diseases. In the patient database, there are records of some diseases, but perhaps not all the diseases we would like to study. It is possible that other research centers or hospitals have more records of diseases, which may be: common to the diseases present in our database or new diseases that we do not have records for. If it were possible to train a model with both, we would gain two potential advantages: we would have a larger number of cases for each disease (something necessary in most deep learning models) and the model could classify a greater number of diseases.\\
+Of course, this is not so simple. Medical records are very sensitive and cannot be used (or shared) freely. For such cases, it might make sense to use Federated Learning, a novel approach to model training that allows
  machine learning models to be trained collaboratively across multiple decentralized devices or servers
- without exchanging raw data \cite{mcmahan2023a}.
+ without exchanging raw data \cite{mcmahan2023a}.\\
 
  Unlike traditional centralized approaches, where data is collected and processed in a central server, FL enables training on local devices following a scheme of decentralized model training.
  This decentralization ensures that data remains on the device, granting a certain degree of privacy.
@@ -41,7 +40,7 @@ Horizontal Federated Learning (HFL) and Vertical Federated learning (VFL) are tw
     \label{fig:VFL}
 \end{figure}
 
-HFL and VFL are not mutually exclusive, in some cases a combination of both schemes may be applied. This work will focus on HFL. Also, we will only study \textit{Cross-Silo Federated Learning (Cross-Silo FL)},
+HFL and VFL are not mutually exclusive, in some cases a combination of both schemes may be applied. In this chapter we will focus on HFL. Also, we will only study \textit{Cross-Silo Federated Learning (Cross-Silo FL)},
 which is a variation of FL that addresses the scenario where data is distributed across different organizations, usually few parties, each maintaining control over its own data.
 This setting is particularly relevant in industries where different organizations need to collaborate on machine learning task, such as healthcare (hospitals collaborating on medical research), finance (banks collaborating on fraud detection), epidemiological studies (international public health agencies studying disease spread),
 smart cities (urban planning authorities collaborating on public services optimization), etc. Ensuring interoperability between different silos is a huge challenge, since there needs to be a fixed standard in data format, structures and processing capabilities accross different organizations.\\
@@ -146,8 +145,8 @@ In \cite*{mcmahan2023a}, it was introduced the \textbf{FederatedAveraging} algor
 
 
 \begin{algorithm}[H]
-  \label{alg:FedAvg}
   \caption{FedAvg}
+  \label{alg:FedAvg}
   \begin{algorithmic}[1]
     \Require{local datasets $D^i$ $\forall i \in \{1,\dots, N\}$, number of parties $N$, number of communication rounds $T$, number of local epochs $E$, learning rate $\eta$ for SGD, local mini-batch size $B$.}
     \Ensure{global model $\omega^T_g$.}
@@ -565,10 +564,12 @@ In the aggregation step, the central sever performs:
   \boldsymbol{w}(t) = \frac{\sum_{i} |D^i| \boldsymbol{w}_i(t)}{\sum_j |D^j|}
 \end{align*}
 
-\textbf{FedADAGRAD} and \textbf{FedADAM}: Based on Adagrad optimizer explain in Equation \ref{eqn:Adagrad} and ADAM optimizer explained in equation \ref{eqn:Adam}, \cite{reddi2021} proposed an adaptive federated version of these algorithms in order to improve the convergence results of FedAvg, following its notation FedAvg's update can be expressed as:
+\textbf{FedAdagrad} and \textbf{FedAdam}: Based on Adagrad optimizer explain in Equation \ref{eqn:Adagrad} and ADAM optimizer explained in equation \ref{eqn:Adam}, \cite{reddi2021} proposed an adaptive federated version of these algorithms in order to improve the convergence results of FedAvg, following its notation FedAvg's update can be expressed as:
 
 \begin{equation*}
   \omega_g^{t+1} = \omega_g^t - \frac{1}{N} \sum_{i=1}^N (\omega_g^t - \omega_i^t)
 \end{equation*}
 
-Let $\Delta_i^t \colon = \omega_i^t - \omega_g^t$ and $\Delta_t \colon = \frac{1}{N} \sum_{i=1}^N \Delta_i^t$. The server update in FedAvg is like applying SGD to $-\Delta_t$ with learning rate $\eta=1$ (see FedOpt algorithm in \cite{reddi2021}). Therefore, the will perform the local training for each epoch $k$ computing the unbiased gradient estimate $g_{i,k}^t$ of $\nabla F_i(\omega_{i,k}^t; x)$ and updating the weights $\omega_{i,k+1}^t = \omega_{i,k}^t - \eta_l g_{i,k}^t$. After computing all local epochs of training, each client computes $\Delta_i^t = \omega_i^t - \omega_g^t$. Then, the server will get $\Delta_t = \frac{1}{N}\sum_{i=1}^N \Delta_i^t$ and the first moment estimate (with the decay parameters $\beta_1,\beta_2 \in [0,1)$) $m_t = \beta_1 m_{t-1} + (1-\beta_1)\Delta_t$. Then, adapting the optimizers from Section \ref{sec:optimizer}, FedAagrad computes the second moment estimate $v_t = v_{t-1} + \Delta_t^2$ and FedAdam $v_t = \beta_2 v_{t-1} + (1-\beta_2)\Delta_t^2$. Finally, the global model is updated $\omega_g^{t+1} = \omega_g^t + \eta \frac{m_t}{\sqrt{v_t} + \epsilon}$.
+Let $\Delta_i^t \colon = \omega_i^t - \omega_g^t$ and $\Delta_t \colon = \frac{1}{N} \sum_{i=1}^N \Delta_i^t$. The server update in FedAvg is like applying SGD to $-\Delta_t$ with learning rate $\eta=1$ (see FedOpt algorithm in \cite{reddi2021}). Therefore, the will perform the local training for each epoch $k$ computing the unbiased gradient estimate $g_{i,k}^t$ of $\nabla F_i(\omega_{i,k}^t; x)$ and updating the weights $\omega_{i,k+1}^t = \omega_{i,k}^t - \eta_l g_{i,k}^t$. After computing all local epochs of training, each client computes $\Delta_i^t = \omega_i^t - \omega_g^t$. Then, the server will get $\Delta_t = \frac{1}{N}\sum_{i=1}^N \Delta_i^t$ and the first moment estimate (with the decay parameters $\beta_1,\beta_2 \in [0,1)$) $m_t = \beta_1 m_{t-1} + (1-\beta_1)\Delta_t$. Then, adapting the optimizers from Section \ref{sec:optimizer}, FedAdagrad computes the second moment estimate $v_t = v_{t-1} + \Delta_t^2$ and FedAdam $v_t = \beta_2 v_{t-1} + (1-\beta_2)\Delta_t^2$. Finally, the global model is updated $\omega_g^{t+1} = \omega_g^t + \eta \frac{m_t}{\sqrt{v_t} + \epsilon}$.\\
+
+There are numerous algorithms aimed at mitigating the effects of statistical heterogeneity in federated training. Some, like those mentioned, are based on optimizers. Others select the clients that can collaborate in training by clustering them according to the similarity of their local data. In some cases, it is proposed to pre-train the global model with a public dataset, which may not be feasible in real-world scenarios unless synthetic data is used. Personalization methods such as local fine-tuning or knowledge distillation have also been proposed. In \cite{zhu2021}, different methods currently available to prevent model degradation due to non-IID data can be found.

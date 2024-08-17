@@ -117,11 +117,11 @@ Let's suppose Alice has the features $\boldsymbol{x}$ and Bob the labels $y$, an
     \State Alice initializes the weights of its split $F_A = \{\boldsymbol{z}_0,...,\boldsymbol{z}_n\}$
     \State Bob initializes the weights of its split $F_B = \{\boldsymbol{z}_{n+1},...,\boldsymbol{z}_N\}$
     \State \textbf{While} Alice has new data to train on and $epoch < MAX\_EPOCHS$  \textbf{do}
-    \State Alice uses standard forward propagation on data and sends $\boldsymbol{z}_n = \psi(\boldsymbol{W}_n \boldsymbol{z}_{l-1} + \boldsymbol{b}_l)$ to Bob.
-    \State Bob uses the received $\boldsymbol{z}_n$ as an input to its split $F_B$ and get the output $\boldsymbol{z}_N$.
-    \State Bob computes the gradients of $F_B$ using Backpropagation and updates its weights.
-    \State Bob sends the gradient of $\boldsymbol{z}_n$ to Alice.
-    \State Alice backpropagates gradients received updating the weights of $F_A$.
+    \State \hspace*{1 em} Alice uses standard forward propagation on data and sends $\boldsymbol{z}_n = \psi(\boldsymbol{W}_n \boldsymbol{z}_{l-1} + \boldsymbol{b}_l)$ to Bob.
+    \State \hspace*{1 em} Bob uses the received $\boldsymbol{z}_n$ as an input to its split $F_B$ and get the output $\boldsymbol{z}_N$.
+    \State \hspace*{1 em} Bob computes the gradients of $F_B$ using Backpropagation and updates its weights.
+    \State \hspace*{1 em} Bob sends the gradient of $\boldsymbol{z}_n$ to Alice.
+    \State \hspace*{1 em} Alice backpropagates gradients received updating the weights of $F_A$.
 \end{algorithmic}
 \end{algorithm}
 
@@ -133,3 +133,6 @@ A basic implementation can be found in the source code of this work.\footnote{ht
   \caption{Example of SplitNN using MNIST dataset. The training performs the same as a centralized model.}
   \label{fig:MNIST_SplitNN_Metrics}
 \end{figure}
+
+Of course, there are many more algorithms for training models on vertically partitioned data.
+A fairly comprehensive list of VFL algorithms can be found in \cite{yang2023}. Most techniques require the use of homomorphic encryption or MPC. These technologies are beyond the scope of this work, but I recommend checking \cite{gentry}, \cite{escudero2022} and \cite{evans} for an introduction.

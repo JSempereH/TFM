@@ -53,7 +53,17 @@ Although not all use cases of this technology can be listed, such as collaborati
     \item \textbf{E-commerce:} E-commerce platforms thrive on understanding consumer behavior to offer personalized recommendations and targeted advertisements. However, this reliance on user data raises concerns about privacy infringement. PEML solutions like multi-party computation enable e-commerce companies to collaborate with data providers and advertisers without directly exposing individual user preferences. By jointly analyzing encrypted data, these platforms can tailor offerings to user interests while preserving user anonymity.
 \end{itemize}
 
+\section{How this document is structured:}
 
+In the remainder of Chapter 1, the basic elements for neural network models that will be used later will be briefly introduced. The decision to study neural networks rather than other ML models is due to the fact that most current research in Privacy Enhancing Technologies focuses on these models.\\
+
+Chapter 2 will provide a detailed study of federated learning, particularly on horizontally partitioned data and under a cross-silo topology. The objective of this chapter is twofold: to introduce federated learning and to examine its performance under different Non-IID data sampling schemes, which is one of the main challenges of this technology. For this purpose, the necessary code has been developed to freely experiment with algorithms and data sampling. This code can be found at: \url{www.github.com/JSempereH/TFM}.\\
+
+Chapter 3 will discuss how models can be trained on vertically partitioned data, aligning datasets with cryptographic protocols such as Private Set Intersection and training neural networks using the SplitNN algorithm. Again, an implementation of this can be seen in the project repository.\\
+
+Chapter 4 covers two technologies that can be used to protect data privacy in specific cases. The topics covered require a very extensive formal introduction, so only the basic concepts needed to understand the use cases and challenges will be explained. First, differential privacy is introduced along with some algorithms that utilize it. Next, it examines how generative models can be used to protect data privacy, specifically for tabular data. To this end, one of the most commonly used techniques, Conditional GANs, is studied and implemented on sample data to assess its performance.\\
+
+Finally, this work concludes with a summary of the topics covered, the challenges encountered, and potential areas for future research.
 \section{Multilayer Perceptrons}
 \label{sec:Multilayer_Perceptron}
 Since most current research and practical implementations are being conducted in the field of deep learning, a large part of the algorithms explained in this work will focus on this area. Therefore, some basic pattern classification algorithms that will be used in this work will be introduced.\\
