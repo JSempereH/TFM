@@ -1,0 +1,16 @@
+dataset: CIFAR10 # CIFAR10 | MNIST | FashionMNIST
+iid: Non_IID_Noise # IID | Non_IID_Dirichlet | Non_IID_Quantity_Based | Non_IID_Quantity_Skew | Non_IID_Noise
+fl_strategy: FedNova # FedAvg | FedProx | FedNova | SCAFFOLD
+num_clients: 3
+list_of_epochs: [5,1,2]
+same_initial_weights: true
+n_rounds: 50
+
+mu: 0.1 # Needed for FedProx or FedNova (in FedNova could be 0)
+beta: null
+labels_per_party: null
+noise_level: null
+
+batch_size: 10
+lr: 1e-4
+global_lr: 1 # For SCAFFOLD
